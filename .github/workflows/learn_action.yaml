@@ -1,0 +1,23 @@
+name: Learning
+
+on:
+    # push:
+    #     branches:
+    #         - master
+    workflow_dispatch:
+
+jobs:
+    first:
+        runs-on: ubuntu-latest
+        steps:
+            - name: console
+              run: echo "Hellow world"
+
+    javascript:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              name: echo
+            
+            - uses: ./.github/actions/first
+              name: custom javascript 
