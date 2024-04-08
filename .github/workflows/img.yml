@@ -1,6 +1,8 @@
 name: "imgcmp"
 description: "Optimize images in your repository. Supported image file formats: JPEG, PNG, GIF, SVG, WEBP"
 author: "9sako6"
+on:
+  workflow_dispatch:
 branding:
   icon: "image"
   color: "blue"
