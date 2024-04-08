@@ -26,6 +26,7 @@ function setupTimeout(app) {
 
 function setupRateLimiter(app) {
     if (!process.env.RATE_LIMIT_WINDOW || !process.env.RATE_LIMIT) return console.log(`Rate Limiter is turned OFF`);
+    app.set('trust proxy', true)
     console.log(`Rate Limiter is turned ON with ${process.env.RATE_LIMIT_WINDOW}:${process.env.RATE_LIMIT}`);
     const limiter = rateLimit({
         windowMs: process.env.RATE_LIMIT_WINDOW, // 10 minutes
