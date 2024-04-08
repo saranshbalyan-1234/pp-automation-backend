@@ -26,4 +26,4 @@ EXPOSE 8080
 
 #scaling
 # CMD ["pm2-runtime", "index.js", "-i","-0"]
-CMD [ "node", "--env-file=.env","index.js" ]
+CMD [ "npm","start" ]
