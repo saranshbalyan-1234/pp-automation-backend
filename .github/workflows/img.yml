@@ -11,6 +11,6 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: saranshbalyan-1234/imgcmp@v2.0.4
+      - uses: saranshbalyan-1234/imgcmp@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
