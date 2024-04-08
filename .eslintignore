@@ -1,0 +1,12 @@
+**/node_modules/*
+**/dist/*
+.github/actions/**/index.js"
+docs/vendor/**
+xhook.js
+xhook.min.js
+libs
+**/src/index.js
+*.test.js
+.yarn
+**/config.js
+**/config.template.js

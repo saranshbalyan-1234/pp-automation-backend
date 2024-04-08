@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "paths": {
+        "#validations/*": ["./Utils/Validations/*"],
+        "#middlewares/*": ["./Utils/Middlewares/*"],
+        "#constants/*": ["./Utils/Constants/*"],
+        "#utils/*": ["./Utils/*"],
+        "#storage/*": ["./Storage/*"],
+        "#user/*": ["./User/*"],
+        "#project/*": ["./Project/*"],
+        "#testcase/*": ["./TestCase/*"],
+        "#controllers/*": ["./Controllers/*"],
+        "#routes/*": ["./Routes/*"],
+        "#encryption/*": ["./Encryption/*"],
+        "#scheduler/*": ["./Scheduler/*"],
+        "#root/*": ["./*"],
+    }
+  }
+}
