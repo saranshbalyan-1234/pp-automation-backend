@@ -11,7 +11,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - uses: saranshbalyan-1234/action-eslint@v1
+      - uses: saranshbalyan-1234/action-eslint@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review # Change reporter.
