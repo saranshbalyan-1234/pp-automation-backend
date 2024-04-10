@@ -1,24 +1,20 @@
 {
     "env": {
-        "node": true,
-        "es2021": true
+        "browser": true,
+        "es6": true
     },
-    "extends": ["eslint:recommended"],
-    "overrides": [
-        {
-            "env": {
-                "node": true
-            },
-            "files": [".eslintrc.{js,cjs}"],
-            "parserOptions": {
-                "sourceType": "script"
-            }
-        }
+    "extends": [
+        "standard",
+        "eslint:recommended"
     ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
     "parserOptions": {
-        "ecmaVersion": "latest",
+        "ecmaVersion": 2018,
         "sourceType": "module"
     },
-    "plugins": [ "unused-imports"],
-    "rules": {"no-console": "off", "no-case-declarations": "off"}
+    "rules": {
+    }
 }
