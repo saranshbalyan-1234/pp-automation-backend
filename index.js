@@ -8,7 +8,7 @@ import errorContstants from "#constants/error.js";
 import { morgalApiLogger } from "#utils/logger.js";
 import { setupTimeout, setupRateLimiter, setupCors, setupResponseInterceptor, setupErrorInterceptor, setupValidationErrorInterceptor } from "#middlewares/server.js";
 import { syncDatabase, createSuperAdmin } from "#user/Service/database.js";
-// import { scheduleInit } from "#scheduler/Service/schedulerService.js";
+import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 const app = express();
 
 if (process.env.PRINT_ENV == "true") {
@@ -16,7 +16,10 @@ if (process.env.PRINT_ENV == "true") {
     console.debug(process.env);
     console.debug("======================ENV======================");
 }
-
+console.log(a)
+console.log(b)
+console.log("a"    )
+console
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: false }));
 app.use(helmet());
