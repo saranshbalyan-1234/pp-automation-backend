@@ -44,6 +44,7 @@ const syncDatabase = async (database, force = false, alter = false) => {
             synced.push(model.name);
             await model.schema(database).sync({ force, alter });
         }
+        await createSuperAdmin();
         console.success(`MODEL SYNC COMPLETED`);
         return synced;
     } catch (e) {

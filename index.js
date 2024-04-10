@@ -37,8 +37,7 @@ registerRoutes(app);
 setupValidationErrorInterceptor(app);
 
 if (process.env.NODE_ENV == "production") {
-    await syncDatabase(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME);
-    await createSuperAdmin();
+    syncDatabase(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME);
 }
 
 app.use((req, res) => {
