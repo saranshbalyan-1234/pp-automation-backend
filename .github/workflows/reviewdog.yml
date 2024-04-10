@@ -14,5 +14,5 @@ jobs:
       - uses: saranshbalyan-1234/action-eslint@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review # Change reporter.
-          # eslint_flags: "src/"
+          reporter: github-pr-review 
+          fail_on_error: true
