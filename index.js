@@ -12,7 +12,7 @@ import { syncDatabase, createSuperAdmin } from "#user/Service/database.js";
 const app = express();
 console.log("saransh", saransh)
 function saransh(){ 
-console.log("abc")
+console.log("abc"     )
 }
 if (process.env.PRINT_ENV == "true") {
     console.debug("======================ENV======================");
