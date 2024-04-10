@@ -8,7 +8,7 @@ import errorContstants from "#constants/error.js";
 import { morgalApiLogger } from "#utils/logger.js";
 import { setupTimeout, setupRateLimiter, setupCors, setupResponseInterceptor, setupErrorInterceptor, setupValidationErrorInterceptor } from "#middlewares/server.js";
 import { syncDatabase, createSuperAdmin } from "#user/Service/database.js";
-// import { scheduleInit } from "#scheduler/Service/schedulerService.js";
+import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 const app = express();
 console.log(a)
 console.log(b)
