@@ -14,6 +14,10 @@ console.log("saransh", saransh)
 function saransh (){ 
 console.log("abc"     )
 }
+console.log("saransh", saransh)
+function saransh (){ 
+console.log("abc"     )
+}
 if (process.env.PRINT_ENV == "true") {
     console.debug("======================ENV======================");
     console.debug(process.env);
