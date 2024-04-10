@@ -1,9 +1,7 @@
 name: reviewdog
 on:
   workflow_dispatch:
-  #push:
-  #   branches:
-  #     - 'main'
+  pull_request:
 jobs:
   eslint:
     name: runner / eslint
