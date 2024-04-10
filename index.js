@@ -11,7 +11,7 @@ import { syncDatabase, createSuperAdmin } from "#user/Service/database.js";
 // import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 const app = express();
 console.log("saransh", saransh)
-function saransh(){ 
+function saransh (){ 
 console.log("abc"     )
 }
 if (process.env.PRINT_ENV == "true") {
