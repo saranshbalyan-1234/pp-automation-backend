@@ -10,6 +10,10 @@ import { setupTimeout, setupRateLimiter, setupCors, setupResponseInterceptor, se
 import { syncDatabase, createSuperAdmin } from "#user/Service/database.js";
 // import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 const app = express();
+console.log(a)
+console.log(b)
+console.log("a"    )
+console
 
 if (process.env.PRINT_ENV == "true") {
     console.debug("======================ENV======================");
