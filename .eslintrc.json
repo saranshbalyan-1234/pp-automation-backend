@@ -5,7 +5,8 @@
     },
     "extends": [
         "standard",
-        "eslint:recommended"
+        "eslint:recommended",
+        "plugin:promise/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
