@@ -2,6 +2,11 @@ name: deploy
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - reviewdog
+    types:
+      - completed
   # push:
   #   branches:
   #     - 'main'
