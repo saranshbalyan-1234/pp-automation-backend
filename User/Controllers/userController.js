@@ -99,7 +99,7 @@ const addUser = async (req, res) => {
       id: user.id,
       name,
       email,
-      message: "User added, Verify user's email to login"
+      message: 'User added, Verify user\'s email to login'
     });
   } catch (error) {
     getError(error, res);
