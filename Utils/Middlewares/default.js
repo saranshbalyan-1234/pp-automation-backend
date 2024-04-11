@@ -4,11 +4,11 @@
 // import pkg from "jsonwebtoken";
 
 export const defaultMiddleware = () => {
-    return async (req, res, next) => {
-        req.user = {
-            tenant: "master",
-            database: process.env.DATABASE_NAME,
-        };
-        next();
+  return async (req, res, next) => {
+    req.user = {
+      tenant: 'master',
+      database: process.env.DATABASE_NAME
     };
+    next();
+  };
 };

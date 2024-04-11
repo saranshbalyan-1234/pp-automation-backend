@@ -1,17 +1,25 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "commonjs": true,
+        "es6": true,
+        "node": true
     },
     "extends": [
         "standard",
         "eslint:recommended",
-        "plugin:promise/recommended"
+        "plugin:promise/recommended",
+        "plugin:eqeqeq-fix/recommended",
+        "plugin:react/recommended"
     ],
     "parserOptions": {
-        "ecmaVersion": 2018,
+        "ecmaVersion": "latest",
+        "ecmaFeatures": {
+            "jsx": true
+        },
         "sourceType": "module"
     },
     "rules": {
+        "semi": [2, "always"]
     }
 }

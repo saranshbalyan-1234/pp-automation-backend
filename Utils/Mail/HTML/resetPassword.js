@@ -1,5 +1,5 @@
 const resetPasswordHtml = (name, link) => {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
         <html>
             <body>
                 <p>Hi ${name}, As per your request, we have sent you a link to rest your password. </p>

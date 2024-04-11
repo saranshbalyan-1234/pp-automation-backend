@@ -1,85 +1,85 @@
-import passport from "passport";
+import passport from 'passport';
 // const { Strategy: FacebookStrategy } = require('passport-facebook');
-import { Strategy as GitHubStrategy } from "passport-github2";
-import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
-import { loginWithCredentals } from "./user.js";
-import { Strategy as LinkedInStrategy } from "passport-linkedin-oauth2";
+import { Strategy as GitHubStrategy } from 'passport-github2';
+import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+import { loginWithCredentals } from './user.js';
+import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
 /**
  * Sign in with Google.
  */
 if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
-    const googleStrategyConfig = new GoogleStrategy(
-        {
-            clientID: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET,
-            callbackURL: "/auth/google/callback",
-            passReqToCallback: true,
-        },
-        async (req, accessToken, refreshToken, params, profile, done) => {
-            try {
-                // const email = profile.emails.find((el) => el.verified)?.value;
-                const email = profile.emails[0]?.value;
-                const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true });
-                return done(null, loggedInUser);
-            } catch (err) {
-                return done(err);
-            }
-        }
-    );
-    passport.use("google", googleStrategyConfig);
+  const googleStrategyConfig = new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+      callbackURL: '/auth/google/callback',
+      passReqToCallback: true
+    },
+    async (req, accessToken, refreshToken, params, profile, done) => {
+      try {
+        // const email = profile.emails.find((el) => el.verified)?.value;
+        const email = profile.emails[0]?.value;
+        const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true });
+        return done(null, loggedInUser);
+      } catch (err) {
+        return done(err);
+      }
+    }
+  );
+  passport.use('google', googleStrategyConfig);
 }
 
 /**
  * Sign in with GitHub.
  */
 if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
-    const githubStrategyConfig = new GitHubStrategy(
-        {
-            clientID: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET,
-            callbackURL: "/auth/github/callback",
-            passReqToCallback: true,
-            scope: ["user:email"],
-        },
-        async (req, accessToken, refreshToken, profile, done) => {
-            try {
-                const email = profile.emails[0]?.value;
-                const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true });
-                return done(null, loggedInUser);
-            } catch (err) {
-                return done(err);
-            }
-        }
-    );
-    passport.use("github", githubStrategyConfig);
+  const githubStrategyConfig = new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+      callbackURL: '/auth/github/callback',
+      passReqToCallback: true,
+      scope: ['user:email']
+    },
+    async (req, accessToken, refreshToken, profile, done) => {
+      try {
+        const email = profile.emails[0]?.value;
+        const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true });
+        return done(null, loggedInUser);
+      } catch (err) {
+        return done(err);
+      }
+    }
+  );
+  passport.use('github', githubStrategyConfig);
 }
 
 /**
  * Sign in with LinkedIn.
  */
 if (process.env.LINKEDIN_ID && process.env.LINKEDIN_SECRET) {
-    passport.use(
-        new LinkedInStrategy(
-            {
-                clientID: process.env.LINKEDIN_ID,
-                clientSecret: process.env.LINKEDIN_SECRET,
-                callbackURL: `/auth/linkedin/callback`,
-                scope: ["profile"],
-                passReqToCallback: true,
-            },
-            async (req, accessToken, refreshToken, profile, done) => {
-                try {
-                    const email = profile.emails[0]?.value;
-                    const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true });
-                    return done(null, loggedInUser);
-                } catch (err) {
-                    console.log(err);
-                    return done(err);
-                }
-            }
-        )
-    );
+  passport.use(
+    new LinkedInStrategy(
+      {
+        clientID: process.env.LINKEDIN_ID,
+        clientSecret: process.env.LINKEDIN_SECRET,
+        callbackURL: '/auth/linkedin/callback',
+        scope: ['profile'],
+        passReqToCallback: true
+      },
+      async (req, accessToken, refreshToken, profile, done) => {
+        try {
+          const email = profile.emails[0]?.value;
+          const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true });
+          return done(null, loggedInUser);
+        } catch (err) {
+          console.log(err);
+          return done(err);
+        }
+      }
+    )
+  );
 }
 
 /**

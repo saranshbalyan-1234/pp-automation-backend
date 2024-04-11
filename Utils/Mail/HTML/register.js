@@ -1,5 +1,5 @@
 const registerHTML = (name, link) => {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
         <html>
             <body>
                 <p>Hi ${name}, We're excited to have you get started. First, you need to confirm your account.</p>
