@@ -21,7 +21,7 @@
     },
     "rules": {
         "semi": [2, "always"],
-        "indent": [1],
+        "indent": [2],
         "quotes": [2, "single"],
         "linebreak-style": [2, "unix"]
         // "no-console":"error"
