@@ -1,5 +1,6 @@
-import { createToken } from '#utils/jwt.js';
 import nodemailer from 'nodemailer';
+
+import { createToken } from '#utils/jwt.js';
 import registerHTML from '#utils/Mail/HTML/register.js';
 import resetPasswordHtml from '#utils/Mail/HTML/resetPassword.js';
 const transporter = nodemailer.createTransport({
@@ -22,7 +23,7 @@ const sendMailApi = (req, res) => {
     return res.status(200).json(info);
   });
 };
-const sendMail = async (data, type) => {
+const sendMail = (data, type) => {
   let mailOption = {
     html: '',
     subject: '',
@@ -60,6 +61,8 @@ const sendMail = async (data, type) => {
         to: data.email
       };
       break;
+    default:
+      break;
   }
   transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM }, (error, info) => {
     if (error) {
@@ -71,4 +74,4 @@ const sendMail = async (data, type) => {
     }
   });
 };
-export { sendMailApi, sendMail };
+export { sendMail, sendMailApi };

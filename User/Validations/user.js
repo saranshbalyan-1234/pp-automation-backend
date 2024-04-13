@@ -25,4 +25,4 @@ const userIdParamsValidation = {
   params: Joi.object({ userId: Joi.number().integer().required() })
 };
 
-export { changePasswordValidation, changeDetailsValidation, activeInactiveValidation, userIdParamsValidation };
+export { activeInactiveValidation, changeDetailsValidation, changePasswordValidation, userIdParamsValidation };

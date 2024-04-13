@@ -33,8 +33,23 @@
         "sort-keys-fix/sort-keys-fix": "warn",
         "id-length":"off",
         "no-magic-numbers":"off",
-        "require-unicode-regexp":"off"
-      
+        "require-unicode-regexp":"off",
+        "max-params":"off",
+        "prefer-destructuring":"off",
+        "no-multi-assign":"off",
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "consistent-return":"off",
+        "max-lines":"off",
+        "no-plusplus":"off",
+        "no-continue":"off",
+        "no-await-in-loop":"off",
+        "sort-imports": ["error", {
+            "ignoreCase": true,
+            "ignoreDeclarationSort": true,
+            "ignoreMemberSort": true,
+            "memberSyntaxSortOrder": ["multiple", "all","single","none"]
+        }]
     },
     "settings": {
         "react": {
@@ -47,7 +62,8 @@
         "react",
         "react-hooks",
         "eqeqeq-fix",
-        "simple-import-sort",
-        "sort-keys-fix"
+        "sort-keys-fix",
+        "unused-imports",
+        "simple-import-sort"
     ]
 }

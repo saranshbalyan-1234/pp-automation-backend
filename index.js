@@ -1,13 +1,14 @@
-import { defaultMiddleware } from '#middlewares/default.js';
-import { morgalApiLogger } from '#utils/logger.js';
-import { registerRoutes } from '#routes/index.js';
-import { setupCors, setupErrorInterceptor, setupRateLimiter, setupResponseInterceptor, setupTimeout, setupValidationErrorInterceptor } from '#middlewares/server.js';
-import { syncDatabase } from '#user/Service/database.js';
-import errorContstants from '#constants/error.js';
+import parser from 'body-parser';
 import express from 'express';
 import fileupload from 'express-fileupload';
 import helmet from 'helmet';
-import parser from 'body-parser';
+
+import errorContstants from '#constants/error.js';
+import defaultMiddleware from '#middlewares/default.js';
+import { setupCors, setupErrorInterceptor, setupRateLimiter, setupResponseInterceptor, setupTimeout, setupValidationErrorInterceptor } from '#middlewares/server.js';
+import registerRoutes from '#routes/index.js';
+import { syncDatabase } from '#user/Service/database.js';
+import morgalApiLogger from '#utils/Logger/api.js';
 // Import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 const app = express();
 

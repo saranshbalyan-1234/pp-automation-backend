@@ -6,7 +6,6 @@ const createToken = (data, secret, expiration) => {
   try {
     const options = {};
     if (expiration) options.expiresIn = expiration;
-    console.log('saransh', secret);
     return sign(data, secret, options);
   } catch (err) {
     console.error('Error in Signing Token');
@@ -36,4 +35,4 @@ const decryptJwt = (jwt) => {
   return verify(jwt, process.env.JWT_ACCESS_SECRET);
 };
 
-export { createToken, getTokenError, extractToken, decryptJwt };
+export { createToken, decryptJwt, extractToken, getTokenError };

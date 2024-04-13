@@ -1,11 +1,12 @@
 import crypto from 'crypto';
+
 import getError from '#utils/error.js';
 
 const secretKey = 'saranshbalyan123saranshbalyan123';
 const initializationVector = 'c3e84932d4eca8d8860e087613ca4313';
 
 // Function to encrypt using AES CBC
-function encryptWithAES (text, key = secretKey, iv = initializationVector) {
+const encryptWithAES = (text, key = secretKey, iv = initializationVector) => {
   try {
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), Buffer.from(iv, 'hex'));
     let encrypted = cipher.update(JSON.stringify(text), 'utf-8', 'hex');
@@ -14,10 +15,10 @@ function encryptWithAES (text, key = secretKey, iv = initializationVector) {
   } catch (e) {
     getError(e);
   }
-}
+};
 
 // Function to decrypt using AES CBC
-function decryptWithAES (encryptedText, key = secretKey, iv = initializationVector) {
+const decryptWithAES = (encryptedText, key = secretKey, iv = initializationVector) => {
   try {
     const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), Buffer.from(iv, 'hex'));
     let decrypted = decipher.update(encryptedText, 'hex', 'utf-8');
@@ -26,7 +27,7 @@ function decryptWithAES (encryptedText, key = secretKey, iv = initializationVect
   } catch (e) {
     getError(e);
   }
-}
+};
 
 /*
  * Const plaintext = "Hello, AES CBC encryption!";
@@ -39,4 +40,4 @@ function decryptWithAES (encryptedText, key = secretKey, iv = initializationVect
  * console.log("Decrypted:", decryptedText);
  */
 
-export { encryptWithAES, decryptWithAES };
+export { decryptWithAES, encryptWithAES };

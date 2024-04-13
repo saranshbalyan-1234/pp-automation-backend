@@ -1,14 +1,16 @@
+import pkg from 'jsonwebtoken';
+import moment from 'moment';
+
+import errorContstants from '#constants/error.js';
+import successConstants from '#constants/success.js';
 import { createBucket } from '#storage/Service/awsService.js';
+import db from '#utils/dataBaseConnection.js';
+import getError from '#utils/error.js';
 import { createToken, getTokenError } from '#utils/jwt.js';
+import { sendMail } from '#utils/Mail/nodeMailer.js';
+
 import { dropDatabase, syncDatabase } from '../Service/database.js';
 import { loginWithCredentals } from '../Service/user.js';
-import { sendMail } from '#utils/Mail/nodeMailer.js';
-import db from '#utils/dataBaseConnection.js';
-import errorContstants from '#constants/error.js';
-import getError from '#utils/error.js';
-import moment from 'moment';
-import pkg from 'jsonwebtoken';
-import successConstants from '#constants/success.js';
 const { verify } = pkg;
 
 // Main
@@ -214,7 +216,7 @@ const sendResetPasswordMail = async (req, res) => {
   }
 };
 
-const refreshToken = async (req, res) => {
+const refreshToken = (req, res) => {
   /*  #swagger.tags = ["Auth"] */
   const { token } = req.body;
   if (!token) return res.status(401).json({ error: errorContstants.REFRESH_TOKEN_NOT_FOUND });
@@ -224,12 +226,12 @@ const refreshToken = async (req, res) => {
     if (data) {
       const tokenData = { email: data.email, id: data.id };
       const accessToken = createToken(tokenData, process.env.JWT_ACCESS_SECRET, process.env.JWT_ACCESS_EXPIRATION);
-      const refreshToken = createToken(tokenData, process.env.JWT_REFRESH_SECRET, process.env.JWT_REFRESH_EXPIRATION);
-      return res.status(200).json({ accessToken, refreshToken });
+      const refreshedToken = createToken(tokenData, process.env.JWT_REFRESH_SECRET, process.env.JWT_REFRESH_EXPIRATION);
+      return res.status(200).json({ accessToken, refreshToken: refreshedToken });
     }
   } catch (e) {
     return res.status(401).json({ error: getTokenError(e, 'Refresh') });
   }
 };
 
-export { login, register, verifyCustomer, verifyUser, resetPassword, sendResetPasswordMail, refreshToken };
+export { login, refreshToken, register, resetPassword, sendResetPasswordMail, verifyCustomer, verifyUser };

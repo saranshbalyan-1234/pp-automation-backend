@@ -1,7 +1,9 @@
-import { deleteCustomer, getCachedKeys, syncDatabase } from '../Service/database.js';
 import _ from 'lodash';
+
 import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
+
+import { deleteCustomer, getCachedKeys, syncDatabase } from '../Service/database.js';
 
 const deleteCustomerByAdmin = async (req, res) => {
   /*
@@ -32,7 +34,7 @@ const syncTenant = async (req, res) => {
   }
 };
 
-const getAllSession = async (req, res) => {
+const getAllSession = (req, res) => {
   /*
    *  #swagger.tags = ["Super Admin"]
    *  #swagger.security = [{"apiKeyAuth": []}]
@@ -56,7 +58,7 @@ const getAllSession = async (req, res) => {
   }
 };
 
-const terminateSession = async (req, res) => {
+const terminateSession = (req, res) => {
   /*
    *  #swagger.tags = ["Super Admin"]
    *  #swagger.security = [{"apiKeyAuth": []}]
@@ -70,4 +72,4 @@ const terminateSession = async (req, res) => {
   }
 };
 
-export { deleteCustomerByAdmin, syncTenant, getAllSession, terminateSession };
+export { deleteCustomerByAdmin, getAllSession, syncTenant, terminateSession };

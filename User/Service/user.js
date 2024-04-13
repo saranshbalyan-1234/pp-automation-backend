@@ -1,8 +1,9 @@
-import { createToken } from '#utils/jwt.js';
 import bcrypt from 'bcryptjs';
+
+import errorContstants from '#constants/error.js';
 import cache from '#utils/cache.js';
 import db from '#utils/dataBaseConnection.js';
-import errorContstants from '#constants/error.js';
+import { createToken } from '#utils/jwt.js';
 
 // Main
 const Customer = db.customers;

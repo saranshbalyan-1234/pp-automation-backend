@@ -1,6 +1,6 @@
 export const KeyboardButtonList = [
   'NULL',
-  'CANCEL', // ^break
+  'CANCEL',
   'HELP',
   'BACK_SPACE',
   'TAB',
@@ -30,7 +30,8 @@ export const KeyboardButtonList = [
   'SEMICOLON',
   'EQUALS',
 
-  'NUMPAD0', // Number pad keys
+  // Number pad keys
+  'NUMPAD0',
   'NUMPAD1',
   'NUMPAD2',
   'NUMPAD3',
@@ -47,7 +48,8 @@ export const KeyboardButtonList = [
   'DECIMAL',
   'DIVIDE',
 
-  'F1', // Function keys
+  // Function keys
+  'F1',
   'F2',
   'F3',
   'F4',
@@ -60,8 +62,11 @@ export const KeyboardButtonList = [
   'F11',
   'F12',
 
-  'COMMAND', // Apple command key
-  'META' // Alias for Windows key
+  // Apple command key
+  'COMMAND',
+
+  // Alias for Windows key
+  'META'
 ];
 
 export const IfType = ['Boolean', 'Number', 'String'];

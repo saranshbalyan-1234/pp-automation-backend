@@ -1,13 +1,14 @@
 import chalk from 'chalk';
-import morganBody from 'morgan-body';
 
 const overrideInfo = () => {
   if (process.env.PRINT_CONSOLE_INFO === 'false') {
-    return (console.log = () => {});
+    console.log = () => {
+      // Do nothing.
+    };
   }
 
   const { log } = console;
-  return console.log = function (...e) {
+  console.log = (...e) => {
     try {
       throw new Error();
     } catch (error) {
@@ -19,13 +20,15 @@ const overrideInfo = () => {
 
 const overrideWarn = () => {
   if (process.env.PRINT_CONSOLE_WARN === 'false') {
-    return (console.log = () => {});
+    console.log = () => {
+      // Do nothing.
+    };
   }
   const log = console.warn;
   try {
     throw new Error();
   } catch (error) {
-    return console.warn = function (...e) {
+    console.warn = (...e) => {
       const fileName = getFileNameFromError(error);
       log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.yellow('WARN:'), fileName, ...e]);
     };
@@ -34,10 +37,12 @@ const overrideWarn = () => {
 
 const overrideError = () => {
   if (process.env.PRINT_CONSOLE_ERROR === 'false') {
-    return (console.log = () => {});
+    console.log = () => {
+      // Do nothing.
+    };
   }
   const log = console.error;
-  return console.error = function (...e) {
+  console.error = (...e) => {
     try {
       throw new Error();
     } catch (error) {
@@ -49,11 +54,13 @@ const overrideError = () => {
 
 const overrideDebug = () => {
   if (process.env.PRINT_CONSOLE_DEBUG === 'false') {
-    return (console.log = () => {});
+    console.log = () => {
+      // Do nothing.
+    };
   }
 
   const log = console.debug;
-  return console.debug = function (...e) {
+  console.debug = (...e) => {
     try {
       throw new Error();
     } catch (error) {
@@ -65,12 +72,14 @@ const overrideDebug = () => {
 
 const overrideSuccess = () => {
   if (process.env.PRINT_CONSOLE_SUCCESS === 'false') {
-    return (console.log = () => {});
+    console.log = () => {
+      // Do nothing.
+    };
   }
 
   const log = console.info;
 
-  return console.success = function (...e) {
+  console.success = (...e) => {
     try {
       throw new Error();
     } catch (error) {
@@ -78,18 +87,6 @@ const overrideSuccess = () => {
       log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.green('SUCCESS:'), fileName, ...e]);
     }
   };
-};
-
-const morgalApiLogger = (app) => {
-  if (process.env.PRINT_API_REQ_RES === 'false') return console.log('API logger is turned OFF');
-  console.log('API logger is turned ON');
-  return morganBody(app, {
-    includeNewLine: true,
-    logReqHeaderList: ['x-project-id'],
-    prettify: false,
-    skip: (req) => req.url.includes('management') || req.url.includes('favicon') || req.method === 'OPTIONS',
-    timezone: 'Asia/Kolkata'
-  });
 };
 
 const overrideConsole = () => {
@@ -100,11 +97,6 @@ const overrideConsole = () => {
   overrideDebug();
 };
 
-const setupLogger = (app) => {
-  morgalApiLogger(app);
-  overrideConsole();
-};
-export default setupLogger;
-export { morgalApiLogger, overrideConsole };
+export default overrideConsole;
 
 const getFileNameFromError = (error) => `[${error.stack.split('\n')[2].split('/').at(-1).replace(/\)/, '')}]`;

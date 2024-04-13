@@ -1,7 +1,7 @@
-import { idValidation } from '#validations/index.js';
-import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+import { idValidation } from '#validations/index.js';
 const UserProject = db.userProjects;
 
 const validatePermission = (permissionName, method) => async (req, res, next) => {
@@ -10,24 +10,24 @@ const validatePermission = (permissionName, method) => async (req, res, next) =>
       const allowed = await req.user.permissions.some((permission) => permissionName === permission.name && permission[method] === true);
       if (!allowed) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
     }
-    next();
+    return next();
   } catch (e) {
     return getError(e, res);
   }
 };
 
-const validateSuperAdmin = () => async (req, res, next) => {
+const validateSuperAdmin = () => (req, res, next) => {
   try {
     if (!req.user.superAdmin) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
-    next();
+    return next();
   } catch (e) {
     return getError(e, res);
   }
 };
-const validateCustomerAdmin = () => async (req, res, next) => {
+const validateCustomerAdmin = () => (req, res, next) => {
   try {
     if (!req.user.customerAdmin) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
-    next();
+    return next();
   } catch (e) {
     return getError(e, res);
   }
@@ -44,10 +44,10 @@ const validateUserProject = () => async (req, res, next) => {
     });
     if (!userProject) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
 
-    next();
+    return next();
   } catch (e) {
     return getError(e, res);
   }
 };
 
-export { validatePermission, validateSuperAdmin, validateCustomerAdmin, validateUserProject };
+export { validateCustomerAdmin, validatePermission, validateSuperAdmin, validateUserProject };

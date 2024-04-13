@@ -1,4 +1,5 @@
 import { Op, Sequelize } from 'sequelize';
+
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 const User = db.users;

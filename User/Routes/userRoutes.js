@@ -1,4 +1,8 @@
-import { activeInactiveValidation, changeDetailsValidation, changePasswordValidation, userIdParamsValidation } from '../Validations/user.js';
+import express from 'express';
+import { validate } from 'express-validation';
+
+import { validateCustomerAdmin, validatePermission } from '#middlewares/permissions.js';
+
 import {
   addUser,
   changeDetails,
@@ -16,9 +20,7 @@ import {
    */
 } from '../Controllers/userController.js';
 import { emailBodyValidation, registerValidation } from '../Validations/auth.js';
-import { validate } from 'express-validation';
-import { validateCustomerAdmin, validatePermission } from '#middlewares/permissions.js';
-import express from 'express';
+import { activeInactiveValidation, changeDetailsValidation, changePasswordValidation, userIdParamsValidation } from '../Validations/user.js';
 
 const Router = express.Router();
 

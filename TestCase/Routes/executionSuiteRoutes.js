@@ -1,3 +1,7 @@
+import express from 'express';
+
+import { validatePermission } from '#middlewares/permissions.js';
+
 import {
   addExecutionSuite,
   addTestCaseToExecutionSuite,
@@ -8,8 +12,6 @@ import {
   getTestCaseByExecutionSuiteId,
   removeTestCaseFromExecutionSuite
 } from '../Controllers/executionSuiteController.js';
-import { validatePermission } from '#middlewares/permissions.js';
-import express from 'express';
 const Router = express.Router();
 
 Router.post('/', validatePermission('Execution Suite', 'add'), addExecutionSuite);

@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+
 import errorContstants from '#constants/error.js';
 export default (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -54,7 +55,7 @@ export default (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterFind: function (model) {
+        afterFind: function afterFind (model) {
           if (!Array.isArray(model)) {
             if (!model.dataValues.active) throw new Error(errorContstants.ACCOUNT_INACTIVE);
             // If(model.dataValues.verifiedAt) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);

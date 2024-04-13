@@ -1,7 +1,7 @@
-import { idValidation } from '#validations/index.js';
-import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+import { idValidation } from '#validations/index.js';
 const Machine = db.machines;
 
 export const addMachine = async (req, res) => {

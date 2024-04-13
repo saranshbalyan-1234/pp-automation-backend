@@ -1,7 +1,8 @@
-import { decryptWithAES, encryptWithAES } from '../Service/aes.service.js';
 import getError from '#utils/error.js';
 
-const encryptData = async (req, res) => {
+import { decryptWithAES, encryptWithAES } from '../Service/aes.service.js';
+
+const encryptData = (req, res) => {
   /*
    *  #swagger.tags = ["Encryption"]
    *  #swagger.security = [{"apiKeyAuth": []}]
@@ -15,7 +16,7 @@ const encryptData = async (req, res) => {
   }
 };
 
-const decryptData = async (req, res) => {
+const decryptData = (req, res) => {
   /*
    *  #swagger.tags = ["Encryption"]
    *  #swagger.security = [{"apiKeyAuth": []}]
@@ -29,4 +30,4 @@ const decryptData = async (req, res) => {
   }
 };
 
-export { encryptData, decryptData };
+export { decryptData, encryptData };

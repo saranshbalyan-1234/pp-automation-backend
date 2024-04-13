@@ -1,3 +1,7 @@
+import express from 'express';
+
+import { validatePermission } from '#middlewares/permissions.js';
+
 import {
   convertToReusableProcess,
   createReusableProcessLog,
@@ -9,8 +13,6 @@ import {
   saveReusableProcess,
   updateReusableProcess
 } from '../Controllers/reusableProcessController.js';
-import { validatePermission } from '#middlewares/permissions.js';
-import express from 'express';
 const Router = express.Router();
 
 Router.post('/', validatePermission('Reusable Process', 'add'), saveReusableProcess);

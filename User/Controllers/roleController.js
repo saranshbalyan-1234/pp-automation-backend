@@ -1,9 +1,10 @@
-import { idValidation, nameValidation } from '#validations/index.js';
-import { permissionList } from '#constants/permission.js';
-import { updateNameValidation, updatePermissionValidation } from '../Validations/role.js';
-import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import { permissionList } from '#constants/permission.js';
+import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+import { idValidation, nameValidation } from '#validations/index.js';
+
+import { updateNameValidation, updatePermissionValidation } from '../Validations/role.js';
 const Role = db.roles;
 const UserRole = db.userRoles;
 const Permission = db.permissions;
@@ -126,14 +127,14 @@ const updateRolePermission = async (req, res) => {
 
     if (check) {
       const payload = [...req.body].map((el) => {
-        const { error } = updatePermissionValidation.validate({
+        const { error: validationError } = updatePermissionValidation.validate({
           add: el.add,
           delete: el.delete,
           edit: el.edit,
           name: el.name,
           view: el.view
         });
-        if (error) throw new Error(error.details[0].message);
+        if (validationError) throw new Error(validationError.details[0].message);
 
         return {
           add: el.add,
@@ -208,4 +209,4 @@ const updateUserRole = async (req, res) => {
   }
 };
 
-export { saveRole, updateRole, getAllRole, deleteRole, updateRolePermission, updateUserRole, getUserRole };
+export { deleteRole, getAllRole, getUserRole, saveRole, updateRole, updateRolePermission, updateUserRole };

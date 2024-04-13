@@ -5,10 +5,12 @@
  * import pkg from "jsonwebtoken";
  */
 
-export const defaultMiddleware = () => async (req, res, next) => {
+const defaultMiddleware = () => (req, res, next) => {
   req.user = {
     database: process.env.DATABASE_NAME,
     tenant: 'master'
   };
   next();
 };
+
+export default defaultMiddleware;

@@ -1,8 +1,9 @@
+import moment from 'moment';
+
+import errorContstants from '#constants/error.js';
 import { deleteBucket } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
 import db from '#utils/dataBaseConnection.js';
-import errorContstants from '#constants/error.js';
-import moment from 'moment';
 const deleteCustomer = async (email) => {
   const tenantName = email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
   try {
@@ -113,4 +114,4 @@ const dropDatabase = async (database) => {
     return false;
   }
 };
-export { deleteCustomer, syncDatabase, getAllTenant, getCachedKeys, createSuperAdmin, dropDatabase };
+export { createSuperAdmin, deleteCustomer, dropDatabase, getAllTenant, getCachedKeys, syncDatabase };

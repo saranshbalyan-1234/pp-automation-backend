@@ -63,7 +63,7 @@ const deleteCustomerByAdmin = async (config) => {
   }
 };
 
-export { register, login, deleteCustomerByAdmin, verifyCustomer };
+export { deleteCustomerByAdmin, login, register, verifyCustomer };
 
 const getSuperAdminToken = async () => {
   try {

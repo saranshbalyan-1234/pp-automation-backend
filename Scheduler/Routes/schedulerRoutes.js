@@ -1,7 +1,7 @@
-import { createJobManager, getAllJobManager, getJobManagerById, removeJobManager, updateJobManagerById } from '../Controllers/jobManagerController.js';
 import express from 'express';
 
 import { createJob, getAllJobByJobManagerId, getJobById, removeJob, updateJob } from '../Controllers/jobController.js';
+import { createJobManager, getAllJobManager, getJobManagerById, removeJobManager, updateJobManagerById } from '../Controllers/jobManagerController.js';
 const Router = express.Router();
 
 Router.get('/job-manager', getAllJobManager);

@@ -1,9 +1,10 @@
-import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#utils/Validations/index.js';
-import { updateReusableProcessValidation } from '#testcase/Validations/reusableProcess.js';
 import _ from 'lodash';
-import db from '#utils/dataBaseConnection.js';
+
 import errorContstants from '#constants/error.js';
+import { updateReusableProcessValidation } from '#testcase/Validations/reusableProcess.js';
+import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#utils/Validations/index.js';
 
 const Object = db.objects;
 const TestParameter = db.testParameters;
@@ -238,16 +239,16 @@ const convertToReusableProcess = async (req, res) => {
       });
       if (error) throw new Error(error.details[0].message);
 
-      const process = await Process.schema(req.database).findByPk(processId);
+      const processByPk = await Process.schema(req.database).findByPk(processId);
 
-      if (process.dataValues.reusableProcessId) {
+      if (processByPk.dataValues.reusableProcessId) {
         return res.status(200).json({ message: 'Already Reuasable Process!' });
       }
 
       const reusableProcess = await ReusableProcess.schema(req.database).create(
         {
           createdByUser: req.user.id,
-          name: process.dataValues.name,
+          name: processByPk.dataValues.name,
           projectId
         },
         { transaction }
@@ -260,7 +261,7 @@ const convertToReusableProcess = async (req, res) => {
         {
           transaction,
           where: {
-            id: process.dataValues.id
+            id: processByPk.dataValues.id
           }
         }
       );
@@ -277,7 +278,7 @@ const convertToReusableProcess = async (req, res) => {
       );
 
       if (updatedProcess[0]) {
-        const process = await Process.schema(req.database).findByPk(
+        const updatedProcessByPk = await Process.schema(req.database).findByPk(
           processId,
           {
             include: [
@@ -295,7 +296,7 @@ const convertToReusableProcess = async (req, res) => {
           { transaction }
         );
 
-        const temp = _.cloneDeep(process);
+        const temp = _.cloneDeep(updatedProcessByPk);
 
         if (temp.dataValues.reusableProcess) {
           temp.dataValues.testSteps = temp.dataValues.reusableProcess.dataValues.testSteps;
@@ -313,13 +314,13 @@ const convertToReusableProcess = async (req, res) => {
 };
 
 export {
-  saveReusableProcess,
-  updateReusableProcess,
-  getAllReusableProcess,
-  deleteReusableProcess,
-  getReusableProcessDetailsById,
-  getTestStepByReusableProcess,
+  convertToReusableProcess,
   createReusableProcessLog,
+  deleteReusableProcess,
+  getAllReusableProcess,
+  getReusableProcessDetailsById,
   getReusableProcessLogsById,
-  convertToReusableProcess
+  getTestStepByReusableProcess,
+  saveReusableProcess,
+  updateReusableProcess
 };

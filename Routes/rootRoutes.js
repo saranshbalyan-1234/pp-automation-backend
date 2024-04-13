@@ -1,8 +1,7 @@
 import express from 'express';
-import swaggerUi from 'swagger-ui-express';
-
 // Swagger
 import { createRequire } from 'module';
+import swaggerUi from 'swagger-ui-express';
 const require = createRequire(import.meta.url);
 const swaggerFile = require('../swagger.json');
 // Swagger

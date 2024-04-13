@@ -1,8 +1,8 @@
-import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#validations/index.js';
+import errorContstants from '#constants/error.js';
 import { saveObjectLocatorValidation, updateObjectValidation } from '#testcase/Validations/object.js';
 import db from '#utils/dataBaseConnection.js';
-import errorContstants from '#constants/error.js';
 import getError from '#utils/error.js';
+import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#validations/index.js';
 
 const Object = db.objects;
 const ObjectLocator = db.ObjectLocators;
@@ -260,14 +260,14 @@ const createObjectLog = async (req, res, id, logs = []) => {
 };
 
 export {
+  createObjectLog,
+  deleteObject,
+  deleteObjectLocator,
   getAllObject,
   getObjectDetailsById,
-  saveObject,
-  updateObject,
-  deleteObject,
   getObjectLocatorsByObjectId,
-  saveObjectLocator,
-  deleteObjectLocator,
   getObjectLogsByObjectId,
-  createObjectLog
+  saveObject,
+  saveObjectLocator,
+  updateObject
 };

@@ -1,8 +1,9 @@
-import { addProjectValidation, memberProjectValidation, updateProjectValidation } from '../Validations/project.js';
-import { idValidation } from '#validations/index.js';
-import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+import { idValidation } from '#validations/index.js';
+
+import { addProjectValidation, memberProjectValidation, updateProjectValidation } from '../Validations/project.js';
 
 const UserProject = db.userProjects;
 const Project = db.projects;
@@ -43,7 +44,7 @@ const getMyProject = async (req, res) => {
 
     const updatedArray = projects.map((el) => {
       const temp = { ...el.project.dataValues };
-      temp.members = temp.members.map((el) => el.user);
+      temp.members = temp.members.map((el1) => el1.user);
       return temp;
     });
 
@@ -239,4 +240,4 @@ const editProject = async (req, res) => {
   }
 };
 
-export { getMyProject, getProjectById, addProject, deleteProject, addMember, deleteMember, editProject };
+export { addMember, addProject, deleteMember, deleteProject, editProject, getMyProject, getProjectById };

@@ -1,8 +1,9 @@
-import { idValidation } from '#validations/index.js';
-import { nameTestCaseId, updateColumnValidation } from '../Validations/environment.js';
-import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+import { idValidation } from '#validations/index.js';
+
+import { nameTestCaseId, updateColumnValidation } from '../Validations/environment.js';
 const Environment = db.enviroments;
 const Column = db.columns;
 
@@ -67,8 +68,9 @@ const getAllEnvironmentsByTestCase = async (req, res) => {
     const env = enviroments.map((el) => {
       const temp = el.dataValues.columns;
       const newKeys = {};
-      temp.forEach((el) => {
-        newKeys[el.name] = el.value;
+
+      temp.forEach((el1) => {
+        newKeys[el1.name] = el1.value;
       });
 
       return {
@@ -150,7 +152,7 @@ const updateColumnValue = async (req, res) => {
     const { error } = updateColumnValidation.validate(req.body);
     if (error) throw new Error(error.details[0].message);
 
-    const updateColumnValue = await Column.schema(req.database).update(
+    const updatedColumnValue = await Column.schema(req.database).update(
       { value },
       {
         where: {
@@ -159,7 +161,7 @@ const updateColumnValue = async (req, res) => {
         }
       }
     );
-    if (updateColumnValue[0]) {
+    if (updatedColumnValue[0]) {
       return res.status(200).json({ message: 'Column updated successfully!' });
     }
     return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
@@ -240,4 +242,4 @@ const deleteEnvironment = async (req, res) => {
   }
 };
 
-export { createEnvironment, getAllEnvironmentsByTestCase, createColumnForEnvironment, deleteColumnFromEnvironment, updateColumnValue, getAllEnvironmentNamesByTestCase, deleteEnvironment };
+export { createColumnForEnvironment, createEnvironment, deleteColumnFromEnvironment, deleteEnvironment, getAllEnvironmentNamesByTestCase, getAllEnvironmentsByTestCase, updateColumnValue };

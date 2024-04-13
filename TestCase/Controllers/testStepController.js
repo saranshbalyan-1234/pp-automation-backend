@@ -1,9 +1,10 @@
 import { Op } from 'sequelize';
-import { idValidation } from '#validations/index.js';
+
+import errorContstants from '#constants/error.js';
 import { saveTestStepValidation, updateTestStepValidation } from '#testcase/Validations/testStep.js';
 import db from '#utils/dataBaseConnection.js';
-import errorContstants from '#constants/error.js';
 import getError from '#utils/error.js';
+import { idValidation } from '#validations/index.js';
 const TestStep = db.testSteps;
 const Object = db.objects;
 const TestParameter = db.testParameters;
@@ -191,4 +192,4 @@ const deleteTestStep = async (req, res) => {
   }
 };
 
-export { saveTestStep, updateTestStep, deleteTestStep };
+export { deleteTestStep, saveTestStep, updateTestStep };

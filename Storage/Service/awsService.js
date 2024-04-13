@@ -1,5 +1,6 @@
 import { S3 } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
+
 import errorContstants from '#constants/error.js';
 
 export const s3 = new S3({
@@ -163,11 +164,11 @@ export const deleteS3Folder = (bucketName, folderName) => {
         params.Delete.Objects.push({ Key: content.Key });
       });
 
-      s3.deleteObjects(params, (err, data) => {
-        if (err) return console.log(err);
-        if (data.Errors?.length > 0) {
+      s3.deleteObjects(params, (err1, data1) => {
+        if (err1) return console.log(err1);
+        if (data1.Errors?.length > 0) {
           console.log('Error in Deleting S3 Files');
-          console.log(data.Errors);
+          console.log(data1.Errors);
         }
       });
     });

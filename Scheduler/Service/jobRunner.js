@@ -1,5 +1,5 @@
-import XLSX from 'xlsx';
 import fs from 'fs';
+import XLSX from 'xlsx';
 export const executeQuery = async (connection, job) => {
   const { name, query, extension } = job;
   if (!query) return;
@@ -19,7 +19,7 @@ export const executeCurl = (curl) => {
   console.log('Executing Curl ', curl);
 };
 
-function formatJSON (data, extension) {
+const formatJSON = (data, extension) => {
   if (extension === 'json') {
     return JSON.stringify(data);
   }
@@ -29,7 +29,7 @@ function formatJSON (data, extension) {
     csv.unshift(Object.keys(data[0]));
     return csv.join('\n');
   } return JSON.stringify(data);
-}
+};
 
 const generateFile = (data, name, extension) => {
   const fileName = `${name ? `${name}_${new Date().toISOString()}` : new Date().toISOString()}.${extension[0] === '.' ? extension.slice(1) : extension}`;

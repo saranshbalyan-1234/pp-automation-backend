@@ -2,7 +2,7 @@ import { actionEvents } from '#constants/actionEvents.js';
 import { permissionList } from '#constants/permission.js';
 import getError from '#utils/error.js';
 
-const getAllPermission = async (req, res) => {
+const getAllPermission = (req, res) => {
   /*
    *  #swagger.tags = ["Constant"]
    *  #swagger.security = [{"apiKeyAuth": []}]
@@ -15,7 +15,7 @@ const getAllPermission = async (req, res) => {
   }
 };
 
-const getAllActionEvent = async (req, res) => {
+const getAllActionEvent = (req, res) => {
   /*
    *  #swagger.tags = ["Constant"]
    *  #swagger.security = [{"apiKeyAuth": []}]
@@ -28,4 +28,4 @@ const getAllActionEvent = async (req, res) => {
   }
 };
 
-export { getAllPermission, getAllActionEvent };
+export { getAllActionEvent, getAllPermission };

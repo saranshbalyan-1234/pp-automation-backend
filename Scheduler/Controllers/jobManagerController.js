@@ -1,11 +1,13 @@
-import { idValidation } from '#validations/index.js';
-import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
-// Import { createJobManagerValidation } from "../Validations/scheduler.js";
-import { addToConnectionPool, deleteFromConnectionPool, getJobManagerFromMap, startManagerJobs, stopManager } from '../Service/schedulerService.js';
 import _ from 'lodash';
+
 import errorContstants from '#constants/error.js';
 import successContstants from '#constants/success.js';
+import db from '#utils/dataBaseConnection.js';
+import getError from '#utils/error.js';
+import { idValidation } from '#validations/index.js';
+
+// Import { createJobManagerValidation } from "../Validations/scheduler.js";
+import { addToConnectionPool, deleteFromConnectionPool, getJobManagerFromMap, startManagerJobs, stopManager } from '../Service/schedulerService.js';
 const JobManager = db.jobManagers;
 const Job = db.jobs;
 
@@ -58,7 +60,7 @@ export const updateJobManagerById = async (req, res) => {
         await startManagerJobs({ active, connection, jobs, name }, req.user.tenant, false);
       } else {
         console.log('Job Manager already active');
-        const { host, port, dialect, user, password, db } = connection;
+        const { host, port, dialect, user, password, db: database } = connection;
         if (
           (host && port && dialect && user && password) ||
                     prevConnectionData.host !== host ||
@@ -66,7 +68,7 @@ export const updateJobManagerById = async (req, res) => {
                     prevConnectionData.dialect !== dialect ||
                     prevConnectionData.user !== user ||
                     prevConnectionData.password !== password ||
-                    prevConnectionData.db !== db
+                    prevConnectionData.db !== database
         ) {
           console.log('New Connection Found');
           deleteFromConnectionPool(`${req.user.tenant}_${prevJobManager.dataValues.id}`);

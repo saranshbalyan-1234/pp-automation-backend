@@ -1,3 +1,7 @@
+import express from 'express';
+
+import { validatePermission } from '#middlewares/permissions.js';
+
 import {
   createColumnForEnvironment,
   createEnvironment,
@@ -7,8 +11,6 @@ import {
   getAllEnvironmentsByTestCase,
   updateColumnValue
 } from '../Controllers/environment.js';
-import { validatePermission } from '#middlewares/permissions.js';
-import express from 'express';
 const Router = express.Router();
 
 Router.get('/testCase/:testCaseId', validatePermission('Test Case', 'view'), getAllEnvironmentsByTestCase);

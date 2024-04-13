@@ -1,10 +1,11 @@
-import { Op } from 'sequelize';
-import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#validations/index.js';
-import { saveProcesValidation, updateProcessValidation, updateTestCaseValidation } from '#testcase/Validations/testCase.js';
 import _ from 'lodash';
-import db from '#utils/dataBaseConnection.js';
+import { Op } from 'sequelize';
+
 import errorContstants from '#constants/error.js';
+import { saveProcesValidation, updateProcessValidation, updateTestCaseValidation } from '#testcase/Validations/testCase.js';
+import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#validations/index.js';
 const TestCase = db.testCases;
 const Process = db.process;
 const Object = db.objects;
@@ -415,15 +416,15 @@ const createTestCaseLog = async (req, res, id, logs = []) => {
 };
 
 export {
-  saveTestCase,
-  updateTestCase,
-  getAllTestCase,
+  createTestCaseLog,
+  deleteProcess,
   deleteTestCase,
+  getAllTestCase,
   getTestCaseDetailsById,
+  getTestCaseLogsById,
   getTestStepByTestCase,
   saveProcess,
+  saveTestCase,
   updateProcess,
-  deleteProcess,
-  getTestCaseLogsById,
-  createTestCaseLog
+  updateTestCase
 };

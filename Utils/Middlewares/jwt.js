@@ -1,10 +1,11 @@
-import { extractToken } from '#utils/jwt.js';
-import cache from '#utils/cache.js';
-import errorContstants from '#constants/error.js';
-import getError from '#utils/error.js';
 import pkg from 'jsonwebtoken';
+
+import errorContstants from '#constants/error.js';
+import cache from '#utils/cache.js';
+import getError from '#utils/error.js';
+import { extractToken } from '#utils/jwt.js';
 const { verify } = pkg;
-export const validateToken = () => async (req, res, next) => {
+export const validateToken = () => (req, res, next) => {
   try {
     const token = extractToken(req);
     if (!token) return res.status(401).json({ error: errorContstants.ACCESS_TOKEN_NOT_FOUND });

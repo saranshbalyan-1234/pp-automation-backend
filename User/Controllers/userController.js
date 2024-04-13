@@ -1,12 +1,14 @@
-import { deleteCustomer } from '../Service/database.js';
-import { s3, uploadFile } from '#storage/Service/awsService.js';
-import { sendMail } from '#utils/Mail/nodeMailer.js';
 import bcrypt from 'bcryptjs';
+
+import errorContstants from '#constants/error.js';
+import successConstants from '#constants/success.js';
+import { s3, uploadFile } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
 import db from '#utils/dataBaseConnection.js';
-import errorContstants from '#constants/error.js';
 import getError from '#utils/error.js';
-import successConstants from '#constants/success.js';
+import { sendMail } from '#utils/Mail/nodeMailer.js';
+
+import { deleteCustomer } from '../Service/database.js';
 
 const User = db.users;
 const Customer = db.customers;
@@ -209,10 +211,10 @@ const changeDetails = async (req, res) => {
    */
   try {
     const userId = req.params.userId || req.user.id;
-    const body = req.user.id === userId ? req.body : { active: req.body.active } || {};
+    const body = req.user.id === userId ? req.body : { active: req.body.active };
     delete body.password;
 
-    const updatedUser = await User.schema(req.database).update(body, {
+    const updatedUser = await User.schema(req.database).update(body || {}, {
       where: {
         id: userId
       }
@@ -333,7 +335,7 @@ const getUserDetailsByEmail = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {
+const logout = (req, res) => {
   /*
    *  #swagger.tags = ["User"]
    *  #swagger.security = [{"apiKeyAuth": []}]
@@ -393,17 +395,13 @@ const logout = async (req, res) => {
 
 export {
   addUser,
-  deleteUser,
-  changePassword,
   changeDetails,
-  getTeam,
-  resendVerificationEmail,
+  changePassword,
   deleteCustomerUser,
-  uploadProfileImage,
+  deleteUser,
+  getTeam,
+  getUserDetailsByEmail,
   logout,
-  getUserDetailsByEmail
-  /*
-   * ToggleUserActiveInactive,
-   * myStatus,
-   */
+  resendVerificationEmail,
+  uploadProfileImage
 };

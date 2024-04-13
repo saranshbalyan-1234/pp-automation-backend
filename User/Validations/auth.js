@@ -25,4 +25,4 @@ const tokenBodyValidation = {
     token: Joi.string().required()
   })
 };
-export { loginValidation, registerValidation, emailBodyValidation, tokenBodyValidation };
+export { emailBodyValidation, loginValidation, registerValidation, tokenBodyValidation };
