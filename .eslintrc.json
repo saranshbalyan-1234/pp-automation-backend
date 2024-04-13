@@ -43,12 +43,12 @@
         "max-lines":"off",
         "no-plusplus":"off",
         "no-continue":"off",
-        "no-await-in-loop":"off",
+        // "no-await-in-loop":"off",
         "sort-imports": ["error", {
             "ignoreCase": true,
             "ignoreDeclarationSort": true,
             "ignoreMemberSort": true,
-            "memberSyntaxSortOrder": ["multiple", "all","single","none"]
+            "memberSyntaxSortOrder": [ "all","multiple","single","none"]
         }]
     },
     "settings": {
