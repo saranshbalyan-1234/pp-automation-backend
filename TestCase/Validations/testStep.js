@@ -1,25 +1,25 @@
 import joi from '@hapi/joi';
 
 export const saveTestStepValidation = joi.object({
-  processId: joi.number().integer(),
-  objectId: joi.number().integer().allow(null),
-  reusableProcessId: joi.number().integer(),
-  step: joi.number().integer().required(),
-  parameters: joi.array().allow(null),
-  screenshot: joi.boolean().required(),
-  enable: joi.boolean().required(),
-  xpath: joi.boolean(),
+  actionEvent: joi.string().required(),
   comment: joi.string().allow(null, '').required(),
-  actionEvent: joi.string().required()
+  enable: joi.boolean().required(),
+  objectId: joi.number().integer().allow(null),
+  parameters: joi.array().allow(null),
+  processId: joi.number().integer(),
+  reusableProcessId: joi.number().integer(),
+  screenshot: joi.boolean().required(),
+  step: joi.number().integer().required(),
+  xpath: joi.boolean()
 });
 
 export const updateTestStepValidation = joi.object({
-  testStepId: joi.number().integer().required(),
+  actionEvent: joi.string().required(),
+  comment: joi.string().allow(null, '').required(),
+  enable: joi.boolean().required(),
   objectId: joi.number().integer().allow(null),
   parameters: joi.array().allow(null),
   screenshot: joi.boolean().required(),
-  enable: joi.boolean().required(),
-  xpath: joi.boolean(),
-  comment: joi.string().allow(null, '').required(),
-  actionEvent: joi.string().required()
+  testStepId: joi.number().integer().required(),
+  xpath: joi.boolean()
 });

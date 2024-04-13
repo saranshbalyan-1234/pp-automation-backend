@@ -1,8 +1,12 @@
 export default (sequelize, DataTypes) => {
   const Object = sequelize.define('objects', {
-    name: {
-      type: DataTypes.STRING,
+    createdByUser: {
       allowNull: false,
+      references: {
+        key: 'id',
+        model: 'users'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }
@@ -10,32 +14,28 @@ export default (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING
     },
-    projectId: {
-      type: DataTypes.INTEGER,
+    name: {
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
-      },
+      }
+    },
+    projectId: {
+      allowNull: false,
+      onDelete: 'CASCADE',
       references: {
-        model: 'projects',
-        key: 'id'
+        key: 'id',
+        model: 'projects'
       },
-      onDelete: 'CASCADE'
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
     },
     tags: {
-      type: DataTypes.JSON,
-      defaultValue: null
-    },
-    createdByUser: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'users',
-        key: 'id'
-      }
+      defaultValue: null,
+      type: DataTypes.JSON
     }
   });
 

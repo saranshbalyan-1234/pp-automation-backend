@@ -9,22 +9,22 @@ export const actionEvents = [
   {
     name: 'Click',
     object: true,
-    testParameters: [{ name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ defaultValue: '1000', name: 'Timeout' }]
   },
   {
     name: 'Double Click',
     object: true,
-    testParameters: [{ name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ defaultValue: '1000', name: 'Timeout' }]
   },
   {
     name: 'Right Click',
     object: true,
-    testParameters: [{ name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ defaultValue: '1000', name: 'Timeout' }]
   },
   {
     name: 'Enter Text',
     object: true,
-    testParameters: [{ name: 'Text' }, { name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ name: 'Text' }, { defaultValue: '1000', name: 'Timeout' }]
   },
   {
     name: 'Enter Date Time',
@@ -34,7 +34,7 @@ export const actionEvents = [
   {
     name: 'Clear Input',
     object: true,
-    testParameters: [{ name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ defaultValue: '1000', name: 'Timeout' }]
   },
   {
     name: 'Press Button',
@@ -76,7 +76,7 @@ export const actionEvents = [
     object: true,
     testParameters: [
       { name: 'WaitType', options: WaitUntil },
-      { name: 'Timeout', defaultValue: '1000' }
+      { defaultValue: '1000', name: 'Timeout' }
     ]
   },
   {
@@ -167,17 +167,17 @@ export const actionEvents = [
   {
     name: 'Click By Javascript',
     object: true,
-    testParameters: [{ name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ defaultValue: '1000', name: 'Timeout' }]
   },
   {
     name: 'Click Link By Text',
     object: false,
-    testParameters: [{ name: 'Text' }, { name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ name: 'Text' }, { defaultValue: '1000', name: 'Timeout' }]
   },
   {
     name: 'Click Link By Partial Text',
     object: false,
-    testParameters: [{ name: 'Text' }, { name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ name: 'Text' }, { defaultValue: '1000', name: 'Timeout' }]
   },
   {
     name: 'Hover Mouse',
@@ -352,6 +352,6 @@ export const actionEvents = [
   {
     name: 'Wait For Network Calls',
     object: false,
-    testParameters: [{ name: 'Count' }, { name: 'Timeout', defaultValue: '1000' }]
+    testParameters: [{ name: 'Count' }, { defaultValue: '1000', name: 'Timeout' }]
   }
 ];

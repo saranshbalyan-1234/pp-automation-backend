@@ -51,19 +51,19 @@ overrideConsole();
 
 const connection = mysql.createConnection({
   host: process.env.DATABASE_HOST,
+  password: process.env.DATABASE_PASS,
   port: process.env.DATABASE_PORT,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASS
+  user: process.env.DATABASE_USER
 });
 connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DATABASE_PREFIX + process.env.DATABASE_NAME}\`;`);
 
 const sequelize = await createDBConnection({
   db: process.env.DATABASE_PREFIX + process.env.DATABASE_NAME,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASS,
+  dialect: 'mysql',
   host: process.env.DATABASE_HOST,
+  password: process.env.DATABASE_PASS,
   port: process.env.DATABASE_PORT,
-  dialect: 'mysql'
+  user: process.env.DATABASE_USER
 });
 
 const db = {};
@@ -113,8 +113,8 @@ db.jobManagers = JobManager(sequelize, DataTypes);
 
 db.machines = Machine(sequelize, DataTypes); // All associations
 
-db.customers.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).sync({ force: false, alter: true });
-db.unverifieds.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).sync({ force: false, alter: true });
+db.customers.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).sync({ alter: true, force: false });
+db.unverifieds.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).sync({ alter: true, force: false });
 /*
  * Console.log("Updaing Schema")
  * db.jobs
@@ -140,23 +140,24 @@ async function createDBConnection (data) {
 
     if ((!host || !port || !dialect || user, !password || !db)) throw new Error('Insuffiecient Connection Details');
     const sequelize = new Sequelize(db, user, password, {
-      host,
       dialect,
-      port,
-      logging: false,
       dialectOptions: {
         ssl: {
-          require: true, // This will help you. But you will see nwe error
-          rejectUnauthorized: false // This line will fix new error
+          // This will help you. But you will see nwe error
+          rejectUnauthorized: false,
+          require: true // This line will fix new error
         }
       },
+      host,
+      logging: false,
       pool: {
-        max: 50,
-        min: 1,
         acquire: 60000,
+        evict: 10000,
         idle: 10000,
-        evict: 10000
-      }
+        max: 50,
+        min: 1
+      },
+      port
     });
 
     await sequelize

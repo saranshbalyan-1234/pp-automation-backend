@@ -3,11 +3,11 @@ import nodemailer from 'nodemailer';
 import registerHTML from '#utils/Mail/HTML/register.js';
 import resetPasswordHtml from '#utils/Mail/HTML/resetPassword.js';
 const transporter = nodemailer.createTransport({
-  service: process.env.MAILER_SERVICE,
   auth: {
-    user: process.env.MAILER_USER,
-    pass: process.env.MAILER_PASS
-  }
+    pass: process.env.MAILER_PASS,
+    user: process.env.MAILER_USER
+  },
+  service: process.env.MAILER_SERVICE
 });
 
 const sendMailApi = (req, res) => {
@@ -24,10 +24,10 @@ const sendMailApi = (req, res) => {
 };
 const sendMail = async (data, type) => {
   let mailOption = {
-    to: '',
+    html: '',
     subject: '',
     text: '',
-    html: ''
+    to: ''
   };
   let token = '';
   let link = '';
@@ -36,18 +36,18 @@ const sendMail = async (data, type) => {
       token = createToken({ email: data.email }, process.env.JWT_VERIFICATION_SECRET);
       link = `${process.env.WEBSITE_HOME}/auth/verify-customer/${token}`;
       mailOption = {
-        to: data.email,
+        html: registerHTML(data.name, link),
         subject: 'Customer Registration Successfull',
-        html: registerHTML(data.name, link)
+        to: data.email
       };
       break;
     case 'addUser':
       token = createToken({ email: data.email, tenant: data.tenant }, process.env.JWT_VERIFICATION_SECRET);
       link = `${process.env.WEBSITE_HOME}/auth/verify-user/${token}`;
       mailOption = {
-        to: data.email,
+        html: registerHTML(data.name, link),
         subject: 'Registration Successfull',
-        html: registerHTML(data.name, link)
+        to: data.email
       };
       console.log(link);
       break;
@@ -55,9 +55,9 @@ const sendMail = async (data, type) => {
       token = createToken({ email: data.email, tenant: data.tenant }, process.env.JWT_RESET_SECRET, process.env.JWT_RESET_EXPIRATION);
       link = `${process.env.WEBSITE_HOME}/reset-password/${token}`;
       mailOption = {
-        to: data.email,
+        html: resetPasswordHtml(data.name, link),
         subject: 'Password Reset',
-        html: resetPasswordHtml(data.name, link)
+        to: data.email
       };
       break;
   }

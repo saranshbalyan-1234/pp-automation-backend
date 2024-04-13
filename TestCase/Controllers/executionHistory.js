@@ -20,10 +20,10 @@ const getAllExecutionHistoryByTestCase = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const executionHistories = await ExecutionHistory.schema(req.database).findAll({
+      order: [['createdAt', 'DESC']],
       where: {
         testCaseId
-      },
-      order: [['createdAt', 'DESC']]
+      }
     });
 
     return res.status(200).json(executionHistories);
@@ -96,16 +96,16 @@ const getExecutionHistoryById = async (req, res) => {
     const executionHistory = await ExecutionHistory.schema(req.database).findByPk(executionHistoryId, {
       include: [
         {
-          model: ProcessHistory.schema(req.database),
           as: 'process',
-          where: { executionHistoryId },
           include: [
             {
-              model: TestStepHistory.schema(req.database),
               as: 'testSteps',
+              model: TestStepHistory.schema(req.database),
               where: { executionHistoryId }
             }
-          ]
+          ],
+          model: ProcessHistory.schema(req.database),
+          where: { executionHistoryId }
         }
       ]
     });

@@ -55,7 +55,7 @@ export const updateJobManagerById = async (req, res) => {
       if (prevJobManager.dataValues.active === false) {
         console.log(`Starting Job Manager: ${prevJobManager.dataValues.id}`);
         const jobs = await Job.schema(req.database).findAll({ where: { jobManagerId } });
-        await startManagerJobs({ name, active, connection, jobs }, req.user.tenant, false);
+        await startManagerJobs({ active, connection, jobs, name }, req.user.tenant, false);
       } else {
         console.log('Job Manager already active');
         const { host, port, dialect, user, password, db } = connection;

@@ -47,14 +47,14 @@ export const pageInfo = (info, query = {}, searchable = []) => {
   const pageDetails = {
     data,
     page: {
-      pagination: false,
-      totalElements,
       currentPage: 1,
+      pagination: false,
       size: totalElements,
+      totalElements,
       totalPages: 1
     },
-    sort: { sorted: false, sortBy: null, sortedBy: null },
-    search: { searched: false, searchedBy: null, searchedIn: null }
+    search: { searched: false, searchedBy: null, searchedIn: null },
+    sort: { sortBy: null, sorted: false, sortedBy: null }
   };
 
   if (typeof currentPage === 'number' && currentPage > 0 && size > 0) {

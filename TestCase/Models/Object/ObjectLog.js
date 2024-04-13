@@ -1,33 +1,33 @@
 export default (sequelize, DataTypes) => {
   const ObjectLogs = sequelize.define('objectLogs', {
-    log: {
-      type: DataTypes.STRING,
+    createdByUser: {
       allowNull: false,
+      references: {
+        key: 'id',
+        model: 'users'
+      },
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+    },
+    log: {
+      allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
     objectId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'objects'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'objects',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
-    },
-    createdByUser: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'users',
-        key: 'id'
       }
     }
   });

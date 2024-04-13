@@ -5,7 +5,7 @@ export const nameTestCaseId = joi.object({
   testCaseId: joi.number().integer().required()
 });
 export const updateColumnValidation = joi.object({
+  envId: joi.number().integer().required(),
   name: joi.string().min(3).max(100).required(),
-  value: joi.string(),
-  envId: joi.number().integer().required()
+  value: joi.string()
 });

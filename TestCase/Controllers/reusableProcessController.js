@@ -76,10 +76,10 @@ const getAllReusableProcess = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const reusableProcesses = await ReusableProcess.schema(req.database).findAll({
+      attributes: ['id', 'name', 'updatedAt', 'createdAt', 'tags', 'createdByUser'],
       where: {
         projectId
-      },
-      attributes: ['id', 'name', 'updatedAt', 'createdAt', 'tags', 'createdByUser']
+      }
     });
 
     return res.status(200).json(reusableProcesses);
@@ -126,10 +126,10 @@ const getReusableProcessDetailsById = async (req, res) => {
     });
     if (error) throw new Error(error.details[0].message);
     const reusableProcess = await ReusableProcess.schema(req.database).findOne({
+      attributes: ['id', 'name', 'createdAt', 'updatedAt', 'description', 'tags', 'createdByUser'],
       where: {
         id: reusableProcessId
-      },
-      attributes: ['id', 'name', 'createdAt', 'updatedAt', 'description', 'tags', 'createdByUser']
+      }
     });
     const totalSteps = await TestStep.schema(req.database).count({
       where: { reusableProcessId }
@@ -155,10 +155,10 @@ const getTestStepByReusableProcess = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const data = await TestStep.schema(req.database).findAll({
-      where: { reusableProcessId },
-
       include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
-      order: [['step', 'ASC']]
+
+      order: [['step', 'ASC']],
+      where: { reusableProcessId }
     });
 
     return res.status(200).json(data);
@@ -180,11 +180,11 @@ const getReusableProcessLogsById = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const logs = await ReusableProcessLog.schema(req.database).findAll({
+      attributes: ['id', 'log', 'createdAt', 'createdByUser'],
+      order: [['createdAt', 'DESC']],
       where: {
         reusableProcessId
-      },
-      attributes: ['id', 'log', 'createdAt', 'createdByUser'],
-      order: [['createdAt', 'DESC']]
+      }
     });
 
     return res.status(200).json(logs);
@@ -214,7 +214,7 @@ const createReusableProcessLog = async (req, res, id, logs = []) => {
     });
     if (error) throw new Error(error.details[0].message);
 
-    const payload = tempLogs.map((el) => ({ log: el, reusableProcessId, createdByUser: req.user.id }));
+    const payload = tempLogs.map((el) => ({ createdByUser: req.user.id, log: el, reusableProcessId }));
     await ReusableProcessLog.schema(req.database).bulkCreate(payload);
     if (logs.length === 0) res.status(201).json('Log Created');
   } catch (err) {
@@ -246,8 +246,8 @@ const convertToReusableProcess = async (req, res) => {
 
       const reusableProcess = await ReusableProcess.schema(req.database).create(
         {
-          name: process.dataValues.name,
           createdByUser: req.user.id,
+          name: process.dataValues.name,
           projectId
         },
         { transaction }
@@ -258,21 +258,21 @@ const convertToReusableProcess = async (req, res) => {
           reusableProcessId: reusableProcess.dataValues.id
         },
         {
+          transaction,
           where: {
             id: process.dataValues.id
-          },
-          transaction
+          }
         }
       );
 
       TestStep.schema(req.database).update(
         {
-          reusableProcessId: reusableProcess.dataValues.id,
-          processId: null
+          processId: null,
+          reusableProcessId: reusableProcess.dataValues.id
         },
         {
-          where: { processId },
-          transaction
+          transaction,
+          where: { processId }
         }
       );
 
@@ -282,13 +282,13 @@ const convertToReusableProcess = async (req, res) => {
           {
             include: [
               {
-                model: ReusableProcess.schema(req.database),
                 include: [
                   {
-                    model: TestStep.schema(req.database),
-                    include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }]
+                    include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+                    model: TestStep.schema(req.database)
                   }
-                ]
+                ],
+                model: ReusableProcess.schema(req.database)
               }
             ]
           },

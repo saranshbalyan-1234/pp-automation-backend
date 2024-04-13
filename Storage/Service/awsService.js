@@ -3,11 +3,11 @@ import { Upload } from '@aws-sdk/lib-storage';
 import errorContstants from '#constants/error.js';
 
 export const s3 = new S3({
-  region: 'ap-south-1',
   credentials: {
     accessKeyId: '',
     secretAccessKey: ''
-  }
+  },
+  region: 'ap-south-1'
 });
 
 export const listBuckets = () => {
@@ -28,9 +28,9 @@ export const uploadFile = async (file, bucketName, keyName) => {
     if (!keyName || !file) throw new Error(errorContstants.INVALID_FILE);
 
     const uploadParams = {
+      Body: file.data,
       Bucket: bucketName.toLowerCase(),
-      Key: keyName,
-      Body: file.data
+      Key: keyName
     };
 
     return await new Upload({

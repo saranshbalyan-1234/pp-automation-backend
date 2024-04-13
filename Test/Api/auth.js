@@ -5,8 +5,8 @@ axios.defaults.baseURL = `http://localhost:${process.env.PORT || 3001}`;
 const register = async (config) => {
   try {
     const payload = {
-      name: config.name,
       email: config.email,
+      name: config.name,
       password: config.password
     };
     console.debug('Registering with payload', payload);

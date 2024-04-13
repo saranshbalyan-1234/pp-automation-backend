@@ -3,10 +3,10 @@ import authRoutes from '#user/Routes/authRoutes.js';
 import passportRoutes from '#user/Routes/passport.js';
 import rootRoutes from '#routes/rootRoutes.js';
 const unprotectedRoutes = [
-  { path: '/auth', list: authRoutes },
-  { path: '/', list: rootRoutes },
-  { path: '/encryption/aes', list: aesRoutes },
-  { path: '/auth', list: passportRoutes }
+  { list: authRoutes, path: '/auth' },
+  { list: rootRoutes, path: '/' },
+  { list: aesRoutes, path: '/encryption/aes' },
+  { list: passportRoutes, path: '/auth' }
 ];
 
 export default unprotectedRoutes;

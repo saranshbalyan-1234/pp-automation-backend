@@ -31,24 +31,24 @@ const saveTestStep = async (req, res) => {
       if (processId) {
         await TestStep.schema(req.database).increment('step', {
           by: 1,
+          transaction,
           where: {
             processId: { [Op.eq]: processId },
             step: {
               [Op.gte]: step
             }
-          },
-          transaction
+          }
         });
       } else {
         await TestStep.schema(req.database).increment('step', {
           by: 1,
+          transaction,
           where: {
             reusableProcessId: { [Op.eq]: reusableProcessId },
             step: {
               [Op.gte]: step
             }
-          },
-          transaction
+          }
         });
       }
       const teststep = await TestStep.schema(req.database).create(req.body, { transaction });
@@ -95,16 +95,16 @@ const updateTestStep = async (req, res) => {
       const updatedTestStep = await TestStep.schema(req.database).update(
         { ...req.body, objectId: req.body.objectId || null },
         {
+          transaction,
           where: {
             id: testStepId
-          },
-          transaction
+          }
         }
       );
 
       await TestParameter.schema(req.database).destroy({
-        where: { testStepId },
-        transaction
+        transaction,
+        where: { testStepId }
       });
 
       const parameterPayload = req.body.parameters
@@ -154,32 +154,32 @@ const deleteTestStep = async (req, res) => {
       if (error) throw new Error(error.details[0].message);
 
       const deletedTestStep = await TestStep.schema(req.database).destroy({
-        where: { id: testStepId },
-        transaction
+        transaction,
+        where: { id: testStepId }
       });
 
       if (deletedTestStep > 0) {
         if (deletingTestStep.processId) {
           await TestStep.schema(req.database).decrement('step', {
             by: 1,
+            transaction,
             where: {
               processId: { [Op.eq]: deletingTestStep.processId },
               step: {
                 [Op.gt]: deletingTestStep.step
               }
-            },
-            transaction
+            }
           });
         } else {
           await TestStep.schema(req.database).decrement('step', {
             by: 1,
+            transaction,
             where: {
               reusableProcessId: { [Op.eq]: deletingTestStep.reusableProcessId },
               step: {
                 [Op.gt]: deletingTestStep.step
               }
-            },
-            transaction
+            }
           });
         }
         return res.status(200).json({ message: 'TestStep deleted successfully' });

@@ -29,11 +29,20 @@ function setupRateLimiter (app) {
   app.set('trust proxy', true);
   console.log(`Rate Limiter is turned ON with ${process.env.RATE_LIMIT_WINDOW}:${process.env.RATE_LIMIT}`);
   const limiter = rateLimit({
-    windowMs: process.env.RATE_LIMIT_WINDOW, // 10 minutes
-    limit: process.env.RATE_LIMIT, // Limit each IP to 100 requests per `window` (here, per 10 minutes).
-    standardHeaders: 'draft-7', // Draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-    message: { error: 'Too many requests, please try again later.', limitWindow: `${process.env.RATE_LIMIT_WINDOW}s`, limit: process.env.RATE_LIMIT }
+
+    // Draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    legacyHeaders: false,
+
+    // 10 minutes
+    limit: process.env.RATE_LIMIT,
+
+    // Disable the `X-RateLimit-*` headers.
+    message: { error: 'Too many requests, please try again later.', limit: process.env.RATE_LIMIT, limitWindow: `${process.env.RATE_LIMIT_WINDOW}s` },
+
+    // Limit each IP to 100 requests per `window` (here, per 10 minutes).
+    standardHeaders: 'draft-7',
+
+    windowMs: process.env.RATE_LIMIT_WINDOW
     /*
      * Store: ... , // Use an external store for consistency across multiple server instances.
      * skip: (req) => req.url === '/reset',
@@ -46,15 +55,15 @@ function setupCors (app) {
   const whitelist = process.env.CORS.split(',');
   // Var whitelist = ['http://localhost:8000', 'http://localhost:8080']; //white list consumers
   const corsOptions = {
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Access-Control-Allow-Origin', 'Origin', 'Accept', 'x-project-id"'],
+    methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
     origin: function (origin, callback) {
       if (whitelist.indexOf(origin) !== -1 || !process.env.CORS) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
       }
-    },
-    methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Access-Control-Allow-Origin', 'Origin', 'Accept', 'x-project-id"']
+    }
   };
 
   app.use(cors(corsOptions));

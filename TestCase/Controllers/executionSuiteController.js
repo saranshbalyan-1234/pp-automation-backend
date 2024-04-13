@@ -31,8 +31,8 @@ const getAllExecutionSuite = async (req, res) => {
     const projectId = req.headers['x-project-id'];
 
     const executionSuite = await ExecutionSuite.schema(req.database).findAll({
-      where: { projectId },
-      attributes: ['id', 'name', 'createdByUser', 'tags', 'description', 'createdAt']
+      attributes: ['id', 'name', 'createdByUser', 'tags', 'description', 'createdAt'],
+      where: { projectId }
     });
 
     return res.status(200).json(executionSuite);
@@ -79,24 +79,24 @@ const addTestCaseToExecutionSuite = async (req, res) => {
       }
     });
 
-    const newMapping = await CaseExecution.schema(req.database).create({ testCaseId, executionSuiteId, step });
+    const newMapping = await CaseExecution.schema(req.database).create({ executionSuiteId, step, testCaseId });
 
     const addedTestCase = await CaseExecution.schema(req.database).findOne({
-      where: { id: newMapping.dataValues.id },
       attributes: ['id', 'step', 'createdAt'],
       include: [
         {
-          model: TestCase.schema(req.database),
           attributes: ['id', 'name'],
           include: [
             {
-              model: Environment.schema(req.database),
               as: 'environments',
-              attributes: ['id', 'name']
+              attributes: ['id', 'name'],
+              model: Environment.schema(req.database)
             }
-          ]
+          ],
+          model: TestCase.schema(req.database)
         }
-      ]
+      ],
+      where: { id: newMapping.dataValues.id }
     });
 
     return res.status(200).json({ ...addedTestCase.dataValues, message: 'Test Case added!' });
@@ -144,19 +144,18 @@ const getTestCaseByExecutionSuiteId = async (req, res) => {
      */
 
     const testcases = await CaseExecution.schema(req.database).findAll({
-      where: { executionSuiteId },
       attributes: ['id', 'step', 'createdAt'],
       include: [
         {
-          model: TestCase.schema(req.database),
           attributes: ['id', 'name'],
           include: [
             {
-              model: Environment.schema(req.database),
               as: 'environments',
-              attributes: ['id', 'name']
+              attributes: ['id', 'name'],
+              model: Environment.schema(req.database)
             }
-          ]
+          ],
+          model: TestCase.schema(req.database)
         }
       ],
       order: [
@@ -165,7 +164,8 @@ const getTestCaseByExecutionSuiteId = async (req, res) => {
          * [TestStep, "step", "ASC"],
          * [ReusableProcess, TestStep, "step", "ASC"],
          */
-      ]
+      ],
+      where: { executionSuiteId }
     });
 
     /*
@@ -193,10 +193,10 @@ const getExecutionSuiteDetailsById = async (req, res) => {
     });
     if (error) throw new Error(error.details[0].message);
     const executionSuite = await ExecutionSuite.schema(req.database).findOne({
+      attributes: ['id', 'name', 'createdAt', 'updatedAt', 'description', 'tags', 'createdByUser'],
       where: {
         id: executionSuiteId
-      },
-      attributes: ['id', 'name', 'createdAt', 'updatedAt', 'description', 'tags', 'createdByUser']
+      }
     });
     const totalTestCase = await CaseExecution.schema(req.database).count({
       where: { executionSuiteId }

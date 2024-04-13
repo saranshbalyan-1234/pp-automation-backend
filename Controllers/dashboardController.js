@@ -32,9 +32,9 @@ export const dashboard = async (req, res) => {
       where: { executedByUser: req.user.id }
     });
     return res.status(200).json({
+      executionHistoryCount,
       project: userProject,
-      user: { total: user.length, Active, Inactive, Unverified },
-      executionHistoryCount
+      user: { Active, Inactive, Unverified, total: user.length }
     });
   } catch (error) {
     getError(error, res);
@@ -62,10 +62,10 @@ export const createdReport = async (req, res) => {
     });
 
     return res.status(200).json({
+      Object: object,
       Projects: projects,
-      TestCase: testCase,
       Reusable: reusableProcess,
-      Object: object
+      TestCase: testCase
     });
   } catch (error) {
     getError(error, res);
@@ -87,10 +87,10 @@ export const executionReport = async (req, res) => {
     const passedHistory = totalHistory.filter((el) => el.dataValues.result === true);
     const failedHistory = totalHistory.length - passedHistory.length - incompleteHistory.length;
     return res.status(200).json({
-      Total: totalHistory.length,
+      Failed: failedHistory,
       Incomplete: incompleteHistory.length,
       Passed: passedHistory.length,
-      Failed: failedHistory
+      Total: totalHistory.length
     });
   } catch (error) {
     getError(error, res);
@@ -117,19 +117,19 @@ export const detailedExecutionReport = async (req, res) => {
     }
 
     const passedHistory = await ExecutionHistory.schema(req.database).count({
-      where: { ...payload, result: true },
       attributes: [[Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date']],
-      group: [Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date']
+      group: [Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date'],
+      where: { ...payload, result: true }
     });
     const failedHistory = await ExecutionHistory.schema(req.database).count({
-      where: { ...payload, result: false },
       attributes: [[Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date']],
-      group: [Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date']
+      group: [Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date'],
+      where: { ...payload, result: false }
     });
     const incompleteHistory = await ExecutionHistory.schema(req.database).count({
-      where: { ...payload, result: null },
       attributes: [[Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date']],
-      group: [Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date']
+      group: [Sequelize.fn('DATE', Sequelize.col('createdAt')), 'Date'],
+      where: { ...payload, result: null }
     });
     const totalCount = await ExecutionHistory.schema(req.database).count({
       where: { executedByUser: req.body.executedByUser || req.user.id }
@@ -173,7 +173,7 @@ export const detailedExecutionReport = async (req, res) => {
         value: (el[1].Incomplete || 0) + (el[1].Failed || 0) + (el[1].Passed || 0)
       });
     });
-    return res.status(200).json({ totalCount, data: finalData });
+    return res.status(200).json({ data: finalData, totalCount });
   } catch (error) {
     getError(error, res);
   }

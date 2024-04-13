@@ -1,44 +1,44 @@
 export default (sequelize, DataTypes) => {
   const Permission = sequelize.define('permissions', {
+    add: {
+      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      values: [0, 1]
+    },
+
+    delete: {
+      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      values: [0, 1]
+    },
+    edit: {
+      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      values: [0, 1]
+    },
     name: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
       unique: false,
       validate: {
         notNull: true
       }
     },
-
     roleId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'roles'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'roles',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      }
     },
     view: {
-      type: DataTypes.BOOLEAN,
       defaultValue: 0,
-      values: [0, 1]
-    },
-    add: {
       type: DataTypes.BOOLEAN,
-      defaultValue: 0,
-      values: [0, 1]
-    },
-    edit: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: 0,
-      values: [0, 1]
-    },
-    delete: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: 0,
       values: [0, 1]
     }
   });

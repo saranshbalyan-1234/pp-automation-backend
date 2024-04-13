@@ -2,8 +2,8 @@ import { deleteCustomerByAdmin, login, register, verifyCustomer } from './auth.j
 // Import { deleteCustomer } from "#user/Service/database.js";
 
 const config = {
-  name: 'Api Test',
   email: 'saranshbalyan123@gmail.com',
+  name: 'Api Test',
   password: 'ysoserious123'
 };
 

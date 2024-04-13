@@ -84,11 +84,11 @@ const morgalApiLogger = (app) => {
   if (process.env.PRINT_API_REQ_RES === 'false') return console.log('API logger is turned OFF');
   console.log('API logger is turned ON');
   morganBody(app, {
-    prettify: false,
     includeNewLine: true,
-    timezone: 'Asia/Kolkata',
     logReqHeaderList: ['x-project-id'],
-    skip: (req) => req.url.includes('management') || req.url.includes('favicon') || req.method === 'OPTIONS'
+    prettify: false,
+    skip: (req) => req.url.includes('management') || req.url.includes('favicon') || req.method === 'OPTIONS',
+    timezone: 'Asia/Kolkata'
   });
 };
 

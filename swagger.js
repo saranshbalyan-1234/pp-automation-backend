@@ -30,22 +30,22 @@ const endpointsFiles = [
 ];
 
 const doc = {
-  info: {
-    version: '1.0.0',
-    title: 'Automation Api Structure',
-    description: 'Automateum'
-  },
-  host: 'localhost:3001',
   basePath: '/',
-  schemes: ['http', 'https'],
   consumes: ['application/json'],
+  host: 'localhost:3001',
+  info: {
+    description: 'Automateum',
+    title: 'Automation Api Structure',
+    version: '1.0.0'
+  },
   produces: ['application/json'],
+  schemes: ['http', 'https'],
   securityDefinitions: {
     apiKeyAuth: {
-      type: 'apiKey',
+      description: 'Enter your Bearer Token',
       in: 'header',
       name: 'Authorization',
-      description: 'Enter your Bearer Token'
+      type: 'apiKey'
     }
   }
 };

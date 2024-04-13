@@ -7,8 +7,8 @@
 
 export const defaultMiddleware = () => async (req, res, next) => {
   req.user = {
-    tenant: 'master',
-    database: process.env.DATABASE_NAME
+    database: process.env.DATABASE_NAME,
+    tenant: 'master'
   };
   next();
 };

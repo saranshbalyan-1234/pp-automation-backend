@@ -1,28 +1,28 @@
 export default (sequelize, DataTypes) => {
   const UserProject = sequelize.define('userProjects', {
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'users',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
-    },
     projectId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'projects'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
-      },
+      }
+    },
+    userId: {
+      allowNull: false,
+      onDelete: 'CASCADE',
       references: {
-        model: 'projects',
-        key: 'id'
+        key: 'id',
+        model: 'users'
       },
-      onDelete: 'CASCADE'
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
     }
   });
 

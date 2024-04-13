@@ -42,7 +42,7 @@ const syncDatabase = async (database, force = false, alter = false) => {
       if (model.name === 'customers' || model.name === 'unverifieds') continue;
       console.debug(`synced ${model.name} in ${database}`);
       synced.push(model.name);
-      await model.schema(database).sync({ force, alter });
+      await model.schema(database).sync({ alter, force });
     }
     await createSuperAdmin();
     console.success('MODEL SYNC COMPLETED');
@@ -82,13 +82,13 @@ const createSuperAdmin = async () => {
     const Customer = db.customers;
     const User = db.users;
     await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).create({
+      admin: 2,
       email,
-      tenantName: process.env.DATABASE_NAME,
-      admin: 2
+      tenantName: process.env.DATABASE_NAME
     });
     await User.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).create({
-      name,
       email,
+      name,
       password,
       verifiedAt: moment()
     });

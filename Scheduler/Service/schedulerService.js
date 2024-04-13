@@ -83,11 +83,11 @@ export const addJob = async (managerId, job, tenant) => {
         }
       },
       {
-        start: job.active,
-        timeZone: job.timezone,
         onComplete: () => {
           console.log('Job Stopped:', job.name);
-        }
+        },
+        start: job.active,
+        timeZone: job.timezone
       }
     );
   } catch (err) {

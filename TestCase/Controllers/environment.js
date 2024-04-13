@@ -21,10 +21,10 @@ const createEnvironment = async (req, res) => {
       const env = await Environment.schema(req.database).create(payload, { transaction });
 
       const enviroment = await Environment.schema(req.database).findOne({
+        attributes: ['id'],
         where: {
           testCaseId: payload.testCaseId
-        },
-        attributes: ['id']
+        }
       });
 
       if (enviroment) {
@@ -32,7 +32,7 @@ const createEnvironment = async (req, res) => {
           where: { envId: enviroment.id }
         });
 
-        const columnPayload = columns.map((el) => ({ value: null, envId: env.id, name: el.dataValues.name }));
+        const columnPayload = columns.map((el) => ({ envId: env.id, name: el.dataValues.name, value: null }));
         await Column.schema(req.database).bulkCreate(columnPayload, { transaction });
       }
 
@@ -53,16 +53,16 @@ const getAllEnvironmentsByTestCase = async (req, res) => {
     const { error } = idValidation.validate({ id: testCaseId });
     if (error) throw new Error(error.details[0].message);
     const enviroments = await Environment.schema(req.database).findAll({
-      where: {
-        testCaseId
-      },
       attributes: ['id', 'name'],
       include: [
         {
-          model: Column.schema(req.database),
-          attributes: ['name', 'value']
+          attributes: ['name', 'value'],
+          model: Column.schema(req.database)
         }
-      ]
+      ],
+      where: {
+        testCaseId
+      }
     });
     const env = enviroments.map((el) => {
       const temp = el.dataValues.columns;
@@ -72,8 +72,8 @@ const getAllEnvironmentsByTestCase = async (req, res) => {
       });
 
       return {
-        envId: el.dataValues.id,
         Environment: el.dataValues.name,
+        envId: el.dataValues.id,
         ...newKeys
       };
     });
@@ -94,10 +94,10 @@ const getAllEnvironmentNamesByTestCase = async (req, res) => {
     const { error } = idValidation.validate({ id: testCaseId });
     if (error) throw new Error(error.details[0].message);
     const enviroments = await Environment.schema(req.database).findAll({
+      attributes: ['id', 'name'],
       where: {
         testCaseId
-      },
-      attributes: ['id', 'name']
+      }
     });
     return res.status(200).json(enviroments);
   } catch (err) {
@@ -121,10 +121,10 @@ const createColumnForEnvironment = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const enviroments = await Environment.schema(req.database).findAll({
+      attributes: ['id'],
       where: {
         testCaseId
-      },
-      attributes: ['id']
+      }
     });
 
     const payload = enviroments.map((el) => {
@@ -185,10 +185,10 @@ const deleteColumnFromEnvironment = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const enviroments = await Environment.schema(req.database).findAll({
+      attributes: ['id'],
       where: {
         testCaseId
-      },
-      attributes: ['id']
+      }
     });
 
     const payload = enviroments.map((el) => {
@@ -197,8 +197,8 @@ const deleteColumnFromEnvironment = async (req, res) => {
     });
     const deletedColumn = await Column.schema(req.database).destroy({
       where: {
-        name: columnName,
-        envId: payload
+        envId: payload,
+        name: columnName
       }
     });
 

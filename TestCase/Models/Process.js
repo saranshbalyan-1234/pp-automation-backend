@@ -1,47 +1,47 @@
 export default (sequelize, DataTypes) => {
   const Process = sequelize.define('processes', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
-    },
     comment: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    step: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
+      allowNull: true,
+      type: DataTypes.STRING
     },
     enable: {
-      type: DataTypes.BOOLEAN,
       defaultValue: 1,
+      type: DataTypes.BOOLEAN,
       values: [0, 1]
     },
-    testCaseId: {
-      type: DataTypes.INTEGER,
+    name: {
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'testCases',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      }
     },
     reusableProcessId: {
-      type: DataTypes.INTEGER,
       references: {
-        model: 'reusableProcesses',
-        key: 'id'
-      }
+        key: 'id',
+        model: 'reusableProcesses'
+      },
+      type: DataTypes.INTEGER
       // OnDelete: "CASCADE",
+    },
+    step: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+    },
+    testCaseId: {
+      allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'testCases'
+      },
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
     }
   });
 

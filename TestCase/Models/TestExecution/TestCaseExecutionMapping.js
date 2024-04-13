@@ -1,35 +1,35 @@
 export default (sequelize, DataTypes) => {
   const TestCaseExecutionMapping = sequelize.define('testCaseExecutionMappings', {
-    testCaseId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'testCases',
-        key: 'id'
-      }
-      // OnDelete: "CASCADE",
-    },
     executionSuiteId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'executionSuites'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'executionSuites',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      }
     },
     step: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }
+    },
+    testCaseId: {
+      allowNull: false,
+      references: {
+        key: 'id',
+        model: 'testCases'
+      },
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+      // OnDelete: "CASCADE",
     }
   });
 

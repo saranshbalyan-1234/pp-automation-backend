@@ -21,24 +21,24 @@ const getMyProject = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const projects = await UserProject.schema(req.database).findAll({
-      where: { userId },
       include: [
         {
-          model: Project.schema(req.database),
           include: [
             {
-              model: UserProject.schema(req.database),
               as: 'members',
               include: [
                 {
-                  model: User.schema(req.database),
-                  attributes: ['id', 'name', 'email', 'active', 'profileImage', 'deletedAt']
+                  attributes: ['id', 'name', 'email', 'active', 'profileImage', 'deletedAt'],
+                  model: User.schema(req.database)
                 }
-              ]
+              ],
+              model: UserProject.schema(req.database)
             }
-          ]
+          ],
+          model: Project.schema(req.database)
         }
-      ]
+      ],
+      where: { userId }
     });
 
     const updatedArray = projects.map((el) => {
@@ -64,14 +64,14 @@ const getProjectById = async (req, res) => {
       attributes: ['id', 'name', 'description', 'startDate', 'endDate', 'createdAt', 'createdByUser'],
       include: [
         {
-          model: UserProject.schema(req.database),
           as: 'members',
           include: [
             {
-              model: User.schema(req.database),
-              attributes: ['id', 'name', 'email', 'active', 'verifiedAt', 'deletedAt']
+              attributes: ['id', 'name', 'email', 'active', 'verifiedAt', 'deletedAt'],
+              model: User.schema(req.database)
             }
-          ]
+          ],
+          model: UserProject.schema(req.database)
         }
       ]
     });
@@ -90,7 +90,7 @@ const getProjectById = async (req, res) => {
       where: { projectId }
     });
 
-    return res.status(200).json({ ...temp, count: { testCase, reusableProcess, object } });
+    return res.status(200).json({ ...temp, count: { object, reusableProcess, testCase } });
   } catch (error) {
     getError(error, res);
   }
@@ -108,17 +108,17 @@ const addProject = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const project = await Project.schema(req.database).create({
-      name,
+      createdByUser: req.user.id,
       description,
-      startDate,
       endDate,
-      createdByUser: req.user.id
+      name,
+      startDate
     });
 
     await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
     await UserProject.schema(req.database).create({
-      userId: req.user.id,
-      projectId: project.id
+      projectId: project.id,
+      userId: req.user.id
     });
 
     return res.status(200).json(project);
@@ -168,8 +168,8 @@ const addMember = async (req, res) => {
     await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
 
     await UserProject.schema(req.database).create({
-      userId,
-      projectId
+      projectId,
+      userId
     });
     return res.status(200).json({ message: 'Project member added!' });
   } catch (error) {
@@ -201,7 +201,7 @@ const deleteMember = async (req, res) => {
       }
     );
     await UserProject.schema(req.database).destroy({
-      where: { userId, projectId }
+      where: { projectId, userId }
     });
 
     return res.status(200).json({ message: 'Project member removed!' });

@@ -75,10 +75,10 @@ const getAllTestCase = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const testCases = await TestCase.schema(req.database).findAll({
+      attributes: ['id', 'name', 'updatedAt', 'createdAt', 'tags', 'createdByUser'],
       where: {
         projectId
-      },
-      attributes: ['id', 'name', 'updatedAt', 'createdAt', 'tags', 'createdByUser']
+      }
     });
 
     return res.status(200).json(testCases);
@@ -123,17 +123,17 @@ const getTestCaseDetailsById = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const testCase = await TestCase.schema(req.database).findOne({
+      attributes: ['id', 'name', 'createdAt', 'updatedAt', 'description', 'tags', 'createdByUser'],
       where: {
         id: testCaseId
-      },
-      attributes: ['id', 'name', 'createdAt', 'updatedAt', 'description', 'tags', 'createdByUser']
+      }
     });
 
     const totalProcess = await Process.schema(req.database).findAll({
       where: { testCaseId }
     });
     const processCount = await Process.schema(req.database).count({
-      where: { testCaseId, reusableProcessId: null }
+      where: { reusableProcessId: null, testCaseId }
     });
     const reusableProcessCount = totalProcess.length - processCount;
 
@@ -147,8 +147,8 @@ const getTestCaseDetailsById = async (req, res) => {
     return res.status(200).json({
       ...testCase.dataValues,
       reusableProcessCount,
-      totalProcess: totalProcess.length,
-      stepCount
+      stepCount,
+      totalProcess: totalProcess.length
     });
   } catch (err) {
     getError(err, res);
@@ -172,27 +172,27 @@ const getTestStepByTestCase = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const data = await Process.schema(req.database).findAll({
-      where: { testCaseId },
       include: [
         {
-          model: TestStep.schema(req.database),
-          include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }]
+          include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+          model: TestStep.schema(req.database)
         },
         {
-          model: ReusableProcess.schema(req.database),
           include: [
             {
-              model: TestStep.schema(req.database),
-              include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }]
+              include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+              model: TestStep.schema(req.database)
             }
-          ]
+          ],
+          model: ReusableProcess.schema(req.database)
         }
       ],
       order: [
         ['step', 'ASC'],
         [TestStep, 'step', 'ASC'],
         [ReusableProcess, TestStep, 'step', 'ASC']
-      ]
+      ],
+      where: { testCaseId }
     });
 
     const updatedTestCase = data.map((process) => {
@@ -225,35 +225,35 @@ const saveProcess = async (req, res) => {
     await Process.schema(req.database).increment('step', {
       by: 1,
       where: {
-        testCaseId: { [Op.eq]: testCaseId },
         step: {
           [Op.gte]: step
-        }
+        },
+        testCaseId: { [Op.eq]: testCaseId }
       }
     });
 
     const data = await Process.schema(req.database).create(req.body, {
       include: [
         {
-          model: TestStep.schema(req.database),
-          include: [{ model: TestParameter.schema(req.database) }]
+          include: [{ model: TestParameter.schema(req.database) }],
+          model: TestStep.schema(req.database)
         }
       ]
     });
     const process = await Process.schema(req.database).findByPk(data.id, {
       include: [
         {
-          model: TestStep.schema(req.database),
-          include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }]
+          include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+          model: TestStep.schema(req.database)
         },
         {
-          model: ReusableProcess.schema(req.database),
           include: [
             {
-              model: TestStep.schema(req.database),
-              include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }]
+              include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+              model: TestStep.schema(req.database)
             }
-          ]
+          ],
+          model: ReusableProcess.schema(req.database)
         }
       ]
     });
@@ -295,13 +295,13 @@ const updateProcess = async (req, res) => {
       const process = await Process.schema(req.database).findByPk(processId, {
         include: [
           {
-            model: ReusableProcess.schema(req.database),
             include: [
               {
-                model: TestStep.schema(req.database),
-                include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }]
+                include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+                model: TestStep.schema(req.database)
               }
-            ]
+            ],
+            model: ReusableProcess.schema(req.database)
           }
         ]
       });
@@ -344,10 +344,10 @@ const deleteProcess = async (req, res) => {
       await Process.schema(req.database).decrement('step', {
         by: 1,
         where: {
-          testCaseId: { [Op.eq]: deletingProcess.testCaseId },
           step: {
             [Op.gt]: deletingProcess.step
-          }
+          },
+          testCaseId: { [Op.eq]: deletingProcess.testCaseId }
         }
       });
 
@@ -372,11 +372,11 @@ const getTestCaseLogsById = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const locators = await TestCaseLog.schema(req.database).findAll({
+      attributes: ['id', 'log', 'createdAt', 'createdByUser'],
+      order: [['createdAt', 'DESC']],
       where: {
         testCaseId
-      },
-      attributes: ['id', 'log', 'createdAt', 'createdByUser'],
-      order: [['createdAt', 'DESC']]
+      }
     });
 
     return res.status(200).json(locators);
@@ -405,7 +405,7 @@ const createTestCaseLog = async (req, res, id, logs = []) => {
       logs: tempLogs
     });
     if (error) throw new Error(error.details[0].message);
-    const payload = tempLogs.map((el) => ({ log: el, testCaseId, createdByUser: req.user.id }));
+    const payload = tempLogs.map((el) => ({ createdByUser: req.user.id, log: el, testCaseId }));
     await TestCaseLog.schema(req.database).bulkCreate(payload);
     if (logs.length === 0) return res.status(201).json('Log Created');
   } catch (err) {

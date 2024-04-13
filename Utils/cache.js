@@ -9,4 +9,4 @@ const del = (key) => cache.del(key);
 
 const keys = () => cache.keys();
 
-export default { get, set, del, keys };
+export default { del, get, keys, set };

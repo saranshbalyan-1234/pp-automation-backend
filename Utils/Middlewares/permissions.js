@@ -40,7 +40,7 @@ const validateUserProject = () => async (req, res, next) => {
     if (error) throw new Error(error.details[0].message);
 
     const userProject = await UserProject.schema(req.database).findOne({
-      where: { userId: req.user.id, projectId }
+      where: { projectId, userId: req.user.id }
     });
     if (!userProject) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
 

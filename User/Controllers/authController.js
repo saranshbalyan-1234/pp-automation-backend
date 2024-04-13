@@ -32,7 +32,7 @@ const register = async (req, res) => {
 
       const tenantName = process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
       await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME)
-        .create({ email, tenantName, admin: true }, { transaction })
+        .create({ admin: true, email, tenantName }, { transaction })
         .catch((e) => {
           console.error(e);
           throw new Error('Customer already exist');
@@ -40,8 +40,8 @@ const register = async (req, res) => {
       const token = createToken({ email }, process.env.JWT_VERIFICATION_SECRET);
       await Unverified.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).create(
         {
-          name,
           email,
+          name,
           password,
           token
         },
@@ -100,10 +100,10 @@ const verifyCustomer = async (req, res) => {
         if (data) {
           if (unverifiedUser) {
             await Unverified.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).destroy({
+              transaction,
               where: {
                 email
-              },
-              transaction
+              }
             });
 
             if (tenantName !== process.env.DATABASE_NAME) {
@@ -118,8 +118,8 @@ const verifyCustomer = async (req, res) => {
             }
 
             await User.schema(database).create({
-              name,
               email,
+              name,
               password,
               verifiedAt: moment()
             });
@@ -154,7 +154,7 @@ const verifyUser = async (req, res) => {
       if (user) {
         if (user.verifiedAt) throw new Error(errorContstants.EMAIL_ALREADY_VERIFIED);
         await User.schema(database).update(
-          { verifiedAt: new Date(), active: true },
+          { active: true, verifiedAt: new Date() },
           {
             where: {
               email: data.email
@@ -222,7 +222,7 @@ const refreshToken = async (req, res) => {
   try {
     const data = verify(token, process.env.JWT_REFRESH_SECRET);
     if (data) {
-      const tokenData = { id: data.id, email: data.email };
+      const tokenData = { email: data.email, id: data.id };
       const accessToken = createToken(tokenData, process.env.JWT_ACCESS_SECRET, process.env.JWT_ACCESS_EXPIRATION);
       const refreshToken = createToken(tokenData, process.env.JWT_REFRESH_SECRET, process.env.JWT_REFRESH_EXPIRATION);
       return res.status(200).json({ accessToken, refreshToken });

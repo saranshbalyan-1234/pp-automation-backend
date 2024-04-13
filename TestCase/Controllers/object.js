@@ -39,16 +39,16 @@ const getObjectDetailsById = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const testCase = await Object.schema(req.database).findOne({
-      where: {
-        id: objectId
-      },
       attributes: ['id', 'name', 'createdAt', 'updatedAt', 'description', 'tags', 'createdByUser'],
       include: [
         {
-          model: ObjectLocator.schema(req.database),
-          as: 'locators'
+          as: 'locators',
+          model: ObjectLocator.schema(req.database)
         }
-      ]
+      ],
+      where: {
+        id: objectId
+      }
     });
 
     return res.status(200).json(testCase);
@@ -123,11 +123,11 @@ const getAllObject = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const objects = await Object.schema(req.database).findAll({
+      attributes: ['id', 'name', 'createdAt', 'updatedAt', 'tags', 'createdByUser'],
+      order: [['name', 'ASC']],
       where: {
         projectId
-      },
-      attributes: ['id', 'name', 'createdAt', 'updatedAt', 'tags', 'createdByUser'],
-      order: [['name', 'ASC']]
+      }
     });
 
     return res.status(200).json(objects);
@@ -217,11 +217,11 @@ const getObjectLogsByObjectId = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const locators = await ObjectLog.schema(req.database).findAll({
+      attributes: ['id', 'log', 'createdAt', 'createdByUser'],
+      order: [['createdAt', 'DESC']],
       where: {
         objectId
-      },
-      attributes: ['id', 'log', 'createdAt', 'createdByUser'],
-      order: [['createdAt', 'DESC']]
+      }
     });
 
     return res.status(200).json(locators);
@@ -250,7 +250,7 @@ const createObjectLog = async (req, res, id, logs = []) => {
     });
     if (error) throw new Error(error.details[0].message);
 
-    const payload = tempLogs.map((el) => ({ log: el, objectId, createdByUser: req.user.id }));
+    const payload = tempLogs.map((el) => ({ createdByUser: req.user.id, log: el, objectId }));
     await ObjectLog.schema(req.database).bulkCreate(payload);
     if (logs.length === 0) return res.status(201).json('Log Created');
   } catch (err) {

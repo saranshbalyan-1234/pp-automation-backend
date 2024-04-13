@@ -1,27 +1,27 @@
 export default (sequelize, DataTypes) => {
   const Column = sequelize.define('columns', {
-    name: {
-      type: DataTypes.STRING,
+    envId: {
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'environments'
+      },
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
     value: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    envId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'environments',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      allowNull: true,
+      type: DataTypes.STRING
     }
   });
 

@@ -28,7 +28,7 @@
         "no-console":"off",
         "no-ternary":"off",
         "radix": "off",
-        // "sort-keys-fix/sort-keys-fix": "warn",
+        "sort-keys-fix/sort-keys-fix": "warn",
         "sort-imports-es6-autofix/sort-imports-es6": [2, {
             "ignoreCase": false,
             "ignoreMemberSort": false,
@@ -47,7 +47,7 @@
         "react",
         "react-hooks",
         "eqeqeq-fix",
-        "sort-imports-es6-autofix"
-        // "sort-keys-fix"
+        "sort-imports-es6-autofix",
+        "sort-keys-fix"
     ]
 }

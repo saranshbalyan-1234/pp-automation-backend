@@ -11,9 +11,9 @@ import { loginWithCredentals } from './user.js';
 if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
   const googleStrategyConfig = new GoogleStrategy(
     {
+      callbackURL: '/auth/google/callback',
       clientID: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: '/auth/google/callback',
       passReqToCallback: true
     },
     async (req, accessToken, refreshToken, params, profile, done) => {
@@ -36,9 +36,9 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
 if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
   const githubStrategyConfig = new GitHubStrategy(
     {
+      callbackURL: '/auth/github/callback',
       clientID: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
-      callbackURL: '/auth/github/callback',
       passReqToCallback: true,
       scope: ['user:email']
     },
@@ -62,11 +62,11 @@ if (process.env.LINKEDIN_ID && process.env.LINKEDIN_SECRET) {
   passport.use(
     new LinkedInStrategy(
       {
+        callbackURL: '/auth/linkedin/callback',
         clientID: process.env.LINKEDIN_ID,
         clientSecret: process.env.LINKEDIN_SECRET,
-        callbackURL: '/auth/linkedin/callback',
-        scope: ['profile'],
-        passReqToCallback: true
+        passReqToCallback: true,
+        scope: ['profile']
       },
       async (req, accessToken, refreshToken, profile, done) => {
         try {

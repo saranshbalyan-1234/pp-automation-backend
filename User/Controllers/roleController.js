@@ -17,8 +17,8 @@ const getAllRole = async (req, res) => {
     const roles = await Role.schema(req.database).findAll({
       include: [
         {
-          model: Permission.schema(req.database),
-          attributes: ['id', 'name', 'view', 'add', 'edit', 'delete']
+          attributes: ['id', 'name', 'view', 'add', 'edit', 'delete'],
+          model: Permission.schema(req.database)
         }
       ]
     });
@@ -56,7 +56,7 @@ const updateRole = async (req, res) => {
   try {
     const { roleId } = req.params;
     const { name } = req.body;
-    const { error } = updateNameValidation.validate({ roleId, name });
+    const { error } = updateNameValidation.validate({ name, roleId });
     if (error) throw new Error(error.details[0].message);
 
     const updatedRole = await Role.schema(req.database).update(
@@ -128,20 +128,20 @@ const updateRolePermission = async (req, res) => {
       const payload = [...req.body].map((el) => {
         const { error } = updatePermissionValidation.validate({
           add: el.add,
-          edit: el.edit,
-          view: el.view,
           delete: el.delete,
-          name: el.name
+          edit: el.edit,
+          name: el.name,
+          view: el.view
         });
         if (error) throw new Error(error.details[0].message);
 
         return {
           add: el.add,
-          edit: el.edit,
-          view: el.view,
           delete: el.delete,
+          edit: el.edit,
           name: el.name,
-          roleId
+          roleId,
+          view: el.view
         };
       });
 
@@ -167,13 +167,13 @@ const getUserRole = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const roles = await UserRole.schema(req.database).findAll({
-      where: { userId },
       include: [
         {
-          model: Role.schema(req.database),
-          attributes: ['name']
+          attributes: ['name'],
+          model: Role.schema(req.database)
         }
-      ]
+      ],
+      where: { userId }
     });
     const tempRole = roles.map((el) => {
       const temp = { ...el.dataValues, name: el.dataValues.role.name };

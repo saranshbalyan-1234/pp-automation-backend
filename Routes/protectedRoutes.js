@@ -16,22 +16,22 @@ import userRoutes from '#user/Routes/userRoutes.js';
 // Import schedulerRoutes from "#scheduler/Routes/schedulerRoutes.js";
 
 const protectedRoutes = [
-  { path: '/constant', list: constantRoutes },
+  { list: constantRoutes, path: '/constant' },
   // { path: "/scheduler", list: schedulerRoutes },
-  { path: '/user', list: userRoutes },
-  { path: '/super-admin', list: superAdminRoutes },
-  { path: '/role', list: roleRoutes },
-  { path: '/project', list: projectRoutes },
-  { path: '/dashboard', list: dashboardRoutes },
-  { path: '/storage', list: storageRoutes },
-  { path: '/testcase', list: testCaseRoutes },
-  { path: '/object', list: objectRoutes },
-  { path: '/teststep', list: testStepRoutes },
-  { path: '/reusableProcess', list: reusableProcessRoutes },
-  { path: '/executionHistory', list: executionHistoryRoutes },
-  { path: '/environment', list: environmentRoutes },
-  { path: '/machines', list: machineRoutes },
-  { path: '/execution-suite', list: executionSuiteRoutes }
+  { list: userRoutes, path: '/user' },
+  { list: superAdminRoutes, path: '/super-admin' },
+  { list: roleRoutes, path: '/role' },
+  { list: projectRoutes, path: '/project' },
+  { list: dashboardRoutes, path: '/dashboard' },
+  { list: storageRoutes, path: '/storage' },
+  { list: testCaseRoutes, path: '/testcase' },
+  { list: objectRoutes, path: '/object' },
+  { list: testStepRoutes, path: '/teststep' },
+  { list: reusableProcessRoutes, path: '/reusableProcess' },
+  { list: executionHistoryRoutes, path: '/executionHistory' },
+  { list: environmentRoutes, path: '/environment' },
+  { list: machineRoutes, path: '/machines' },
+  { list: executionSuiteRoutes, path: '/execution-suite' }
 ];
 
 export default protectedRoutes;

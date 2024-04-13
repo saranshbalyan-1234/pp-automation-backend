@@ -1,69 +1,69 @@
 export default (sequelize, DataTypes) => {
   const TestStepHistory = sequelize.define('testStepHistories', {
+    actionEvent: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate: {
+        notNull: true
+      }
+    },
+    comment: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    executionHistoryId: {
+      allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'executionHistories'
+      },
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+    },
+    failedLog: {
+      allowNull: true,
+      type: DataTypes.TEXT
+    },
+    object: {
+      allowNull: true,
+      type: DataTypes.JSON
+    },
+    processId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+    },
+    result: {
+      type: DataTypes.BOOLEAN,
+      values: [0, 1]
+    },
+    screenshot: {
+      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      values: [0, 1]
+    },
+    step: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+    },
+    testParameters: {
+      allowNull: true,
+      type: DataTypes.JSON
+    },
     testStepId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notNull: true
       }
-    },
-    actionEvent: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
-    },
-    comment: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    step: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
-    },
-    object: {
-      type: DataTypes.JSON,
-      allowNull: true
-    },
-    testParameters: {
-      type: DataTypes.JSON,
-      allowNull: true
-    },
-    screenshot: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: 0,
-      values: [0, 1]
-    },
-    processId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
-    },
-    executionHistoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'executionHistories',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
-    },
-    result: {
-      type: DataTypes.BOOLEAN,
-      values: [0, 1]
-    },
-    failedLog: {
-      type: DataTypes.TEXT,
-      allowNull: true
     }
   });
   return TestStepHistory;

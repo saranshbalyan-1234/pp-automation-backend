@@ -1,50 +1,51 @@
 export default (sequelize, DataTypes) => {
   const ProcessHistory = sequelize.define('processHistories', {
-    processId: {
-      type: DataTypes.INTEGER,
-      // Unique: true,
+    comment: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    executionHistoryId: {
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'executionHistories'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }
     },
     name: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
-    comment: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    step: {
-      type: DataTypes.INTEGER,
+    processId: {
+      // Unique: true,
       allowNull: false,
+
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }
-    },
-    reusableProcess: {
-      type: DataTypes.JSON,
-      defaultValue: null
-    },
-    executionHistoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'executionHistories',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
     },
     result: {
       type: DataTypes.BOOLEAN,
       values: [0, 1]
+    },
+    reusableProcess: {
+      defaultValue: null,
+      type: DataTypes.JSON
+    },
+    step: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
     }
   });
 

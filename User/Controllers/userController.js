@@ -86,18 +86,18 @@ const addUser = async (req, res) => {
 
     const hash = await bcrypt.hash(password, 8);
     const user = await User.schema(req.database).create({
-      name,
+      active: false,
       email,
-      password: hash,
-      active: false
+      name,
+      password: hash
     });
     sendMail({ email, name, tenant: database }, 'addUser');
 
     return res.status(200).json({
-      id: user.id,
-      name,
       email,
-      message: 'User added, Verify user\'s email to login'
+      id: user.id,
+      message: 'User added, Verify user\'s email to login',
+      name
     });
   } catch (error) {
     getError(error, res);
@@ -264,25 +264,25 @@ const getUserDetailsByEmail = async (req, res) => {
     });
 
     const user = await User.schema(database).findOne({
-      where: { email },
       include: [
         {
-          model: UserRole.schema(database),
           attributes: ['roleId'],
           include: [
             {
-              model: Role.schema(database),
               attributes: ['name'],
               include: [
                 {
-                  model: Permission.schema(database),
-                  attributes: ['name', 'view', 'add', 'edit', 'delete']
+                  attributes: ['name', 'view', 'add', 'edit', 'delete'],
+                  model: Permission.schema(database)
                 }
-              ]
+              ],
+              model: Role.schema(database)
             }
-          ]
+          ],
+          model: UserRole.schema(database)
         }
-      ]
+      ],
+      where: { email }
     });
 
     if (!user) throw new Error(errorContstants.RECORD_NOT_FOUND);
@@ -319,14 +319,14 @@ const getUserDetailsByEmail = async (req, res) => {
     }
 
     return res.status(200).json({
-      id,
-      name,
-      email,
-      profileImage: profileImage ? base64ProfileImage : '',
       customerAdmin,
       defaultProjectId,
-      verifiedAt,
-      roles: newRoles
+      email,
+      id,
+      name,
+      profileImage: profileImage ? base64ProfileImage : '',
+      roles: newRoles,
+      verifiedAt
     });
   } catch (error) {
     getError(error, res);
