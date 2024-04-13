@@ -52,6 +52,25 @@ const syncDatabase = async (database, force = false, alter = false) => {
     throw new Error(e);
   }
 };
+const syncDatabasenew = async (database, force = false, alter = false) => {
+  try {
+    console.log('Please wait, while models are being synced');
+    const models = Object.values(db.sequelize.models);
+    const synced = [];
+    for (let i = 0; i < models.length; i++) {
+      const model = models[i];
+      if (model.name === 'customers' || model.name === 'unverifieds') continue;
+      console.debug(`synced ${model.name} in ${database}`);
+      synced.push(model.name);
+      await model.schema(database).sync({ alter, force });
+    }
+    await createSuperAdmin();
+    console.success('MODEL SYNC COMPLETED');
+    return synced;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
 
 const getAllTenant = async () => {
   try {
