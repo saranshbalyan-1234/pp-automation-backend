@@ -12,7 +12,9 @@
         "plugin:eqeqeq-fix/recommended",
         "plugin:react/all",
         "plugin:react-hooks/recommended",
-        "plugin:sonarjs/recommended"
+        "plugin:sonarjs/recommended",
+        "plugin:sonar/recommended",
+        "plugin:react-redux/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -47,6 +49,7 @@
         "no-await-in-loop":"off",
         "unused-imports/no-unused-imports": "error",
         "autofix/no-unused-vars": "error",
+        "sonar/deprecation": 2,
         "sort-imports": ["error", {
             "ignoreCase": true,
             "ignoreDeclarationSort": true,
@@ -69,6 +72,8 @@
         "unused-imports",
         "simple-import-sort",
         "autofix",
-        "sonarjs"
+        "sonarjs",
+        "sonar",
+        "react-redux"
     ]
 }
