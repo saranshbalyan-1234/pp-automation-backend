@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
-const paginate = function (model) {
-  model.paginate = async function (args) {
+const paginate = (model) => {
+  model.paginate = async (args) => {
     const where = args.where || {};
     const { page } = args;
     const { size } = args;

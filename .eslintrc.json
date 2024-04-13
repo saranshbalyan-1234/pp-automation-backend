@@ -28,12 +28,12 @@
         "no-console":"off",
         "no-ternary":"off",
         "radix": "off",
+        "max-statements":"off",
+        "max-lines-per-function":"off",
         "sort-keys-fix/sort-keys-fix": "warn",
-        "sort-imports-es6-autofix/sort-imports-es6": [2, {
-            "ignoreCase": false,
-            "ignoreMemberSort": false,
-            "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
-          }]
+        "id-length":"off",
+        "no-magic-numbers":"off",
+        "require-unicode-regexp":"off"
       
     },
     "settings": {
@@ -47,7 +47,7 @@
         "react",
         "react-hooks",
         "eqeqeq-fix",
-        "sort-imports-es6-autofix",
+        "simple-import-sort",
         "sort-keys-fix"
     ]
 }

@@ -59,8 +59,8 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.JSON
     },
     testStepId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }

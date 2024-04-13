@@ -48,11 +48,11 @@ export default (sequelize, DataTypes) => {
     },
     testCaseId: {
       allowNull: false,
+      onDelete: 'CASCADE',
       references: {
         key: 'id',
         model: 'testCases'
       },
-      onDelete: 'CASCADE',
       type: DataTypes.INTEGER,
       validate: {
         notNull: true

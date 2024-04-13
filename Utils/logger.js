@@ -3,11 +3,11 @@ import morganBody from 'morgan-body';
 
 const overrideInfo = () => {
   if (process.env.PRINT_CONSOLE_INFO === 'false') {
-    return (console.log = function () {});
+    return (console.log = () => {});
   }
 
   const { log } = console;
-  console.log = function (...e) {
+  return console.log = function (...e) {
     try {
       throw new Error();
     } catch (error) {
@@ -19,13 +19,13 @@ const overrideInfo = () => {
 
 const overrideWarn = () => {
   if (process.env.PRINT_CONSOLE_WARN === 'false') {
-    return (console.warn = function () {});
+    return (console.log = () => {});
   }
   const log = console.warn;
   try {
     throw new Error();
   } catch (error) {
-    console.warn = function (...e) {
+    return console.warn = function (...e) {
       const fileName = getFileNameFromError(error);
       log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.yellow('WARN:'), fileName, ...e]);
     };
@@ -34,10 +34,10 @@ const overrideWarn = () => {
 
 const overrideError = () => {
   if (process.env.PRINT_CONSOLE_ERROR === 'false') {
-    return (console.error = function () {});
+    return (console.log = () => {});
   }
   const log = console.error;
-  console.error = function (...e) {
+  return console.error = function (...e) {
     try {
       throw new Error();
     } catch (error) {
@@ -49,11 +49,11 @@ const overrideError = () => {
 
 const overrideDebug = () => {
   if (process.env.PRINT_CONSOLE_DEBUG === 'false') {
-    return (console.debug = function () {});
+    return (console.log = () => {});
   }
 
   const log = console.debug;
-  console.debug = function (...e) {
+  return console.debug = function (...e) {
     try {
       throw new Error();
     } catch (error) {
@@ -65,12 +65,12 @@ const overrideDebug = () => {
 
 const overrideSuccess = () => {
   if (process.env.PRINT_CONSOLE_SUCCESS === 'false') {
-    return (console.success = function () {});
+    return (console.log = () => {});
   }
 
   const log = console.info;
 
-  console.success = function (...e) {
+  return console.success = function (...e) {
     try {
       throw new Error();
     } catch (error) {
@@ -83,7 +83,7 @@ const overrideSuccess = () => {
 const morgalApiLogger = (app) => {
   if (process.env.PRINT_API_REQ_RES === 'false') return console.log('API logger is turned OFF');
   console.log('API logger is turned ON');
-  morganBody(app, {
+  return morganBody(app, {
     includeNewLine: true,
     logReqHeaderList: ['x-project-id'],
     prettify: false,

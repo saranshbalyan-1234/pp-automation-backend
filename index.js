@@ -17,10 +17,12 @@ if (process.env.PRINT_ENV === 'true') {
   console.debug('======================ENV======================');
 }
 
-console.log(a);
-console.log('safa ');
-console;
-function process () { }
+/*
+ * Console.log(a);
+ * console.log('safa ');
+ * console;
+ * function process () { }
+ */
 
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: false }));
