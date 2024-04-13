@@ -193,10 +193,7 @@ const deleteColumnFromEnvironment = async (req, res) => {
       }
     });
 
-    const payload = enviroments.map((el) => {
-      const envId = el.dataValues.id;
-      return envId;
-    });
+    const payload = enviroments.map((el) => el.dataValues.id);
     const deletedColumn = await Column.schema(req.database).destroy({
       where: {
         envId: payload,

@@ -1,30 +1,26 @@
-export default (sequelize, DataTypes) => {
-  const UserRole = sequelize.define('userRoles', {
-    roleId: {
-      allowNull: false,
-      onDelete: 'CASCADE',
-      references: {
-        key: 'id',
-        model: 'roles'
-      },
-      type: DataTypes.INTEGER,
-      validate: {
-        notNull: true
-      }
+export default (sequelize, DataTypes) => sequelize.define('userRoles', {
+  roleId: {
+    allowNull: false,
+    onDelete: 'CASCADE',
+    references: {
+      key: 'id',
+      model: 'roles'
     },
-    userId: {
-      allowNull: false,
-      onDelete: 'CASCADE',
-      references: {
-        key: 'id',
-        model: 'users'
-      },
-      type: DataTypes.INTEGER,
-      validate: {
-        notNull: true
-      }
+    type: DataTypes.INTEGER,
+    validate: {
+      notNull: true
     }
-  });
-
-  return UserRole;
-};
+  },
+  userId: {
+    allowNull: false,
+    onDelete: 'CASCADE',
+    references: {
+      key: 'id',
+      model: 'users'
+    },
+    type: DataTypes.INTEGER,
+    validate: {
+      notNull: true
+    }
+  }
+});

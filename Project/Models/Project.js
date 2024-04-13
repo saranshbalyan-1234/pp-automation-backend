@@ -1,36 +1,32 @@
-export default (sequelize, DataTypes) => {
-  const Project = sequelize.define('projects', {
-    createdByUser: {
-      allowNull: false,
-      references: {
-        key: 'id',
-        model: 'users'
-      },
-      type: DataTypes.INTEGER,
-      validate: {
-        notNull: true
-      }
+export default (sequelize, DataTypes) => sequelize.define('projects', {
+  createdByUser: {
+    allowNull: false,
+    references: {
+      key: 'id',
+      model: 'users'
     },
-    description: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
-    endDate: {
-      allowNull: true,
-      type: DataTypes.DATEONLY
-    },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING,
-      validate: {
-        notNull: true
-      }
-    },
-    startDate: {
-      allowNull: true,
-      type: DataTypes.DATEONLY
+    type: DataTypes.INTEGER,
+    validate: {
+      notNull: true
     }
-  });
-
-  return Project;
-};
+  },
+  description: {
+    allowNull: true,
+    type: DataTypes.STRING
+  },
+  endDate: {
+    allowNull: true,
+    type: DataTypes.DATEONLY
+  },
+  name: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    validate: {
+      notNull: true
+    }
+  },
+  startDate: {
+    allowNull: true,
+    type: DataTypes.DATEONLY
+  }
+});

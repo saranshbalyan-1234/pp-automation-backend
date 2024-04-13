@@ -11,7 +11,8 @@
         "plugin:promise/recommended",
         "plugin:eqeqeq-fix/recommended",
         "plugin:react/all",
-        "plugin:react-hooks/recommended"
+        "plugin:react-hooks/recommended",
+        "plugin:sonarjs/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -67,6 +68,7 @@
         "sort-keys-fix",
         "unused-imports",
         "simple-import-sort",
-        "autofix"
+        "autofix",
+        "sonarjs"
     ]
 }
