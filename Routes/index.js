@@ -1,6 +1,6 @@
 import { validateToken } from '#middlewares/jwt.js';
-import unprotectedRoutes from './unprotectedRoutes.js';
 import protectedRoutes from './protectedRoutes.js';
+import unprotectedRoutes from './unprotectedRoutes.js';
 
 const registerUnprotectedRoutes = (app) => {
   unprotectedRoutes.forEach((route) => {

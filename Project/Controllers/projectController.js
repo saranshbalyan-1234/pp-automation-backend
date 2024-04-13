@@ -1,8 +1,8 @@
-import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
 import { addProjectValidation, memberProjectValidation, updateProjectValidation } from '../Validations/project.js';
 import { idValidation } from '#validations/index.js';
+import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import getError from '#utils/error.js';
 
 const UserProject = db.userProjects;
 const Project = db.projects;
@@ -11,8 +11,10 @@ const TestCase = db.testCases;
 const ReusableProcess = db.reusableProcess;
 const Object = db.objects;
 const getMyProject = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-      #swagger.security = [{"apiKeyAuth": []}] */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const userId = req.user.id;
     const { error } = idValidation.validate({ id: userId });
@@ -41,9 +43,7 @@ const getMyProject = async (req, res) => {
 
     const updatedArray = projects.map((el) => {
       const temp = { ...el.project.dataValues };
-      temp.members = temp.members.map((el) => {
-        return el.user;
-      });
+      temp.members = temp.members.map((el) => el.user);
       return temp;
     });
 
@@ -54,11 +54,12 @@ const getMyProject = async (req, res) => {
 };
 
 const getProjectById = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const projectId = req.params.projectId;
+    const { projectId } = req.params;
     const project = await Project.schema(req.database).findByPk(projectId, {
       attributes: ['id', 'name', 'description', 'startDate', 'endDate', 'createdAt', 'createdByUser'],
       include: [
@@ -77,9 +78,7 @@ const getProjectById = async (req, res) => {
 
     const temp = { ...project.dataValues };
 
-    temp.members = temp.members.map((user) => {
-      return user.dataValues.user;
-    });
+    temp.members = temp.members.map((user) => user.dataValues.user);
 
     const testCase = await TestCase.schema(req.database).count({
       where: { projectId }
@@ -98,9 +97,10 @@ const getProjectById = async (req, res) => {
 };
 
 const addProject = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { name, description, startDate, endDate } = req.body;
 
@@ -128,11 +128,12 @@ const addProject = async (req, res) => {
 };
 
 const deleteProject = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const projectId = req.params.projectId;
+    const { projectId } = req.params;
     const hProjectId = req.headers['x-project-id'];
 
     if (projectId === hProjectId) throw new Error('Cannot delete current project');
@@ -149,16 +150,17 @@ const deleteProject = async (req, res) => {
       where: { id: projectId }
     });
     if (deletedProject > 0) return res.status(200).json({ message: 'Project deleted successfully!' });
-    else return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (error) {
     getError(error, res);
   }
 };
 
 const addMember = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { projectId, userId } = req.body;
     const { error } = memberProjectValidation.validate({ projectId, userId });
@@ -176,9 +178,10 @@ const addMember = async (req, res) => {
 };
 
 const deleteMember = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { projectId, userId } = req.body;
 
@@ -208,9 +211,10 @@ const deleteMember = async (req, res) => {
 };
 
 const editProject = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const projectId = req.headers['x-project-id'];
 
@@ -228,9 +232,8 @@ const editProject = async (req, res) => {
 
     if (updatedProject[0]) {
       return res.status(200).json({ message: 'Project Updated Successfully!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (error) {
     getError(error, res);
   }

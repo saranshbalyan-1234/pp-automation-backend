@@ -41,7 +41,7 @@ export default (sequelize, DataTypes) => {
         model: 'reusableProcesses',
         key: 'id'
       }
-      // onDelete: "CASCADE",
+      // OnDelete: "CASCADE",
     }
   });
 

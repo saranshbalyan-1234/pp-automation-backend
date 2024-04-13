@@ -1,13 +1,13 @@
-import db from '#utils/dataBaseConnection.js';
+import { createBucket } from '#storage/Service/awsService.js';
 import { createToken, getTokenError } from '#utils/jwt.js';
+import { dropDatabase, syncDatabase } from '../Service/database.js';
+import { loginWithCredentals } from '../Service/user.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
-import pkg from 'jsonwebtoken';
+import db from '#utils/dataBaseConnection.js';
+import errorContstants from '#constants/error.js';
 import getError from '#utils/error.js';
 import moment from 'moment';
-import { createBucket } from '#storage/Service/awsService.js';
-import { dropDatabase, syncDatabase } from '../Service/database.js';
-import errorContstants from '#constants/error.js';
-import { loginWithCredentals } from '../Service/user.js';
+import pkg from 'jsonwebtoken';
 import successConstants from '#constants/success.js';
 const { verify } = pkg;
 
@@ -17,9 +17,11 @@ const Unverified = db.unverifieds;
 
 // Tenant
 const User = db.users;
-// const Role = db.roles;
-// const Permission = db.permissions;
-// const UserRole = db.userRoles;
+/*
+ * Const Role = db.roles;
+ * const Permission = db.permissions;
+ * const UserRole = db.userRoles;
+ */
 
 const register = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
@@ -123,9 +125,8 @@ const verifyCustomer = async (req, res) => {
             });
 
             return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
-          } else {
-            return res.status(500).json({ error: errorContstants.EMAIL_ALREADY_VERIFIED });
           }
+          return res.status(500).json({ error: errorContstants.EMAIL_ALREADY_VERIFIED });
         }
       });
     } catch (error) {
@@ -161,9 +162,8 @@ const verifyUser = async (req, res) => {
           }
         );
         return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
-      } else {
-        throw new Error(errorContstants.RECORD_NOT_FOUND);
       }
+      throw new Error(errorContstants.RECORD_NOT_FOUND);
     }
   } catch (error) {
     getError(error, res, 'Email Verification');
@@ -188,7 +188,7 @@ const resetPassword = async (req, res) => {
         }
       );
       if (updatedUser[0]) return res.status(200).json({ message: successConstants.PASSWORD_RESET_SUCCESSFULL });
-      else throw new Error(errorContstants.RECORD_NOT_FOUND);
+      throw new Error(errorContstants.RECORD_NOT_FOUND);
     }
   } catch (error) {
     getError(error, res, 'Password Reset');
@@ -216,7 +216,7 @@ const sendResetPasswordMail = async (req, res) => {
 
 const refreshToken = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
-  const token = req.body.token;
+  const { token } = req.body;
   if (!token) return res.status(401).json({ error: errorContstants.REFRESH_TOKEN_NOT_FOUND });
 
   try {

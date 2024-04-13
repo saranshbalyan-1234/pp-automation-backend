@@ -1,5 +1,5 @@
-import { register, login, deleteCustomerByAdmin, verifyCustomer } from './auth.js';
-// import { deleteCustomer } from "#user/Service/database.js";
+import { deleteCustomerByAdmin, login, register, verifyCustomer } from './auth.js';
+// Import { deleteCustomer } from "#user/Service/database.js";
 
 const config = {
   name: 'Api Test',
@@ -21,7 +21,7 @@ const apiTest = async () => {
     const loginResult = await login(config);
     if (!loginResult) throw new Error('Login Failed');
   } catch (e) {
-    // deleteCustomerByAdmin(config);
+    // DeleteCustomerByAdmin(config);
   } finally {
     deleteCustomerByAdmin(config);
   }

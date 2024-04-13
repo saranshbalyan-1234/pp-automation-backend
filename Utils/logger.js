@@ -6,13 +6,13 @@ const overrideInfo = () => {
     return (console.log = function () {});
   }
 
-  const log = console.log;
+  const { log } = console;
   console.log = function (...e) {
     try {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', '[' + new Date().toLocaleString() + ']', chalk.blue('INFO:'), fileName, ...e]);
+      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.blue('INFO:'), fileName, ...e]);
     }
   };
 };
@@ -27,7 +27,7 @@ const overrideWarn = () => {
   } catch (error) {
     console.warn = function (...e) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', '[' + new Date().toLocaleString() + ']', chalk.yellow('WARN:'), fileName, ...e]);
+      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.yellow('WARN:'), fileName, ...e]);
     };
   }
 };
@@ -42,7 +42,7 @@ const overrideError = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', '[' + new Date().toLocaleString() + ']', chalk.red('ERROR:'), fileName, ...e]);
+      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.red('ERROR:'), fileName, ...e]);
     }
   };
 };
@@ -58,7 +58,7 @@ const overrideDebug = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', '[' + new Date().toLocaleString() + ']', chalk.magenta('DEBUG:'), fileName, ...e]);
+      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.magenta('DEBUG:'), fileName, ...e]);
     }
   };
 };
@@ -75,7 +75,7 @@ const overrideSuccess = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', '[' + new Date().toLocaleString() + ']', chalk.green('SUCCESS:'), fileName, ...e]);
+      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.green('SUCCESS:'), fileName, ...e]);
     }
   };
 };
@@ -88,9 +88,7 @@ const morgalApiLogger = (app) => {
     includeNewLine: true,
     timezone: 'Asia/Kolkata',
     logReqHeaderList: ['x-project-id'],
-    skip: (req) => {
-      return req.url.includes('management') || req.url.includes('favicon') || req.method === 'OPTIONS';
-    }
+    skip: (req) => req.url.includes('management') || req.url.includes('favicon') || req.method === 'OPTIONS'
   });
 };
 
@@ -109,6 +107,4 @@ const setupLogger = (app) => {
 export default setupLogger;
 export { morgalApiLogger, overrideConsole };
 
-const getFileNameFromError = (error) => {
-  return '[' + error.stack.split('\n')[2].split('/').at(-1).replace(/\)/, '') + ']';
-};
+const getFileNameFromError = (error) => `[${error.stack.split('\n')[2].split('/').at(-1).replace(/\)/, '')}]`;

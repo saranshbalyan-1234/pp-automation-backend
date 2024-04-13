@@ -57,7 +57,7 @@ export default (sequelize, DataTypes) => {
         afterFind: function (model) {
           if (!Array.isArray(model)) {
             if (!model.dataValues.active) throw new Error(errorContstants.ACCOUNT_INACTIVE);
-            // if(model.dataValues.verifiedAt) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
+            // If(model.dataValues.verifiedAt) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
           }
         }
       }

@@ -1,7 +1,7 @@
+import { executeCurl, executeQuery } from './jobRunner.js';
+import { getAllTenant } from '#user/Service/database.js';
 import Scheduler from 'cron-job-manager';
 import db, { createDBConnection } from '#utils/dataBaseConnection.js';
-import { getAllTenant } from '#user/Service/database.js';
-import { executeCurl, executeQuery } from './jobRunner.js';
 const JobManager = db.jobManagers;
 const Job = db.jobs;
 
@@ -26,7 +26,7 @@ export const scheduleInit = async () => {
         await startManagerJobs(manager, customer.tenantName);
       }
     }
-    // console.log("Connection Pool: ", console.log(connectionPool))
+    // Console.log("Connection Pool: ", console.log(connectionPool))
     console.log('Current Jobs', jobManagerMap);
   } catch (e) {
     console.error(e);
@@ -41,7 +41,7 @@ export const startManagerJobs = async (manager, tenant) => {
       console.log('Starting Manager Connection');
       await addToConnectionPool(manager.id, tenant, manager.connection);
     } else console.log('No Connection Found');
-    jobManagerMap[tenant + '_' + manager.id] = new Scheduler();
+    jobManagerMap[`${tenant}_${manager.id}`] = new Scheduler();
 
     manager.jobs?.forEach((job) => {
       addJob(manager.id, job, tenant);
@@ -53,10 +53,10 @@ export const startManagerJobs = async (manager, tenant) => {
 
 export const stopManager = async (managerId, tenant) => {
   try {
-    const manager = jobManagerMap[tenant + '_' + managerId];
+    const manager = jobManagerMap[`${tenant}_${managerId}`];
     await manager.stopAll();
-    delete connectionPool[tenant + '_' + managerId];
-    delete jobManagerMap[tenant + '_' + managerId];
+    delete connectionPool[`${tenant}_${managerId}`];
+    delete jobManagerMap[`${tenant}_${managerId}`];
   } catch (err) {
     console.error(err);
   }
@@ -64,7 +64,7 @@ export const stopManager = async (managerId, tenant) => {
 
 export const addJob = async (managerId, job, tenant) => {
   try {
-    const manager = jobManagerMap[tenant + '_' + managerId];
+    const manager = jobManagerMap[`${tenant}_${managerId}`];
 
     return await manager.add(
       String(job.id),
@@ -73,7 +73,7 @@ export const addJob = async (managerId, job, tenant) => {
         console.log('Job Triggered:', job.name);
         switch (job.type) {
           case 'query':
-            executeQuery(connectionPool[tenant + '_' + managerId], job);
+            executeQuery(connectionPool[`${tenant}_${managerId}`], job);
             break;
           case 'curl':
             executeCurl(job.data);
@@ -97,7 +97,7 @@ export const addJob = async (managerId, job, tenant) => {
 
 export const addToConnectionPool = async (managerId, tenant, connection) => {
   try {
-    connectionPool[tenant + '_' + managerId] = await createDBConnection(connection);
+    connectionPool[`${tenant}_${managerId}`] = await createDBConnection(connection);
     return true;
   } catch (err) {
     console.error(err);
@@ -132,7 +132,7 @@ export const updateJobStatus = (managerId, jobId, status, tenant) => {
   if (status !== true && status !== false) return console.log('Invalid Job Status');
   console.log(`Updating Job with key ${jobId} status to ${status}:`);
   try {
-    const manager = jobManagerMap[tenant + '_' + managerId];
+    const manager = jobManagerMap[`${tenant}_${managerId}`];
     if (status === true) {
       manager.start(String(jobId));
     } else if (status === false) {

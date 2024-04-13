@@ -1,6 +1,6 @@
-import express from 'express';
-import { getAllExecutionHistoryByTestCase, deleteExecutionHistoryById, deleteExecutionHistoryByTestCase, getExecutionHistoryById } from '../Controllers/executionHistory.js';
+import { deleteExecutionHistoryById, deleteExecutionHistoryByTestCase, getAllExecutionHistoryByTestCase, getExecutionHistoryById } from '../Controllers/executionHistory.js';
 import { validatePermission } from '#middlewares/permissions.js';
+import express from 'express';
 const Router = express.Router();
 
 Router.delete('/:executionHistoryId', validatePermission('Execute', 'delete'), deleteExecutionHistoryById);

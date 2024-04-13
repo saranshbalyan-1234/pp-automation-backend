@@ -2,19 +2,21 @@ import { Op } from 'sequelize';
 const paginate = function (model) {
   model.paginate = async function (args) {
     const where = args.where || {};
-    const page = args.page;
-    const size = args.size;
+    const { page } = args;
+    const { size } = args;
     const sort = args.sort || '';
     const searchable = args.searchable || [];
     const database = args.database || process.env.DATABASE_PREFIX + process.env.DATABASE_NAME;
     const data = { where };
     const query = { page: page - 1, size, sort };
 
-    // const newPage = parseInt(query.page) - 1;
-    // const size = parseInt(query.size);
-    // const sort = query.sort;
+    /*
+     * Const newPage = parseInt(query.page) - 1;
+     * const size = parseInt(query.size);
+     * const sort = query.sort;
+     */
 
-    const search = query.search;
+    const { search } = query;
     if (!(isNaN(page) || isNaN(size) || page <= 0 || size < 1)) {
       data.offset = parseInt(query.page * size);
       data.limit = parseInt(size);
@@ -28,9 +30,7 @@ const paginate = function (model) {
     }
     if (searchable.length && search) {
       data.where = {
-        [Op.or]: searchable.map((el) => {
-          return { [el]: { [Op.like]: `%${search}%` } };
-        })
+        [Op.or]: searchable.map((el) => ({ [el]: { [Op.like]: `%${search}%` } }))
       };
     }
     const temp = await model.schema(database).findAndCountAll({ ...data });
@@ -42,8 +42,8 @@ export const pageInfo = (info, query = {}, searchable = []) => {
   const currentPage = parseInt(query.page + 1);
   const size = parseInt(query.size);
   const totalElements = parseInt(info.count);
-  const sort = query.sort;
-  const search = query.search;
+  const { sort } = query;
+  const { search } = query;
   const pageDetails = {
     data,
     page: {

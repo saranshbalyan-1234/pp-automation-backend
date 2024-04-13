@@ -30,7 +30,7 @@ export const KeyboardButtonList = [
   'SEMICOLON',
   'EQUALS',
 
-  'NUMPAD0', // number pad keys
+  'NUMPAD0', // Number pad keys
   'NUMPAD1',
   'NUMPAD2',
   'NUMPAD3',
@@ -47,7 +47,7 @@ export const KeyboardButtonList = [
   'DECIMAL',
   'DIVIDE',
 
-  'F1', // function keys
+  'F1', // Function keys
   'F2',
   'F3',
   'F4',
@@ -61,7 +61,7 @@ export const KeyboardButtonList = [
   'F12',
 
   'COMMAND', // Apple command key
-  'META' // alias for Windows key
+  'META' // Alias for Windows key
 ];
 
 export const IfType = ['Boolean', 'Number', 'String'];

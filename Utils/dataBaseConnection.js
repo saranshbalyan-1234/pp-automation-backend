@@ -1,27 +1,27 @@
-import { Sequelize, DataTypes } from 'sequelize';
-import paginate from '#utils/pagination.js';
+import { DataTypes, Sequelize } from 'sequelize';
 import mysql from 'mysql';
+import paginate from '#utils/pagination.js';
 // Main
 import Customer from '#user/Models/Customer.js';
 import Unverified from '#user/Models/Unverified.js';
 
 // Tenant
-import Role from '#user/Models/RolePermission/Role.js';
-import Permission from '#user/Models/RolePermission/Permission.js';
-import User from '#user/Models/User.js';
-import UserRole from '#user/Models/RolePermission/UserRole.js';
-import Project from '#project/Models/Project.js';
-import UserProject from '#project/Models/UserProject.js';
 import Machine from '#testcase/Models/Machine.js';
+import Permission from '#user/Models/RolePermission/Permission.js';
+import Project from '#project/Models/Project.js';
+import Role from '#user/Models/RolePermission/Role.js';
+import User from '#user/Models/User.js';
+import UserProject from '#project/Models/UserProject.js';
+import UserRole from '#user/Models/RolePermission/UserRole.js';
 
 // TestCase
-import TestCase from '#testcase/Models/TestCase.js';
-import TestParameter from '#testcase/Models/TestParameter.js';
-import TestStep from '#testcase/Models/TestStep.js';
 import Process from '#testcase/Models/Process.js';
 import ReusableProcess from '#testcase/Models/ReusableProcess.js';
 import ReusableProcessLog from '#testcase/Models/ReusableProcessLog.js';
+import TestCase from '#testcase/Models/TestCase.js';
 import TestCaseLog from '#testcase/Models/TestCaseLog.js';
+import TestParameter from '#testcase/Models/TestParameter.js';
+import TestStep from '#testcase/Models/TestStep.js';
 
 // Object
 import Object from '#testcase/Models/Object/Object.js';
@@ -34,8 +34,8 @@ import ProcessHistory from '#testcase/Models/ExecutionHistory/ProcessHistory.js'
 import TestStepHistory from '#testcase/Models/ExecutionHistory/TestStepHistory.js';
 
 // Environment
-import Environment from '#testcase/Models/Environment/Environment.js';
 import Column from '#testcase/Models/Environment/Column.js';
+import Environment from '#testcase/Models/Environment/Environment.js';
 
 // Execution Suite
 import ExecutionSuite from '#testcase/Models/TestExecution/ExecutionSuite.js';
@@ -111,27 +111,31 @@ db.testCaseExecutionMappings = TestCaseExecutionMapping(sequelize, DataTypes);
 db.jobs = Job(sequelize, DataTypes);
 db.jobManagers = JobManager(sequelize, DataTypes);
 
-db.machines = Machine(sequelize, DataTypes); // all associations
+db.machines = Machine(sequelize, DataTypes); // All associations
 
 db.customers.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).sync({ force: false, alter: true });
 db.unverifieds.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).sync({ force: false, alter: true });
-// console.log("Updaing Schema")
-// db.jobs
-//   .schema("automation_master")
-//   .sync({ force: true, alter: true })
-// db.jobManagers
-//   .schema("automation_master")
-//   .sync({ force: true, alter: true })
+/*
+ * Console.log("Updaing Schema")
+ * db.jobs
+ *   .schema("automation_master")
+ *   .sync({ force: true, alter: true })
+ * db.jobManagers
+ *   .schema("automation_master")
+ *   .sync({ force: true, alter: true })
+ */
 
-// await db.scheduler.schema("automation_").sync({ alter: true, });
+// Await db.scheduler.schema("automation_").sync({ alter: true, });
 customModelMethods(db.sequelize.models);
 
 export default db;
 
 async function createDBConnection (data) {
   try {
-    // console.log("Connection Details: ")
-    // console.log(connectionData)
+    /*
+     * Console.log("Connection Details: ")
+     * console.log(connectionData)
+     */
     const { host, port, dialect, user, password, db } = data;
 
     if ((!host || !port || !dialect || user, !password || !db)) throw new Error('Insuffiecient Connection Details');
@@ -157,9 +161,7 @@ async function createDBConnection (data) {
 
     await sequelize
       .authenticate()
-      .then(() => {
-        return console.success(`Database Connected: ${dialect} => ${host}:${port}`);
-      })
+      .then(() => console.success(`Database Connected: ${dialect} => ${host}:${port}`))
       .catch((err) => {
         console.error('Sequalize Error');
         console.log(data);

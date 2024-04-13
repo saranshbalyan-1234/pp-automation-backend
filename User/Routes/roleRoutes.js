@@ -1,6 +1,6 @@
-import express from 'express';
-import { getAllRole, updateRole, saveRole, deleteRole, updateRolePermission, getUserRole, updateUserRole } from '../Controllers/roleController.js';
+import { deleteRole, getAllRole, getUserRole, saveRole, updateRole, updateRolePermission, updateUserRole } from '../Controllers/roleController.js';
 import { validatePermission } from '#middlewares/permissions.js';
+import express from 'express';
 const Router = express.Router();
 
 Router.get('/', validatePermission('Role', 'view'), getAllRole);

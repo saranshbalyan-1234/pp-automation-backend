@@ -1,10 +1,10 @@
-import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
-import { idValidation, createLogValidation, nameDesTagPrjValidation } from '#validations/index.js';
-import { updateTestCaseValidation, saveProcesValidation, updateProcessValidation } from '#testcase/Validations/testCase.js';
 import { Op } from 'sequelize';
+import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#validations/index.js';
+import { saveProcesValidation, updateProcessValidation, updateTestCaseValidation } from '#testcase/Validations/testCase.js';
 import _ from 'lodash';
+import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import getError from '#utils/error.js';
 const TestCase = db.testCases;
 const Process = db.process;
 const Object = db.objects;
@@ -13,9 +13,10 @@ const TestStep = db.testSteps;
 const ReusableProcess = db.reusableProcess;
 const TestCaseLog = db.testCaseLogs;
 const saveTestCase = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const { error } = nameDesTagPrjValidation.validate(req.body);
@@ -33,13 +34,14 @@ const saveTestCase = async (req, res) => {
 };
 
 const updateTestCase = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    // const { name, tags } = req.body;
-    const testCaseId = req.params.testCaseId;
+    // Const { name, tags } = req.body;
+    const { testCaseId } = req.params;
     const { error } = updateTestCaseValidation.validate({
       ...req.body,
       testCaseId
@@ -54,18 +56,18 @@ const updateTestCase = async (req, res) => {
 
     if (updatedTestCase[0]) {
       return res.status(200).json({ message: 'TestCase updated successfully!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const getAllTestCase = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const projectId = req.headers['x-project-id'];
@@ -86,12 +88,13 @@ const getAllTestCase = async (req, res) => {
 };
 
 const deleteTestCase = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const testCaseId = req.params.testCaseId;
+    const { testCaseId } = req.params;
     const { error } = idValidation.validate({ id: testCaseId });
     if (error) throw new Error(error.details[0].message);
 
@@ -101,20 +104,20 @@ const deleteTestCase = async (req, res) => {
 
     if (deletedTestCase > 0) {
       return res.status(200).json({ message: 'TestCase deleted successfully' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 const getTestCaseDetailsById = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const testCaseId = req.params.testCaseId;
+    const { testCaseId } = req.params;
 
     const { error } = idValidation.validate({ id: testCaseId });
     if (error) throw new Error(error.details[0].message);
@@ -134,12 +137,8 @@ const getTestCaseDetailsById = async (req, res) => {
     });
     const reusableProcessCount = totalProcess.length - processCount;
 
-    const allStepId = await totalProcess.map((el) => {
-      return el.id;
-    });
-    const allReusableProcessId = await totalProcess.map((el) => {
-      return el.reusableProcessId;
-    });
+    const allStepId = await totalProcess.map((el) => el.id);
+    const allReusableProcessId = await totalProcess.map((el) => el.reusableProcessId);
     const stepCount = await TestStep.schema(req.database).count({
       where: {
         [Op.or]: [{ processId: allStepId }, { reusableProcessId: allReusableProcessId }]
@@ -157,15 +156,18 @@ const getTestCaseDetailsById = async (req, res) => {
 };
 
 const getTestStepByTestCase = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    // const { error } = nameValidation.validate(req.body);
-    // if (error) throw new Error(error.details[0].message);
+    /*
+     * Const { error } = nameValidation.validate(req.body);
+     * if (error) throw new Error(error.details[0].message);
+     */
 
-    const testCaseId = req.params.testCaseId;
+    const { testCaseId } = req.params;
     const { error } = idValidation.validate({ id: testCaseId });
     if (error) throw new Error(error.details[0].message);
 
@@ -209,9 +211,10 @@ const getTestStepByTestCase = async (req, res) => {
 };
 
 const saveProcess = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const { error } = saveProcesValidation.validate(req.body);
@@ -269,12 +272,13 @@ const saveProcess = async (req, res) => {
 };
 
 const updateProcess = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const processId = req.params.processId;
+    const { processId } = req.params;
     const { error } = updateProcessValidation.validate({
       ...req.body,
       processId
@@ -311,21 +315,21 @@ const updateProcess = async (req, res) => {
         delete temp.dataValues.testSteps;
       }
       return res.status(200).json({ ...temp.dataValues, message: 'Process Updated' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const deleteProcess = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const processId = req.params.processId;
+    const { processId } = req.params;
 
     const { error } = idValidation.validate({ id: processId });
     if (error) throw new Error(error.details[0].message);
@@ -348,21 +352,21 @@ const deleteProcess = async (req, res) => {
       });
 
       return res.status(200).json({ message: 'Process deleted successfully' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const getTestCaseLogsById = async (req, res) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const testCaseId = req.params.testCaseId;
+    const { testCaseId } = req.params;
 
     const { error } = idValidation.validate({ id: testCaseId });
     if (error) throw new Error(error.details[0].message);
@@ -382,9 +386,10 @@ const getTestCaseLogsById = async (req, res) => {
 };
 
 const createTestCaseLog = async (req, res, id, logs = []) => {
-  /*  #swagger.tags = ["Test Case"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Case"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     if (process.env.SAVE_LOGS !== 'true') {
@@ -400,9 +405,7 @@ const createTestCaseLog = async (req, res, id, logs = []) => {
       logs: tempLogs
     });
     if (error) throw new Error(error.details[0].message);
-    const payload = tempLogs.map((el) => {
-      return { log: el, testCaseId, createdByUser: req.user.id };
-    });
+    const payload = tempLogs.map((el) => ({ log: el, testCaseId, createdByUser: req.user.id }));
     await TestCaseLog.schema(req.database).bulkCreate(payload);
     if (logs.length === 0) return res.status(201).json('Log Created');
   } catch (err) {

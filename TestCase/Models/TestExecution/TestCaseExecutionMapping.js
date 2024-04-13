@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
         model: 'testCases',
         key: 'id'
       }
-      // onDelete: "CASCADE",
+      // OnDelete: "CASCADE",
     },
     executionSuiteId: {
       type: DataTypes.INTEGER,

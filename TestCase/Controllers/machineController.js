@@ -1,13 +1,14 @@
-import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
 import { idValidation } from '#validations/index.js';
+import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import getError from '#utils/error.js';
 const Machine = db.machines;
 
 export const addMachine = async (req, res) => {
-  /*  #swagger.tags = ["Machine"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Machine"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     if (!req.user.customerAdmin) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
 
@@ -25,9 +26,10 @@ export const addMachine = async (req, res) => {
 };
 
 export const getAllMachine = async (req, res) => {
-  /*  #swagger.tags = ["Machine"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Machine"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const machines = await Machine.schema(req.database).findAll({
       attributes: ['id', 'name', 'url', 'createdAt']
@@ -40,12 +42,13 @@ export const getAllMachine = async (req, res) => {
 };
 
 export const removeMachine = async (req, res) => {
-  /*  #swagger.tags = ["Machine"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Machine"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     if (!req.user.customerAdmin) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
-    const machineId = req.params.machineId;
+    const { machineId } = req.params;
     const { error } = idValidation.validate({ id: machineId });
     if (error) throw new Error(error.details[0].message);
 
@@ -53,7 +56,7 @@ export const removeMachine = async (req, res) => {
       where: { id: machineId }
     });
     if (deletedMachine > 0) return res.status(200).json({ message: 'Machine deleted successfully!' });
-    else return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (error) {
     getError(error, res);
   }

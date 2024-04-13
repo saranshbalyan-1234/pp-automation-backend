@@ -1,5 +1,5 @@
+import { decryptData, encryptData } from '../Controller/aes.controller.js';
 import express from 'express';
-import { encryptData, decryptData } from '../Controller/aes.controller.js';
 const Router = express.Router();
 
 Router.post('/decrypt', decryptData);

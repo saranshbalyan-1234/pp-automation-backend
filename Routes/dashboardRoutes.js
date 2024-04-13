@@ -1,5 +1,5 @@
+import { createdReport, dashboard, detailedExecutionReport, executionReport } from '../Controllers/dashboardController.js';
 import express from 'express';
-import { dashboard, detailedExecutionReport, executionReport, createdReport } from '../Controllers/dashboardController.js';
 const Router = express.Router();
 Router.get('/', dashboard);
 Router.post('/detailed-execution-report', detailedExecutionReport);

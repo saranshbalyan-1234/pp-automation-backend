@@ -1,19 +1,19 @@
-import userRoutes from '#user/Routes/userRoutes.js';
-import superAdminRoutes from '#user/Routes/superAdminRoutes.js';
-import roleRoutes from '#user/Routes/roleRoutes.js';
-import projectRoutes from '#project/Routes/projectRoutes.js';
-import testCaseRoutes from '#testcase/Routes/testCase.js';
-import objectRoutes from '#testcase/Routes/object.js';
-import testStepRoutes from '#testcase/Routes/testStepRoutes.js';
-import reusableProcessRoutes from '#testcase/Routes/reusableProcess.js';
+import constantRoutes from '#root/Routes/constantRoutes.js';
+import dashboardRoutes from '#routes/dashboardRoutes.js';
+import environmentRoutes from '#testcase/Routes/environment.js';
 import executionHistoryRoutes from '#testcase/Routes/executionHistory.js';
 import executionSuiteRoutes from '#testcase/Routes/executionSuiteRoutes.js';
-import environmentRoutes from '#testcase/Routes/environment.js';
-import storageRoutes from '#storage/Routes/awsRoutes.js';
 import machineRoutes from '#testcase/Routes/machineRoutes.js';
-import dashboardRoutes from '#routes/dashboardRoutes.js';
-import constantRoutes from '#root/Routes/constantRoutes.js';
-// import schedulerRoutes from "#scheduler/Routes/schedulerRoutes.js";
+import objectRoutes from '#testcase/Routes/object.js';
+import projectRoutes from '#project/Routes/projectRoutes.js';
+import reusableProcessRoutes from '#testcase/Routes/reusableProcess.js';
+import roleRoutes from '#user/Routes/roleRoutes.js';
+import storageRoutes from '#storage/Routes/awsRoutes.js';
+import superAdminRoutes from '#user/Routes/superAdminRoutes.js';
+import testCaseRoutes from '#testcase/Routes/testCase.js';
+import testStepRoutes from '#testcase/Routes/testStepRoutes.js';
+import userRoutes from '#user/Routes/userRoutes.js';
+// Import schedulerRoutes from "#scheduler/Routes/schedulerRoutes.js";
 
 const protectedRoutes = [
   { path: '/constant', list: constantRoutes },

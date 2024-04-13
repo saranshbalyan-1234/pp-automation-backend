@@ -7,10 +7,10 @@
     },
     "extends": [
         "standard",
-        "eslint:recommended",
+        "eslint:all",
         "plugin:promise/recommended",
         "plugin:eqeqeq-fix/recommended",
-        "plugin:react/recommended",
+        "plugin:react/all",
         "plugin:react-hooks/recommended"
     ],
     "parserOptions": {
@@ -25,13 +25,29 @@
         "indent": [2],
         "quotes": [2, "single"],
         "linebreak-style": [2, "unix"],
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "error"
-        // "no-console":"error"
+        "no-console":"off",
+        "no-ternary":"off",
+        "radix": "off",
+        // "sort-keys-fix/sort-keys-fix": "warn",
+        "sort-imports-es6-autofix/sort-imports-es6": [2, {
+            "ignoreCase": false,
+            "ignoreMemberSort": false,
+            "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+          }]
+      
     },
     "settings": {
         "react": {
          "version": "detect"
         }
-      }
+      },
+    "plugins":[
+        "react",
+        "promise",
+        "react",
+        "react-hooks",
+        "eqeqeq-fix",
+        "sort-imports-es6-autofix"
+        // "sort-keys-fix"
+    ]
 }

@@ -1,17 +1,18 @@
+import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#validations/index.js';
+import { saveObjectLocatorValidation, updateObjectValidation } from '#testcase/Validations/object.js';
 import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
-import { idValidation, nameDesTagPrjValidation, createLogValidation } from '#validations/index.js';
-import { updateObjectValidation, saveObjectLocatorValidation } from '#testcase/Validations/object.js';
 import errorContstants from '#constants/error.js';
+import getError from '#utils/error.js';
 
 const Object = db.objects;
 const ObjectLocator = db.ObjectLocators;
 const ObjectLog = db.objectLogs;
 
 const saveObject = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const { error } = nameDesTagPrjValidation.validate(req.body);
@@ -27,12 +28,13 @@ const saveObject = async (req, res) => {
   }
 };
 const getObjectDetailsById = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const objectId = req.params.objectId;
+    const { objectId } = req.params;
     const { error } = idValidation.validate({ id: objectId });
     if (error) throw new Error(error.details[0].message);
 
@@ -56,12 +58,13 @@ const getObjectDetailsById = async (req, res) => {
 };
 
 const updateObject = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const objectId = req.params.objectId;
+    const { objectId } = req.params;
     const { error } = updateObjectValidation.validate({
       ...req.body,
       objectId
@@ -76,21 +79,21 @@ const updateObject = async (req, res) => {
 
     if (updatedObject[0]) {
       return res.status(200).json({ message: 'Object updated successfully!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const deleteObject = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const objectId = req.params.objectId;
+    const { objectId } = req.params;
 
     const { error } = idValidation.validate({ id: objectId });
     if (error) throw new Error(error.details[0].message);
@@ -101,18 +104,18 @@ const deleteObject = async (req, res) => {
 
     if (deletedObject > 0) {
       return res.status(200).json({ message: 'Object deleted successfully' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const getAllObject = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const projectId = req.headers['x-project-id'];
@@ -133,12 +136,13 @@ const getAllObject = async (req, res) => {
   }
 };
 const getObjectLocatorsByObjectId = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const objectId = req.params.objectId;
+    const { objectId } = req.params;
 
     const { error } = idValidation.validate({ id: objectId });
     if (error) throw new Error(error.details[0].message);
@@ -156,9 +160,10 @@ const getObjectLocatorsByObjectId = async (req, res) => {
 };
 
 const saveObjectLocator = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const { error } = saveObjectLocatorValidation.validate(req.body);
@@ -175,12 +180,13 @@ const saveObjectLocator = async (req, res) => {
 };
 
 const deleteObjectLocator = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const locatorId = req.params.locatorId;
+    const { locatorId } = req.params;
 
     const { error } = idValidation.validate({ id: locatorId });
     if (error) throw new Error(error.details[0].message);
@@ -191,21 +197,21 @@ const deleteObjectLocator = async (req, res) => {
 
     if (deletedLocator > 0) {
       return res.status(200).json({ message: 'ObjectLocator deleted successfully' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const getObjectLogsByObjectId = async (req, res) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const objectId = req.params.objectId;
+    const { objectId } = req.params;
 
     const { error } = idValidation.validate({ id: objectId });
     if (error) throw new Error(error.details[0].message);
@@ -225,9 +231,10 @@ const getObjectLogsByObjectId = async (req, res) => {
 };
 
 const createObjectLog = async (req, res, id, logs = []) => {
-  /*  #swagger.tags = ["Test Object"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Object"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     if (process.env.SAVE_LOGS !== 'true') {
@@ -243,9 +250,7 @@ const createObjectLog = async (req, res, id, logs = []) => {
     });
     if (error) throw new Error(error.details[0].message);
 
-    const payload = tempLogs.map((el) => {
-      return { log: el, objectId, createdByUser: req.user.id };
-    });
+    const payload = tempLogs.map((el) => ({ log: el, objectId, createdByUser: req.user.id }));
     await ObjectLog.schema(req.database).bulkCreate(payload);
     if (logs.length === 0) return res.status(201).json('Log Created');
   } catch (err) {

@@ -30,10 +30,10 @@ const getError = (e, res, tokenType) => {
           message = `Invalid ${error.path} is not a valid Integer`;
           break;
         case 'min':
-          message = `${error.path} must be >= ` + error.validatorArgs[0];
+          message = `${error.path} must be >= ${error.validatorArgs[0]}`;
           break;
         case 'max':
-          message = `${error.path} must be <= ` + error.validatorArgs[0];
+          message = `${error.path} must be <= ${error.validatorArgs[0]}`;
           break;
         default:
           message = 'Something Went Wrong';
@@ -71,9 +71,8 @@ const getError = (e, res, tokenType) => {
         message = e.message;
     }
     return res.status(code).json({ error: message });
-  } else {
-    return res.status(500).json(e);
   }
+  return res.status(500).json(e);
 };
 
 export default getError;

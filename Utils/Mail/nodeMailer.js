@@ -1,5 +1,5 @@
-import nodemailer from 'nodemailer';
 import { createToken } from '#utils/jwt.js';
+import nodemailer from 'nodemailer';
 import registerHTML from '#utils/Mail/HTML/register.js';
 import resetPasswordHtml from '#utils/Mail/HTML/resetPassword.js';
 const transporter = nodemailer.createTransport({
@@ -11,15 +11,15 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendMailApi = (req, res) => {
-  /*  #swagger.tags = ["Mail"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
-  transporter.sendMail(req.body, function (error, info) {
+  /*
+   *  #swagger.tags = ["Mail"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
+  transporter.sendMail(req.body, (error, info) => {
     if (error) {
       return res.status(400).json({ error });
-    } else {
-      return res.status(200).json(info);
     }
+    return res.status(200).json(info);
   });
 };
 const sendMail = async (data, type) => {
@@ -61,7 +61,7 @@ const sendMail = async (data, type) => {
       };
       break;
   }
-  transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM }, function (error, info) {
+  transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM }, (error, info) => {
     if (error) {
       console.log(error);
       console.log('Failed to send email');

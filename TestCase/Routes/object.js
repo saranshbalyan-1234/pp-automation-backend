@@ -1,17 +1,17 @@
-import express from 'express';
 import {
-  saveObject,
-  updateObject,
+  createObjectLog,
   deleteObject,
+  deleteObjectLocator,
   getAllObject,
   getObjectDetailsById,
-  saveObjectLocator,
   getObjectLocatorsByObjectId,
-  deleteObjectLocator,
   getObjectLogsByObjectId,
-  createObjectLog
+  saveObject,
+  saveObjectLocator,
+  updateObject
 } from '../Controllers/object.js';
 import { validatePermission } from '#middlewares/permissions.js';
+import express from 'express';
 const Router = express.Router();
 
 Router.post('/', validatePermission('Test Case', 'add'), saveObject);

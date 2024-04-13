@@ -1,5 +1,5 @@
-import getError from '#utils/error.js';
 import crypto from 'crypto';
+import getError from '#utils/error.js';
 
 const secretKey = 'saranshbalyan123saranshbalyan123';
 const initializationVector = 'c3e84932d4eca8d8860e087613ca4313';
@@ -28,11 +28,15 @@ function decryptWithAES (encryptedText, key = secretKey, iv = initializationVect
   }
 }
 
-// const plaintext = "Hello, AES CBC encryption!";
-// const encryptedText = encryptWithAES(plaintext, secretKey,initializationVector );
-// console.log("Encrypted:",encryptedText);
+/*
+ * Const plaintext = "Hello, AES CBC encryption!";
+ * const encryptedText = encryptWithAES(plaintext, secretKey,initializationVector );
+ * console.log("Encrypted:",encryptedText);
+ */
 
-// const decryptedText = decryptWithAES("8600ce43592fecadc5b8edba44f0e81a", secretKey, initializationVector);
-// console.log("Decrypted:", decryptedText);
+/*
+ * Const decryptedText = decryptWithAES("8600ce43592fecadc5b8edba44f0e81a", secretKey, initializationVector);
+ * console.log("Decrypted:", decryptedText);
+ */
 
 export { encryptWithAES, decryptWithAES };

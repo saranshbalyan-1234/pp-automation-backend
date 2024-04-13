@@ -1,17 +1,18 @@
-import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
-import { saveTestStepValidation, updateTestStepValidation } from '#testcase/Validations/testStep.js';
-import { idValidation } from '#validations/index.js';
 import { Op } from 'sequelize';
+import { idValidation } from '#validations/index.js';
+import { saveTestStepValidation, updateTestStepValidation } from '#testcase/Validations/testStep.js';
+import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import getError from '#utils/error.js';
 const TestStep = db.testSteps;
 const Object = db.objects;
 const TestParameter = db.testParameters;
 
 const saveTestStep = async (req, res) => {
-  /*  #swagger.tags = ["Test Step"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Step"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     await db.sequelize.transaction(async (transaction) => {
@@ -20,9 +21,7 @@ const saveTestStep = async (req, res) => {
       const permissionName = reusableProcessId ? 'Reusable Process' : 'Test Case';
 
       if (!req.user.customerAdmin) {
-        const allowed = await req.user.permissions.some((permission) => {
-          return permissionName === permission.name && permission.edit;
-        });
+        const allowed = await req.user.permissions.some((permission) => permissionName === permission.name && permission.edit);
         if (!allowed) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
       }
 
@@ -54,12 +53,8 @@ const saveTestStep = async (req, res) => {
       }
       const teststep = await TestStep.schema(req.database).create(req.body, { transaction });
       const parameterPayload = req.body.parameters
-        .filter((el) => {
-          return el.property;
-        })
-        .map((el) => {
-          return { ...el, testStepId: teststep.id };
-        });
+        .filter((el) => el.property)
+        .map((el) => ({ ...el, testStepId: teststep.id }));
       await TestParameter.schema(req.database).bulkCreate(parameterPayload, { transaction });
       const stepData = await TestStep.schema(req.database).findByPk(teststep.id, {
         include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
@@ -73,22 +68,21 @@ const saveTestStep = async (req, res) => {
 };
 
 const updateTestStep = async (req, res) => {
-  /*  #swagger.tags = ["Test Step"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Step"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     await db.sequelize.transaction(async (transaction) => {
-      const testStepId = req.params.testStepId;
+      const { testStepId } = req.params;
 
       const updatingStep = await TestStep.schema(req.database).findByPk(testStepId);
 
       const permissionName = updatingStep.reusableProcessId ? 'Reusable Process' : 'Test Case';
 
       if (!req.user.customerAdmin) {
-        const allowed = await req.user.permissions.some((permission) => {
-          return permissionName === permission.name && permission.edit;
-        });
+        const allowed = await req.user.permissions.some((permission) => permissionName === permission.name && permission.edit);
         if (!allowed) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
       }
 
@@ -114,12 +108,8 @@ const updateTestStep = async (req, res) => {
       });
 
       const parameterPayload = req.body.parameters
-        .filter((el) => {
-          return el.property;
-        })
-        .map((el) => {
-          return { ...el, testStepId };
-        });
+        .filter((el) => el.property)
+        .map((el) => ({ ...el, testStepId }));
 
       await TestParameter.schema(req.database).bulkCreate(parameterPayload, { transaction });
 
@@ -133,9 +123,8 @@ const updateTestStep = async (req, res) => {
           ...step.dataValues,
           message: 'TestStep updated successfully!'
         });
-      } else {
-        return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
       }
+      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     });
   } catch (err) {
     getError(err, res);
@@ -143,22 +132,21 @@ const updateTestStep = async (req, res) => {
 };
 
 const deleteTestStep = async (req, res) => {
-  /*  #swagger.tags = ["Test Step"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Test Step"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     await db.sequelize.transaction(async (transaction) => {
-      const testStepId = req.params.testStepId;
+      const { testStepId } = req.params;
 
       const deletingTestStep = await TestStep.schema(req.database).findByPk(testStepId);
 
       const permissionName = deletingTestStep.reusableProcessId ? 'Reusable Process' : 'Test Case';
 
       if (!req.user.customerAdmin) {
-        const allowed = await req.user.permissions.some((permission) => {
-          return permissionName === permission.name && permission.edit;
-        });
+        const allowed = await req.user.permissions.some((permission) => permissionName === permission.name && permission.edit);
         if (!allowed) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
       }
 
@@ -195,9 +183,8 @@ const deleteTestStep = async (req, res) => {
           });
         }
         return res.status(200).json({ message: 'TestStep deleted successfully' });
-      } else {
-        return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
       }
+      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     });
   } catch (err) {
     getError(err, res);

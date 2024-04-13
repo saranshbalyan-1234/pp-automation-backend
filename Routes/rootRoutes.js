@@ -1,18 +1,18 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-// swagger
+// Swagger
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const swaggerFile = require('../swagger.json');
-// swagger
+// Swagger
 
 const Router = express.Router();
 
-Router.get('/health', (req, res) => {
+Router.get('/health', (req, res) =>
   /*  #swagger.tags = ["Health"] */
-  return res.json('Server is Working');
-});
+  res.json('Server is Working')
+);
 
 Router.use('/swagger', swaggerUi.serve);
 Router.get('/swagger', swaggerUi.setup(swaggerFile));

@@ -1,18 +1,19 @@
-import errorContstants from '#constants/error.js';
-import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
-import { idValidation } from '#validations/index.js';
 import { Op } from 'sequelize';
+import { idValidation } from '#validations/index.js';
+import db from '#utils/dataBaseConnection.js';
+import errorContstants from '#constants/error.js';
+import getError from '#utils/error.js';
 const ExecutionSuite = db.executionSuites;
 const CaseExecution = db.testCaseExecutionMappings;
 const TestCase = db.testCases;
 const Environment = db.enviroments;
 
 const addExecutionSuite = async (req, res) => {
-  /*  #swagger.tags = ["Execution Suite"]
-     #swagger.security = [{"apiKeyAuth": []}]
-
-  */
+  /*
+   *  #swagger.tags = ["Execution Suite"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   *
+   */
   try {
     const executionSuite = await ExecutionSuite.schema(req.database).create({ ...req.body, createdByUser: req.user.id });
     return res.status(200).json(executionSuite);
@@ -22,9 +23,10 @@ const addExecutionSuite = async (req, res) => {
 };
 
 const getAllExecutionSuite = async (req, res) => {
-  /*  #swagger.tags = ["Execution Suite"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Execution Suite"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const projectId = req.headers['x-project-id'];
 
@@ -40,11 +42,12 @@ const getAllExecutionSuite = async (req, res) => {
 };
 
 const deleteExecutionSuite = async (req, res) => {
-  /*  #swagger.tags = ["Execution Suite"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Execution Suite"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const executionSuiteId = req.params.executionSuiteId;
+    const { executionSuiteId } = req.params;
     const { error } = idValidation.validate({ id: executionSuiteId });
     if (error) throw new Error(error.details[0].message);
 
@@ -52,16 +55,17 @@ const deleteExecutionSuite = async (req, res) => {
       where: { id: executionSuiteId }
     });
     if (deletedExecutionSuite > 0) return res.status(200).json({ message: 'Execution Suite deleted successfully!' });
-    else return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (error) {
     getError(error, res);
   }
 };
 
 const addTestCaseToExecutionSuite = async (req, res) => {
-  /*  #swagger.tags = ["Execution Suite"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Execution Suite"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { testCaseId, executionSuiteId, step } = req.body;
 
@@ -102,9 +106,10 @@ const addTestCaseToExecutionSuite = async (req, res) => {
 };
 
 const removeTestCaseFromExecutionSuite = async (req, res) => {
-  /*  #swagger.tags = ["Execution Suite"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Execution Suite"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const caseExecutionId = req.params.id;
 
@@ -127,12 +132,16 @@ const removeTestCaseFromExecutionSuite = async (req, res) => {
 };
 
 const getTestCaseByExecutionSuiteId = async (req, res) => {
-  /*  #swagger.tags = ["Execution Suite"]
-      #swagger.security = [{"apiKeyAuth": []}] */
+  /*
+   *  #swagger.tags = ["Execution Suite"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const executionSuiteId = req.params.executionSuiteId;
-    // const { error } = idValidation.validate({ id: userId });
-    // if (error) throw new Error(error.details[0].message);
+    const { executionSuiteId } = req.params;
+    /*
+     * Const { error } = idValidation.validate({ id: userId });
+     * if (error) throw new Error(error.details[0].message);
+     */
 
     const testcases = await CaseExecution.schema(req.database).findAll({
       where: { executionSuiteId },
@@ -152,14 +161,18 @@ const getTestCaseByExecutionSuiteId = async (req, res) => {
       ],
       order: [
         ['step', 'ASC']
-        // [TestStep, "step", "ASC"],
-        // [ReusableProcess, TestStep, "step", "ASC"],
+        /*
+         * [TestStep, "step", "ASC"],
+         * [ReusableProcess, TestStep, "step", "ASC"],
+         */
       ]
     });
 
-    // const updatedArray = testcases.map((el) => {
-    //  return { ...el.testCase.dataValues };
-    // });
+    /*
+     * Const updatedArray = testcases.map((el) => {
+     *  return { ...el.testCase.dataValues };
+     * });
+     */
 
     return res.status(200).json(testcases);
   } catch (error) {
@@ -168,11 +181,13 @@ const getTestCaseByExecutionSuiteId = async (req, res) => {
 };
 
 const getExecutionSuiteDetailsById = async (req, res) => {
-  /*  #swagger.tags = ["Execution Suite"]
-      #swagger.security = [{"apiKeyAuth": []}] */
+  /*
+   *  #swagger.tags = ["Execution Suite"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const executionSuiteId = req.params.executionSuiteId;
+    const { executionSuiteId } = req.params;
     const { error } = idValidation.validate({
       id: executionSuiteId
     });
@@ -194,17 +209,20 @@ const getExecutionSuiteDetailsById = async (req, res) => {
 };
 
 const editExecutionSuite = async (req, res) => {
-  /*  #swagger.tags = ["Execution Suite"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Execution Suite"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const executionSuiteId = req.params.executionSuiteId;
+    const { executionSuiteId } = req.params;
 
-    // const { error } = updateProjectValidation.validate({
-    //   ...req.body,
-    //   projectId,
-    // });
-    // if (error) throw new Error(error.details[0].message);
+    /*
+     * Const { error } = updateProjectValidation.validate({
+     *   ...req.body,
+     *   projectId,
+     * });
+     * if (error) throw new Error(error.details[0].message);
+     */
 
     const updatedExecutionSuite = await ExecutionSuite.schema(req.database).update(req.body, {
       where: {
@@ -214,9 +232,8 @@ const editExecutionSuite = async (req, res) => {
 
     if (updatedExecutionSuite[0]) {
       return res.status(200).json({ message: 'Execution Suite Updated Successfully!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (error) {
     getError(error, res);
   }

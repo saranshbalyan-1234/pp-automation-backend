@@ -1,22 +1,24 @@
-import express from 'express';
+import { activeInactiveValidation, changeDetailsValidation, changePasswordValidation, userIdParamsValidation } from '../Validations/user.js';
 import {
   addUser,
-  deleteUser,
-  changePassword,
   changeDetails,
-  getTeam,
-  resendVerificationEmail,
+  changePassword,
   deleteCustomerUser,
-  uploadProfileImage,
+  deleteUser,
+  getTeam,
   getUserDetailsByEmail,
-  logout
-  // toggleUserActiveInactive,
-  // myStatus,
+  logout,
+  resendVerificationEmail,
+  uploadProfileImage
+  /*
+   * ToggleUserActiveInactive,
+   * myStatus,
+   */
 } from '../Controllers/userController.js';
 import { emailBodyValidation, registerValidation } from '../Validations/auth.js';
-import { changePasswordValidation, changeDetailsValidation, activeInactiveValidation, userIdParamsValidation } from '../Validations/user.js';
 import { validate } from 'express-validation';
 import { validateCustomerAdmin, validatePermission } from '#middlewares/permissions.js';
+import express from 'express';
 
 const Router = express.Router();
 

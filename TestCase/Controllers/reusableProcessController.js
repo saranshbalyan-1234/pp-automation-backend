@@ -1,9 +1,9 @@
-import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
-import { idValidation, createLogValidation, nameDesTagPrjValidation } from '#utils/Validations/index.js';
+import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#utils/Validations/index.js';
 import { updateReusableProcessValidation } from '#testcase/Validations/reusableProcess.js';
 import _ from 'lodash';
+import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
+import getError from '#utils/error.js';
 
 const Object = db.objects;
 const TestParameter = db.testParameters;
@@ -12,9 +12,10 @@ const ReusableProcess = db.reusableProcess;
 const ReusableProcessLog = db.reusableProcessLogs;
 const Process = db.process;
 const saveReusableProcess = async (req, res) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const { error } = nameDesTagPrjValidation.validate(req.body);
@@ -35,12 +36,13 @@ const saveReusableProcess = async (req, res) => {
 };
 
 const updateReusableProcess = async (req, res) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const reusableProcessId = req.params.reusableProcessId;
+    const { reusableProcessId } = req.params;
     const { error } = updateReusableProcessValidation.validate({
       ...req.body,
       reusableProcessId
@@ -55,18 +57,18 @@ const updateReusableProcess = async (req, res) => {
 
     if (updatedReusableProcess[0]) {
       return res.status(200).json({ message: 'ReusableProcess updated successfully!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const getAllReusableProcess = async (req, res) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const projectId = req.headers['x-project-id'];
@@ -87,12 +89,13 @@ const getAllReusableProcess = async (req, res) => {
 };
 
 const deleteReusableProcess = async (req, res) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const reusableProcessId = req.params.reusableProcessId;
+    const { reusableProcessId } = req.params;
     const { error } = idValidation.validate({
       id: reusableProcessId
     });
@@ -104,20 +107,20 @@ const deleteReusableProcess = async (req, res) => {
 
     if (deletedReusableProcess > 0) {
       return res.status(200).json({ message: 'ReusableProcess deleted successfully' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 const getReusableProcessDetailsById = async (req, res) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const reusableProcessId = req.params.reusableProcessId;
+    const { reusableProcessId } = req.params;
     const { error } = idValidation.validate({
       id: reusableProcessId
     });
@@ -139,12 +142,13 @@ const getReusableProcessDetailsById = async (req, res) => {
 };
 
 const getTestStepByReusableProcess = async (req, res) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const reusableProcessId = req.params.reusableProcessId;
+    const { reusableProcessId } = req.params;
     const { error } = idValidation.validate({
       id: reusableProcessId
     });
@@ -164,12 +168,13 @@ const getTestStepByReusableProcess = async (req, res) => {
 };
 
 const getReusableProcessLogsById = async (req, res) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const reusableProcessId = req.params.reusableProcessId;
+    const { reusableProcessId } = req.params;
 
     const { error } = idValidation.validate({ id: reusableProcessId });
     if (error) throw new Error(error.details[0].message);
@@ -189,9 +194,10 @@ const getReusableProcessLogsById = async (req, res) => {
 };
 
 const createReusableProcessLog = async (req, res, id, logs = []) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     if (process.env.SAVE_LOGS !== 'true') {
@@ -208,9 +214,7 @@ const createReusableProcessLog = async (req, res, id, logs = []) => {
     });
     if (error) throw new Error(error.details[0].message);
 
-    const payload = tempLogs.map((el) => {
-      return { log: el, reusableProcessId, createdByUser: req.user.id };
-    });
+    const payload = tempLogs.map((el) => ({ log: el, reusableProcessId, createdByUser: req.user.id }));
     await ReusableProcessLog.schema(req.database).bulkCreate(payload);
     if (logs.length === 0) res.status(201).json('Log Created');
   } catch (err) {
@@ -220,13 +224,14 @@ const createReusableProcessLog = async (req, res, id, logs = []) => {
 };
 
 const convertToReusableProcess = async (req, res) => {
-  /*  #swagger.tags = ["Reusable Process"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Reusable Process"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     await db.sequelize.transaction(async (transaction) => {
-      const processId = req.params.processId;
+      const { processId } = req.params;
       const projectId = req.headers['x-project-id'];
       const { error } = idValidation.validate({
         id: processId
@@ -299,9 +304,8 @@ const convertToReusableProcess = async (req, res) => {
           delete temp.dataValues.testSteps;
         }
         return res.status(200).json({ ...temp.dataValues, message: 'Converted to Reuasable Process!' });
-      } else {
-        return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
       }
+      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     });
   } catch (err) {
     getError(err, res);

@@ -1,6 +1,6 @@
-import express from 'express';
-import { getMyProject, getProjectById, addProject, deleteProject, addMember, deleteMember, editProject } from '../Controllers/projectController.js';
+import { addMember, addProject, deleteMember, deleteProject, editProject, getMyProject, getProjectById } from '../Controllers/projectController.js';
 import { validatePermission, validateUserProject } from '#middlewares/permissions.js';
+import express from 'express';
 const Router = express.Router();
 
 Router.get('/', validatePermission('Project', 'view'), getMyProject);

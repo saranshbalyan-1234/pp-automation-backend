@@ -2,7 +2,7 @@ export default (sequelize, DataTypes) => {
   const ProcessHistory = sequelize.define('processHistories', {
     processId: {
       type: DataTypes.INTEGER,
-      // unique: true,
+      // Unique: true,
       allowNull: false,
       validate: {
         notNull: true

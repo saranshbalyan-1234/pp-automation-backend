@@ -1,7 +1,7 @@
-import db from '#utils/dataBaseConnection.js';
-import bcrypt from 'bcryptjs';
 import { createToken } from '#utils/jwt.js';
+import bcrypt from 'bcryptjs';
 import cache from '#utils/cache.js';
+import db from '#utils/dataBaseConnection.js';
 import errorContstants from '#constants/error.js';
 
 // Main
