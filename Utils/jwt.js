@@ -6,7 +6,6 @@ const createToken = (data, secret, expiration) => {
   try {
     const options = {};
     if (expiration) options.expiresIn = expiration;
-    console.log('saransh', secret);
     return sign(data, secret, options);
   } catch (err) {
     console.error('Error in Signing Token');
@@ -22,16 +21,18 @@ const getTokenError = (e, type) => {
       return `Invalid ${type} Found`;
   }
 };
-const extractToken = (req) => {
-  return req.headers.authorization || '';
-  // if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
-  //     return req.headers.authorization.split(" ")[1];
-  // } else return null;
-};
+const extractToken = (req) =>
+  req.headers.authorization || ''
+  /*
+   * If (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
+   *     return req.headers.authorization.split(" ")[1];
+   * } else return null;
+   */
+;
 
 const decryptJwt = (jwt) => {
   if (!jwt || typeof jwt !== 'string') return {};
   return verify(jwt, process.env.JWT_ACCESS_SECRET);
 };
 
-export { createToken, getTokenError, extractToken, decryptJwt };
+export { createToken, decryptJwt, extractToken, getTokenError };

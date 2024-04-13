@@ -1,31 +1,31 @@
 export default (sequelize, DataTypes) => {
   const ObjectLocator = sequelize.define('objectLocators', {
-    type: {
-      type: DataTypes.STRING,
+    locator: {
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
-    locator: {
-      type: DataTypes.STRING,
+    objectId: {
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'objects'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }
     },
 
-    objectId: {
-      type: DataTypes.INTEGER,
+    type: {
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'objects',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      }
     }
   });
 

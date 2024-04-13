@@ -1,33 +1,34 @@
 import nodemailer from 'nodemailer';
+
 import { createToken } from '#utils/jwt.js';
 import registerHTML from '#utils/Mail/HTML/register.js';
 import resetPasswordHtml from '#utils/Mail/HTML/resetPassword.js';
 const transporter = nodemailer.createTransport({
-  service: process.env.MAILER_SERVICE,
   auth: {
-    user: process.env.MAILER_USER,
-    pass: process.env.MAILER_PASS
-  }
+    pass: process.env.MAILER_PASS,
+    user: process.env.MAILER_USER
+  },
+  service: process.env.MAILER_SERVICE
 });
 
 const sendMailApi = (req, res) => {
-  /*  #swagger.tags = ["Mail"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
-  transporter.sendMail(req.body, function (error, info) {
+  /*
+   *  #swagger.tags = ["Mail"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
+  transporter.sendMail(req.body, (error, info) => {
     if (error) {
       return res.status(400).json({ error });
-    } else {
-      return res.status(200).json(info);
     }
+    return res.status(200).json(info);
   });
 };
-const sendMail = async (data, type) => {
+const sendMail = (data, type) => {
   let mailOption = {
-    to: '',
+    html: '',
     subject: '',
     text: '',
-    html: ''
+    to: ''
   };
   let token = '';
   let link = '';
@@ -36,18 +37,18 @@ const sendMail = async (data, type) => {
       token = createToken({ email: data.email }, process.env.JWT_VERIFICATION_SECRET);
       link = `${process.env.WEBSITE_HOME}/auth/verify-customer/${token}`;
       mailOption = {
-        to: data.email,
+        html: registerHTML(data.name, link),
         subject: 'Customer Registration Successfull',
-        html: registerHTML(data.name, link)
+        to: data.email
       };
       break;
     case 'addUser':
       token = createToken({ email: data.email, tenant: data.tenant }, process.env.JWT_VERIFICATION_SECRET);
       link = `${process.env.WEBSITE_HOME}/auth/verify-user/${token}`;
       mailOption = {
-        to: data.email,
+        html: registerHTML(data.name, link),
         subject: 'Registration Successfull',
-        html: registerHTML(data.name, link)
+        to: data.email
       };
       console.log(link);
       break;
@@ -55,13 +56,15 @@ const sendMail = async (data, type) => {
       token = createToken({ email: data.email, tenant: data.tenant }, process.env.JWT_RESET_SECRET, process.env.JWT_RESET_EXPIRATION);
       link = `${process.env.WEBSITE_HOME}/reset-password/${token}`;
       mailOption = {
-        to: data.email,
+        html: resetPasswordHtml(data.name, link),
         subject: 'Password Reset',
-        html: resetPasswordHtml(data.name, link)
+        to: data.email
       };
       break;
+    default:
+      break;
   }
-  transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM }, function (error, info) {
+  transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM }, (error, info) => {
     if (error) {
       console.log(error);
       console.log('Failed to send email');
@@ -71,4 +74,4 @@ const sendMail = async (data, type) => {
     }
   });
 };
-export { sendMailApi, sendMail };
+export { sendMail, sendMailApi };

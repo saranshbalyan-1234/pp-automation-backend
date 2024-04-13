@@ -1,51 +1,51 @@
 export default (sequelize, DataTypes) => {
   const Job = sequelize.define('jobs', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
-    },
-    jobManagerId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
-    },
-    time: {
-      type: DataTypes.STRING,
-      defaultValue: '0 5 31 2 *'
-    },
-    type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
-    },
-    timezone: {
-      type: DataTypes.STRING,
-      defaultValue: 'Asia/Kolkata'
-    },
     active: {
-      type: DataTypes.BOOLEAN,
       defaultValue: 1,
+      type: DataTypes.BOOLEAN,
       values: [0, 1]
     },
-    query: {
-      type: DataTypes.STRING,
-      defaultValue: null
-    },
     decryptColumn: {
-      type: DataTypes.STRING,
-      defaultValue: null
+      defaultValue: null,
+      type: DataTypes.STRING
     },
     extension: {
-      type: DataTypes.STRING,
       defaultValue: null,
+      type: DataTypes.STRING,
       values: ['txt', 'csv', 'json', 'xlsx']
+    },
+    jobManagerId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate: {
+        notNull: true
+      }
+    },
+    query: {
+      defaultValue: null,
+      type: DataTypes.STRING
+    },
+    time: {
+      defaultValue: '0 5 31 2 *',
+      type: DataTypes.STRING
+    },
+    timezone: {
+      defaultValue: 'Asia/Kolkata',
+      type: DataTypes.STRING
+    },
+    type: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate: {
+        notNull: true
+      }
     }
   });
 

@@ -1,7 +1,8 @@
 import express from 'express';
-import { register, login, verifyCustomer, verifyUser, sendResetPasswordMail, resetPassword, refreshToken } from '../Controllers/authController.js';
-import { loginValidation, registerValidation, emailBodyValidation, tokenBodyValidation } from '../Validations/auth.js';
 import { validate } from 'express-validation';
+
+import { login, refreshToken, register, resetPassword, sendResetPasswordMail, verifyCustomer, verifyUser } from '../Controllers/authController.js';
+import { emailBodyValidation, loginValidation, registerValidation, tokenBodyValidation } from '../Validations/auth.js';
 const Router = express.Router();
 
 Router.post('/register', validate(registerValidation), register);

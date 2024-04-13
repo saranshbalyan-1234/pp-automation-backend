@@ -1,23 +1,23 @@
 export default (sequelize, DataTypes) => {
   const Environment = sequelize.define('environments', {
     name: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
     testCaseId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'testCases'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'testCases',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      }
     }
   });
 

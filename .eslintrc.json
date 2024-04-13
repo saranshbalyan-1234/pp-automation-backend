@@ -7,10 +7,10 @@
     },
     "extends": [
         "standard",
-        "eslint:recommended",
+        "eslint:all",
         "plugin:promise/recommended",
         "plugin:eqeqeq-fix/recommended",
-        "plugin:react/recommended",
+        "plugin:react/all",
         "plugin:react-hooks/recommended"
     ],
     "parserOptions": {
@@ -25,13 +25,45 @@
         "indent": [2],
         "quotes": [2, "single"],
         "linebreak-style": [2, "unix"],
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "error"
-        // "no-console":"error"
+        "no-console":"off",
+        "no-ternary":"off",
+        "radix": "off",
+        "max-statements":"off",
+        "max-lines-per-function":"off",
+        "sort-keys-fix/sort-keys-fix": "warn",
+        "id-length":"off",
+        "no-magic-numbers":"off",
+        "require-unicode-regexp":"off",
+        "max-params":"off",
+        "prefer-destructuring":"off",
+        "no-multi-assign":"off",
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "consistent-return":"off",
+        "max-lines":"off",
+        "no-plusplus":"off",
+        "no-continue":"off",
+        "no-await-in-loop":"off",
+        "sort-imports": ["error", {
+            "ignoreCase": true,
+            "ignoreDeclarationSort": true,
+            "ignoreMemberSort": true,
+            "memberSyntaxSortOrder": ["multiple", "all","single","none"]
+        }]
     },
     "settings": {
         "react": {
          "version": "detect"
         }
-      }
+      },
+    "plugins":[
+        "react",
+        "promise",
+        "react",
+        "react-hooks",
+        "eqeqeq-fix",
+        "sort-keys-fix",
+        "unused-imports",
+        "simple-import-sort"
+    ]
 }

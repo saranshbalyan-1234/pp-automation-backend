@@ -1,8 +1,9 @@
+import errorContstants from '#constants/error.js';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
-import { addProjectValidation, memberProjectValidation, updateProjectValidation } from '../Validations/project.js';
 import { idValidation } from '#validations/index.js';
-import errorContstants from '#constants/error.js';
+
+import { addProjectValidation, memberProjectValidation, updateProjectValidation } from '../Validations/project.js';
 
 const UserProject = db.userProjects;
 const Project = db.projects;
@@ -11,39 +12,39 @@ const TestCase = db.testCases;
 const ReusableProcess = db.reusableProcess;
 const Object = db.objects;
 const getMyProject = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-      #swagger.security = [{"apiKeyAuth": []}] */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const userId = req.user.id;
     const { error } = idValidation.validate({ id: userId });
     if (error) throw new Error(error.details[0].message);
 
     const projects = await UserProject.schema(req.database).findAll({
-      where: { userId },
       include: [
         {
-          model: Project.schema(req.database),
           include: [
             {
-              model: UserProject.schema(req.database),
               as: 'members',
               include: [
                 {
-                  model: User.schema(req.database),
-                  attributes: ['id', 'name', 'email', 'active', 'profileImage', 'deletedAt']
+                  attributes: ['id', 'name', 'email', 'active', 'profileImage', 'deletedAt'],
+                  model: User.schema(req.database)
                 }
-              ]
+              ],
+              model: UserProject.schema(req.database)
             }
-          ]
+          ],
+          model: Project.schema(req.database)
         }
-      ]
+      ],
+      where: { userId }
     });
 
     const updatedArray = projects.map((el) => {
       const temp = { ...el.project.dataValues };
-      temp.members = temp.members.map((el) => {
-        return el.user;
-      });
+      temp.members = temp.members.map((el1) => el1.user);
       return temp;
     });
 
@@ -54,32 +55,31 @@ const getMyProject = async (req, res) => {
 };
 
 const getProjectById = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const projectId = req.params.projectId;
+    const { projectId } = req.params;
     const project = await Project.schema(req.database).findByPk(projectId, {
       attributes: ['id', 'name', 'description', 'startDate', 'endDate', 'createdAt', 'createdByUser'],
       include: [
         {
-          model: UserProject.schema(req.database),
           as: 'members',
           include: [
             {
-              model: User.schema(req.database),
-              attributes: ['id', 'name', 'email', 'active', 'verifiedAt', 'deletedAt']
+              attributes: ['id', 'name', 'email', 'active', 'verifiedAt', 'deletedAt'],
+              model: User.schema(req.database)
             }
-          ]
+          ],
+          model: UserProject.schema(req.database)
         }
       ]
     });
 
     const temp = { ...project.dataValues };
 
-    temp.members = temp.members.map((user) => {
-      return user.dataValues.user;
-    });
+    temp.members = temp.members.map((user) => user.dataValues.user);
 
     const testCase = await TestCase.schema(req.database).count({
       where: { projectId }
@@ -91,16 +91,17 @@ const getProjectById = async (req, res) => {
       where: { projectId }
     });
 
-    return res.status(200).json({ ...temp, count: { testCase, reusableProcess, object } });
+    return res.status(200).json({ ...temp, count: { object, reusableProcess, testCase } });
   } catch (error) {
     getError(error, res);
   }
 };
 
 const addProject = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { name, description, startDate, endDate } = req.body;
 
@@ -108,17 +109,17 @@ const addProject = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const project = await Project.schema(req.database).create({
-      name,
+      createdByUser: req.user.id,
       description,
-      startDate,
       endDate,
-      createdByUser: req.user.id
+      name,
+      startDate
     });
 
     await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
     await UserProject.schema(req.database).create({
-      userId: req.user.id,
-      projectId: project.id
+      projectId: project.id,
+      userId: req.user.id
     });
 
     return res.status(200).json(project);
@@ -128,11 +129,12 @@ const addProject = async (req, res) => {
 };
 
 const deleteProject = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const projectId = req.params.projectId;
+    const { projectId } = req.params;
     const hProjectId = req.headers['x-project-id'];
 
     if (projectId === hProjectId) throw new Error('Cannot delete current project');
@@ -149,16 +151,17 @@ const deleteProject = async (req, res) => {
       where: { id: projectId }
     });
     if (deletedProject > 0) return res.status(200).json({ message: 'Project deleted successfully!' });
-    else return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (error) {
     getError(error, res);
   }
 };
 
 const addMember = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { projectId, userId } = req.body;
     const { error } = memberProjectValidation.validate({ projectId, userId });
@@ -166,8 +169,8 @@ const addMember = async (req, res) => {
     await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
 
     await UserProject.schema(req.database).create({
-      userId,
-      projectId
+      projectId,
+      userId
     });
     return res.status(200).json({ message: 'Project member added!' });
   } catch (error) {
@@ -176,9 +179,10 @@ const addMember = async (req, res) => {
 };
 
 const deleteMember = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { projectId, userId } = req.body;
 
@@ -198,7 +202,7 @@ const deleteMember = async (req, res) => {
       }
     );
     await UserProject.schema(req.database).destroy({
-      where: { userId, projectId }
+      where: { projectId, userId }
     });
 
     return res.status(200).json({ message: 'Project member removed!' });
@@ -208,9 +212,10 @@ const deleteMember = async (req, res) => {
 };
 
 const editProject = async (req, res) => {
-  /*  #swagger.tags = ["Project"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Project"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const projectId = req.headers['x-project-id'];
 
@@ -228,12 +233,11 @@ const editProject = async (req, res) => {
 
     if (updatedProject[0]) {
       return res.status(200).json({ message: 'Project Updated Successfully!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (error) {
     getError(error, res);
   }
 };
 
-export { getMyProject, getProjectById, addProject, deleteProject, addMember, deleteMember, editProject };
+export { addMember, addProject, deleteMember, deleteProject, editProject, getMyProject, getProjectById };

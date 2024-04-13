@@ -1,27 +1,29 @@
+import errorContstants from '#constants/error.js';
+import { permissionList } from '#constants/permission.js';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+import { idValidation, nameValidation } from '#validations/index.js';
+
 import { updateNameValidation, updatePermissionValidation } from '../Validations/role.js';
-import { nameValidation, idValidation } from '#validations/index.js';
-import { permissionList } from '#constants/permission.js';
-import errorContstants from '#constants/error.js';
 const Role = db.roles;
 const UserRole = db.userRoles;
 const Permission = db.permissions;
 
 const getAllRole = async (req, res) => {
-  /*  #swagger.tags = ["Role"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Role"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const roles = await Role.schema(req.database).findAll({
       include: [
         {
-          model: Permission.schema(req.database),
-          attributes: ['id', 'name', 'view', 'add', 'edit', 'delete']
+          attributes: ['id', 'name', 'view', 'add', 'edit', 'delete'],
+          model: Permission.schema(req.database)
         }
       ]
     });
-    // const temp = pageInfo(roles, req.query);
+    // Const temp = pageInfo(roles, req.query);
     return res.status(200).json(roles);
   } catch (err) {
     getError(err, res);
@@ -29,9 +31,10 @@ const getAllRole = async (req, res) => {
 };
 
 const saveRole = async (req, res) => {
-  /*  #swagger.tags = ["Role"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Role"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const { error } = nameValidation.validate(req.body);
@@ -46,14 +49,15 @@ const saveRole = async (req, res) => {
 };
 
 const updateRole = async (req, res) => {
-  /*  #swagger.tags = ["Role"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Role"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const roleId = req.params.roleId;
-    const name = req.body.name;
-    const { error } = updateNameValidation.validate({ roleId, name });
+    const { roleId } = req.params;
+    const { name } = req.body;
+    const { error } = updateNameValidation.validate({ name, roleId });
     if (error) throw new Error(error.details[0].message);
 
     const updatedRole = await Role.schema(req.database).update(
@@ -68,20 +72,20 @@ const updateRole = async (req, res) => {
     if (updatedRole[0]) {
       const role = await Role.schema(req.database).findByPk(roleId);
       return res.status(200).json({ ...role, message: 'Role Updated Successfully!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const deleteRole = async (req, res) => {
-  /*  #swagger.tags = ["Role"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Role"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const roleId = req.params.roleId;
+    const { roleId } = req.params;
 
     const { error } = idValidation.validate({ id: roleId });
     if (error) throw new Error(error.details[0].message);
@@ -100,49 +104,45 @@ const deleteRole = async (req, res) => {
     });
     if (deletedRole > 0) {
       return res.status(200).json({ message: 'Role deleted successfully' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 const updateRolePermission = async (req, res) => {
-  /*  #swagger.tags = ["Role"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Role"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const roleId = req.params.roleId;
+    const { roleId } = req.params;
 
     const { error } = idValidation.validate({
       id: roleId
     });
     if (error) throw new Error(error.details[0].message);
 
-    const check = permissionList.some((el) => {
-      return req.body.some((el1) => {
-        return el.name === el1.name;
-      });
-    });
+    const check = permissionList.some((el) => req.body.some((el1) => el.name === el1.name));
 
     if (check) {
       const payload = [...req.body].map((el) => {
-        const { error } = updatePermissionValidation.validate({
+        const { error: validationError } = updatePermissionValidation.validate({
           add: el.add,
-          edit: el.edit,
-          view: el.view,
           delete: el.delete,
-          name: el.name
+          edit: el.edit,
+          name: el.name,
+          view: el.view
         });
-        if (error) throw new Error(error.details[0].message);
+        if (validationError) throw new Error(validationError.details[0].message);
 
         return {
           add: el.add,
-          edit: el.edit,
-          view: el.view,
           delete: el.delete,
+          edit: el.edit,
           name: el.name,
-          roleId
+          roleId,
+          view: el.view
         };
       });
 
@@ -151,30 +151,30 @@ const updateRolePermission = async (req, res) => {
       });
       const permissions = await Permission.schema(req.database).bulkCreate(payload);
       return res.status(200).json(permissions);
-    } else {
-      return res.status(400).json({ error: errorContstants.INVALID_PERMISSION });
     }
+    return res.status(400).json({ error: errorContstants.INVALID_PERMISSION });
   } catch (error) {
     getError(error, res);
   }
 };
 const getUserRole = async (req, res) => {
-  /*  #swagger.tags = ["Role"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Role"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
     const { error } = idValidation.validate({ id: userId });
     if (error) throw new Error(error.details[0].message);
 
     const roles = await UserRole.schema(req.database).findAll({
-      where: { userId },
       include: [
         {
-          model: Role.schema(req.database),
-          attributes: ['name']
+          attributes: ['name'],
+          model: Role.schema(req.database)
         }
-      ]
+      ],
+      where: { userId }
     });
     const tempRole = roles.map((el) => {
       const temp = { ...el.dataValues, name: el.dataValues.role.name };
@@ -189,11 +189,12 @@ const getUserRole = async (req, res) => {
 };
 
 const updateUserRole = async (req, res) => {
-  /*  #swagger.tags = ["Role"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Role"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
     const { error } = idValidation.validate({ id: userId });
     if (error) throw new Error(error.details[0].message);
 
@@ -208,4 +209,4 @@ const updateUserRole = async (req, res) => {
   }
 };
 
-export { saveRole, updateRole, getAllRole, deleteRole, updateRolePermission, updateUserRole, getUserRole };
+export { deleteRole, getAllRole, getUserRole, saveRole, updateRole, updateRolePermission, updateUserRole };

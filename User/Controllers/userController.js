@@ -1,11 +1,13 @@
-import db from '#utils/dataBaseConnection.js';
-import getError from '#utils/error.js';
 import bcrypt from 'bcryptjs';
-import { sendMail } from '#utils/Mail/nodeMailer.js';
-import { s3, uploadFile } from '#storage/Service/awsService.js';
+
 import errorContstants from '#constants/error.js';
 import successConstants from '#constants/success.js';
+import { s3, uploadFile } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
+import db from '#utils/dataBaseConnection.js';
+import getError from '#utils/error.js';
+import { sendMail } from '#utils/Mail/nodeMailer.js';
+
 import { deleteCustomer } from '../Service/database.js';
 
 const User = db.users;
@@ -16,16 +18,15 @@ const Role = db.roles;
 const Permission = db.permissions;
 
 const getTeam = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const team = await User.schema(req.database).findAll({
       attributes: ['id', 'name', 'email', 'profileImage', 'verifiedAt', 'deletedAt', 'active', 'defaultProjectId']
     });
-    const filteredTeam = team.filter((el) => {
-      return el.id !== req.user.id;
-    });
+    const filteredTeam = team.filter((el) => el.id !== req.user.id);
 
     const teamWithImages = await filteredTeam.map(async (user) => {
       let base64ProfileImage = '';
@@ -61,9 +62,7 @@ const getTeam = async (req, res) => {
         };
       }
     });
-    Promise.all(teamWithImages).then((data) => {
-      return res.status(200).json(data);
-    }).catch((err) => {
+    Promise.all(teamWithImages).then((data) => res.status(200).json(data)).catch((err) => {
       throw new Error(err);
     });
   } catch (error) {
@@ -72,12 +71,13 @@ const getTeam = async (req, res) => {
 };
 
 const addUser = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { name, email, password } = req.body;
-    const database = req.database;
+    const { database } = req;
 
     await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME)
       .create({ email, tenantName: req.user.tenant })
@@ -88,18 +88,18 @@ const addUser = async (req, res) => {
 
     const hash = await bcrypt.hash(password, 8);
     const user = await User.schema(req.database).create({
-      name,
+      active: false,
       email,
-      password: hash,
-      active: false
+      name,
+      password: hash
     });
     sendMail({ email, name, tenant: database }, 'addUser');
 
     return res.status(200).json({
-      id: user.id,
-      name,
       email,
-      message: 'User added, Verify user\'s email to login'
+      id: user.id,
+      message: 'User added, Verify user\'s email to login',
+      name
     });
   } catch (error) {
     getError(error, res);
@@ -107,12 +107,13 @@ const addUser = async (req, res) => {
 };
 
 const resendVerificationEmail = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { email } = req.body;
-    const database = req.database;
+    const { database } = req;
 
     const user = await User.schema(database).findOne({
       where: { email }
@@ -128,11 +129,12 @@ const resendVerificationEmail = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
 
     const user = await User.schema(req.database).findByPk(userId);
     if (req.user.tenant === user.email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase()) throw new Error('Cannot Delete Customer Admin');
@@ -162,9 +164,10 @@ const deleteUser = async (req, res) => {
 };
 
 const deleteCustomerUser = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     if (!req.user.customerAdmin) return res.status(401).json({ message: 'Only customer admin can perform this operation!' });
 
@@ -176,9 +179,10 @@ const deleteCustomerUser = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { oldPassword, newPassword } = req.body;
 
@@ -194,37 +198,39 @@ const changePassword = async (req, res) => {
       }
     );
     if (updatedUser[0]) return res.status(200).json({ message: successConstants.UPDATED });
-    else throw new Error(errorContstants.RECORD_NOT_FOUND);
+    throw new Error(errorContstants.RECORD_NOT_FOUND);
   } catch (error) {
     getError(error, res);
   }
 };
 
 const changeDetails = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const userId = req.params.userId || req.user.id;
-    const body = req.user.id === userId ? req.body : { active: req.body.active } || {};
+    const body = req.user.id === userId ? req.body : { active: req.body.active };
     delete body.password;
 
-    const updatedUser = await User.schema(req.database).update(body, {
+    const updatedUser = await User.schema(req.database).update(body || {}, {
       where: {
         id: userId
       }
     });
     if (updatedUser[0]) return res.status(200).json({ message: successConstants.UPDATED });
-    else throw new Error(errorContstants.RECORD_NOT_FOUND);
+    throw new Error(errorContstants.RECORD_NOT_FOUND);
   } catch (error) {
     getError(error, res);
   }
 };
 
 const uploadProfileImage = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const file = req.files.image;
     if (!file) throw new Error('Inavlid Image');
@@ -241,43 +247,44 @@ const uploadProfileImage = async (req, res) => {
         }
       );
       return res.status(200).json({ message: successConstants.UPDATED });
-    } else throw new Error('Unable to upload profile image!');
+    } throw new Error('Unable to upload profile image!');
   } catch (error) {
     getError(error, res);
   }
 };
 
 const getUserDetailsByEmail = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
-    const database = req.user.database;
+    const { database } = req.user;
     const email = req.body.email || req.user.email;
     const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
       where: { email }
     });
 
     const user = await User.schema(database).findOne({
-      where: { email },
       include: [
         {
-          model: UserRole.schema(database),
           attributes: ['roleId'],
           include: [
             {
-              model: Role.schema(database),
               attributes: ['name'],
               include: [
                 {
-                  model: Permission.schema(database),
-                  attributes: ['name', 'view', 'add', 'edit', 'delete']
+                  attributes: ['name', 'view', 'add', 'edit', 'delete'],
+                  model: Permission.schema(database)
                 }
-              ]
+              ],
+              model: Role.schema(database)
             }
-          ]
+          ],
+          model: UserRole.schema(database)
         }
-      ]
+      ],
+      where: { email }
     });
 
     if (!user) throw new Error(errorContstants.RECORD_NOT_FOUND);
@@ -314,24 +321,25 @@ const getUserDetailsByEmail = async (req, res) => {
     }
 
     return res.status(200).json({
-      id,
-      name,
-      email,
-      profileImage: profileImage ? base64ProfileImage : '',
       customerAdmin,
       defaultProjectId,
-      verifiedAt,
-      roles: newRoles
+      email,
+      id,
+      name,
+      profileImage: profileImage ? base64ProfileImage : '',
+      roles: newRoles,
+      verifiedAt
     });
   } catch (error) {
     getError(error, res);
   }
 };
 
-const logout = async (req, res) => {
-  /*  #swagger.tags = ["User"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+const logout = (req, res) => {
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${req.user.tenant}_${req.user.email}`);
     return res.status(200).json({ message: 'Logout Successfull' });
@@ -340,58 +348,60 @@ const logout = async (req, res) => {
   }
 };
 
-// const toggleUserActiveInactive = async (req, res) => {
+// Const toggleUserActiveInactive = async (req, res) => {
 //     /*  #swagger.tags = ["User"]
 //      #swagger.security = [{"apiKeyAuth": []}]
 //   */
-//     try {
-//         const userId = req.params.userId;
-//         const active = req.body.active;
+//     Try {
+//         Const userId = req.params.userId;
+//         Const active = req.body.active;
 
-//         const updatedUser = await User.schema(req.database).update(req.body, {
-//             where: {
-//                 id: userId,
-//             },
-//         });
-//         if (updatedUser[0]) return res.status(200).json({ message: `Marked User as ${active ? "Active" : "Inactive"}` });
-//         else throw new Error(errorContstants.RECORD_NOT_FOUND);
-//     } catch (error) {
-//         getError(error, res);
-//     }
-// };
+/*
+ *         Const updatedUser = await User.schema(req.database).update(req.body, {
+ *             where: {
+ *                 id: userId,
+ *             },
+ *         });
+ *         if (updatedUser[0]) return res.status(200).json({ message: `Marked User as ${active ? "Active" : "Inactive"}` });
+ *         else throw new Error(errorContstants.RECORD_NOT_FOUND);
+ *     } catch (error) {
+ *         getError(error, res);
+ *     }
+ * };
+ */
 
-// const myStatus = async (req, res) => {
+// Const myStatus = async (req, res) => {
 //     /*  #swagger.tags = ["User"]
 //      #swagger.security = [{"apiKeyAuth": []}]
 //   */
-//     try {
-//         const user = await User.schema(req.database).findOne({
-//             where: { email: req.user.email },
+//     Try {
+//         Const user = await User.schema(req.database).findOne({
+//             Where: { email: req.user.email },
 //         });
-//         if (!user.active) return res.status(403).json({ error: errorContstants.ACCOUNT_INACTIVE });
-//         const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
-//             where: { email: req.user.email },
+//         If (!user.active) return res.status(403).json({ error: errorContstants.ACCOUNT_INACTIVE });
+//         Const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
+//             Where: { email: req.user.email },
 //         });
 
-//         if (customer.blocked) return res.status(403).json({ error: errorContstants.ACCOUNT_BLOCKED });
+//         If (customer.blocked) return res.status(403).json({ error: errorContstants.ACCOUNT_BLOCKED });
 
-//         return res.status(200).json("Active");
-//     } catch (error) {
-//         getError(error, res);
-//     }
-// };
+/*
+ *         Return res.status(200).json("Active");
+ *     } catch (error) {
+ *         getError(error, res);
+ *     }
+ * };
+ */
 
 export {
   addUser,
-  deleteUser,
-  changePassword,
   changeDetails,
-  getTeam,
-  resendVerificationEmail,
+  changePassword,
   deleteCustomerUser,
-  uploadProfileImage,
+  deleteUser,
+  getTeam,
+  getUserDetailsByEmail,
   logout,
-  getUserDetailsByEmail
-  // toggleUserActiveInactive,
-  // myStatus,
+  resendVerificationEmail,
+  uploadProfileImage
 };

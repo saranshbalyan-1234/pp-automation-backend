@@ -8,10 +8,10 @@ export const idValidation = joi.object({
 });
 
 export const nameDesTagPrjValidation = joi.object({
-  name: joi.string().min(3).max(100).required(),
   description: joi.string().allow(null, '').required(),
-  tags: joi.array().allow(null, ''),
-  projectId: joi.number().integer().required()
+  name: joi.string().min(3).max(100).required(),
+  projectId: joi.number().integer().required(),
+  tags: joi.array().allow(null, '')
 });
 
 export const createLogValidation = joi.object({

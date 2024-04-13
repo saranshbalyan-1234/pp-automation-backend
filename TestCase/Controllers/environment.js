@@ -1,15 +1,17 @@
+import errorContstants from '#constants/error.js';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { idValidation } from '#validations/index.js';
+
 import { nameTestCaseId, updateColumnValidation } from '../Validations/environment.js';
-import errorContstants from '#constants/error.js';
 const Environment = db.enviroments;
 const Column = db.columns;
 
 const createEnvironment = async (req, res) => {
-  /*  #swagger.tags = ["Environment"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Environment"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     await db.sequelize.transaction(async (transaction) => {
@@ -20,10 +22,10 @@ const createEnvironment = async (req, res) => {
       const env = await Environment.schema(req.database).create(payload, { transaction });
 
       const enviroment = await Environment.schema(req.database).findOne({
+        attributes: ['id'],
         where: {
           testCaseId: payload.testCaseId
-        },
-        attributes: ['id']
+        }
       });
 
       if (enviroment) {
@@ -31,9 +33,7 @@ const createEnvironment = async (req, res) => {
           where: { envId: enviroment.id }
         });
 
-        const columnPayload = columns.map((el) => {
-          return { value: null, envId: env.id, name: el.dataValues.name };
-        });
+        const columnPayload = columns.map((el) => ({ envId: env.id, name: el.dataValues.name, value: null }));
         await Column.schema(req.database).bulkCreate(columnPayload, { transaction });
       }
 
@@ -44,36 +44,38 @@ const createEnvironment = async (req, res) => {
   }
 };
 const getAllEnvironmentsByTestCase = async (req, res) => {
-  /*  #swagger.tags = ["Environment"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Environment"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const testCaseId = req.params.testCaseId;
+    const { testCaseId } = req.params;
     const { error } = idValidation.validate({ id: testCaseId });
     if (error) throw new Error(error.details[0].message);
     const enviroments = await Environment.schema(req.database).findAll({
-      where: {
-        testCaseId
-      },
       attributes: ['id', 'name'],
       include: [
         {
-          model: Column.schema(req.database),
-          attributes: ['name', 'value']
+          attributes: ['name', 'value'],
+          model: Column.schema(req.database)
         }
-      ]
+      ],
+      where: {
+        testCaseId
+      }
     });
     const env = enviroments.map((el) => {
       const temp = el.dataValues.columns;
       const newKeys = {};
-      temp.forEach((el) => {
-        newKeys[el.name] = el.value;
+
+      temp.forEach((el1) => {
+        newKeys[el1.name] = el1.value;
       });
 
       return {
-        envId: el.dataValues.id,
         Environment: el.dataValues.name,
+        envId: el.dataValues.id,
         ...newKeys
       };
     });
@@ -83,20 +85,21 @@ const getAllEnvironmentsByTestCase = async (req, res) => {
   }
 };
 const getAllEnvironmentNamesByTestCase = async (req, res) => {
-  /*  #swagger.tags = ["Environment"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Environment"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const testCaseId = req.params.testCaseId;
+    const { testCaseId } = req.params;
 
     const { error } = idValidation.validate({ id: testCaseId });
     if (error) throw new Error(error.details[0].message);
     const enviroments = await Environment.schema(req.database).findAll({
+      attributes: ['id', 'name'],
       where: {
         testCaseId
-      },
-      attributes: ['id', 'name']
+      }
     });
     return res.status(200).json(enviroments);
   } catch (err) {
@@ -105,13 +108,14 @@ const getAllEnvironmentNamesByTestCase = async (req, res) => {
 };
 
 const createColumnForEnvironment = async (req, res) => {
-  /*  #swagger.tags = ["Environment"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Environment"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const columnName = req.body.name;
-    const testCaseId = req.params.testCaseId;
+    const { testCaseId } = req.params;
     const { error } = nameTestCaseId.validate({
       name: columnName,
       testCaseId
@@ -119,10 +123,10 @@ const createColumnForEnvironment = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const enviroments = await Environment.schema(req.database).findAll({
+      attributes: ['id'],
       where: {
         testCaseId
-      },
-      attributes: ['id']
+      }
     });
 
     const payload = enviroments.map((el) => {
@@ -137,9 +141,10 @@ const createColumnForEnvironment = async (req, res) => {
   }
 };
 const updateColumnValue = async (req, res) => {
-  /*  #swagger.tags = ["Environment"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Environment"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const { value, envId, name } = req.body;
@@ -147,7 +152,7 @@ const updateColumnValue = async (req, res) => {
     const { error } = updateColumnValidation.validate(req.body);
     if (error) throw new Error(error.details[0].message);
 
-    const updateColumnValue = await Column.schema(req.database).update(
+    const updatedColumnValue = await Column.schema(req.database).update(
       { value },
       {
         where: {
@@ -156,24 +161,24 @@ const updateColumnValue = async (req, res) => {
         }
       }
     );
-    if (updateColumnValue[0]) {
+    if (updatedColumnValue[0]) {
       return res.status(200).json({ message: 'Column updated successfully!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
 const deleteColumnFromEnvironment = async (req, res) => {
-  /*  #swagger.tags = ["Environment"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Environment"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const columnName = req.params.name;
-    const testCaseId = req.params.testCaseId;
+    const { testCaseId } = req.params;
 
     const { error } = nameTestCaseId.validate({
       name: columnName,
@@ -182,10 +187,10 @@ const deleteColumnFromEnvironment = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const enviroments = await Environment.schema(req.database).findAll({
+      attributes: ['id'],
       where: {
         testCaseId
-      },
-      attributes: ['id']
+      }
     });
 
     const payload = enviroments.map((el) => {
@@ -194,27 +199,27 @@ const deleteColumnFromEnvironment = async (req, res) => {
     });
     const deletedColumn = await Column.schema(req.database).destroy({
       where: {
-        name: columnName,
-        envId: payload
+        envId: payload,
+        name: columnName
       }
     });
 
     if (deletedColumn > 0) {
       return res.status(200).json({ message: 'Column Deleted!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 const deleteEnvironment = async (req, res) => {
-  /*  #swagger.tags = ["Environment"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Environment"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
-    const envId = req.params.envId;
+    const { envId } = req.params;
     const { error } = idValidation.validate({ id: envId });
     if (error) throw new Error(error.details[0].message);
     await Column.schema(req.database).destroy({
@@ -230,12 +235,11 @@ const deleteEnvironment = async (req, res) => {
 
     if (deletedEnv > 0) {
       return res.status(200).json({ message: 'Environment Deleted!' });
-    } else {
-      return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
     }
+    return res.status(400).json({ error: errorContstants.RECORD_NOT_FOUND });
   } catch (err) {
     getError(err, res);
   }
 };
 
-export { createEnvironment, getAllEnvironmentsByTestCase, createColumnForEnvironment, deleteColumnFromEnvironment, updateColumnValue, getAllEnvironmentNamesByTestCase, deleteEnvironment };
+export { createColumnForEnvironment, createEnvironment, deleteColumnFromEnvironment, deleteEnvironment, getAllEnvironmentNamesByTestCase, getAllEnvironmentsByTestCase, updateColumnValue };

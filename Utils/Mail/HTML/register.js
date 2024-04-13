@@ -1,5 +1,4 @@
-const registerHTML = (name, link) => {
-  return `<!DOCTYPE html>
+const registerHTML = (name, link) => `<!DOCTYPE html>
         <html>
             <body>
                 <p>Hi ${name}, We're excited to have you get started. First, you need to confirm your account.</p>
@@ -9,5 +8,4 @@ const registerHTML = (name, link) => {
                 <a href=${link} target="_blank"">${link}</a>
                 </body>
         </html>`;
-};
 export default registerHTML;

@@ -1,10 +1,12 @@
 import errorContstants from '#constants/error.js';
+
 import { getAwsObject } from '../Service/awsService.js';
 
 export const getObject = async (req, res) => {
-  /*  #swagger.tags = ["AWS"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["AWS"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const data = await getAwsObject(req.database.split('_')[1], req.body.fileName);

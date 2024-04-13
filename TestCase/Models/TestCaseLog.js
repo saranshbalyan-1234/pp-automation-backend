@@ -1,33 +1,33 @@
 export default (sequelize, DataTypes) => {
   const TestCaseLogs = sequelize.define('testCaseLogs', {
-    log: {
-      type: DataTypes.STRING,
+    createdByUser: {
       allowNull: false,
+      references: {
+        key: 'id',
+        model: 'users'
+      },
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
+    },
+    log: {
+      allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
     testCaseId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'testCases'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'testCases',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
-    },
-    createdByUser: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'users',
-        key: 'id'
       }
     }
   });

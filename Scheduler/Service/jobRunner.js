@@ -9,7 +9,7 @@ export const executeQuery = async (connection, job) => {
     if (extension) {
       generateFile(results, name, extension);
     }
-    // console.timeEnd()
+    // Console.timeEnd()
   } catch (err) {
     console.log(err);
   }
@@ -19,7 +19,7 @@ export const executeCurl = (curl) => {
   console.log('Executing Curl ', curl);
 };
 
-function formatJSON (data, extension) {
+const formatJSON = (data, extension) => {
   if (extension === 'json') {
     return JSON.stringify(data);
   }
@@ -28,13 +28,13 @@ function formatJSON (data, extension) {
     const csv = formatterData.map((row) => Object.values(row));
     csv.unshift(Object.keys(data[0]));
     return csv.join('\n');
-  } else return JSON.stringify(data);
-}
+  } return JSON.stringify(data);
+};
 
 const generateFile = (data, name, extension) => {
-  const fileName = `${name ? name + '_' + new Date().toISOString() : new Date().toISOString()}.${extension[0] === '.' ? extension.slice(1) : extension}`;
-  console.log('Generating file with name: ' + fileName);
-  const outputPath = './Resource/Reports/' + fileName;
+  const fileName = `${name ? `${name}_${new Date().toISOString()}` : new Date().toISOString()}.${extension[0] === '.' ? extension.slice(1) : extension}`;
+  console.log(`Generating file with name: ${fileName}`);
+  const outputPath = `./Resource/Reports/${fileName}`;
 
   try {
     if (extension === 'xlsx') {
@@ -42,11 +42,10 @@ const generateFile = (data, name, extension) => {
       const workBook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workBook, workSheet, 'Report');
       return XLSX.writeFile(workBook, outputPath);
-    } else {
-      const output = fs.createWriteStream(outputPath, { encoding: 'utf8' });
-      output.write(formatJSON(data, extension));
-      return output.end();
     }
+    const output = fs.createWriteStream(outputPath, { encoding: 'utf8' });
+    output.write(formatJSON(data, extension));
+    return output.end();
   } catch (err) {
     console.log(err);
   }

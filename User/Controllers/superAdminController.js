@@ -1,12 +1,15 @@
-import getError from '#utils/error.js';
-import { syncDatabase, deleteCustomer, getCachedKeys } from '../Service/database.js';
 import _ from 'lodash';
+
 import cache from '#utils/cache.js';
+import getError from '#utils/error.js';
+
+import { deleteCustomer, getCachedKeys, syncDatabase } from '../Service/database.js';
 
 const deleteCustomerByAdmin = async (req, res) => {
-  /*  #swagger.tags = ["Super Admin"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Super Admin"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { customerEmail } = req.body;
     await deleteCustomer(customerEmail);
@@ -17,9 +20,10 @@ const deleteCustomerByAdmin = async (req, res) => {
 };
 
 const syncTenant = async (req, res) => {
-  /*  #swagger.tags = ["Super Admin"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+  /*
+   *  #swagger.tags = ["Super Admin"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { customerEmail, force = false, alter = false } = req.body;
     const tenant = customerEmail.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
@@ -30,10 +34,11 @@ const syncTenant = async (req, res) => {
   }
 };
 
-const getAllSession = async (req, res) => {
-  /*  #swagger.tags = ["Super Admin"]
-     #swagger.security = [{"apiKeyAuth": []}]
-  */
+const getAllSession = (req, res) => {
+  /*
+   *  #swagger.tags = ["Super Admin"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const sessions = getCachedKeys();
     const sessionObj = sessions
@@ -53,10 +58,11 @@ const getAllSession = async (req, res) => {
   }
 };
 
-const terminateSession = async (req, res) => {
-  /*  #swagger.tags = ["Super Admin"]
-     #swagger.security = [{"apiKeyAuth": []}]
-    */
+const terminateSession = (req, res) => {
+  /*
+   *  #swagger.tags = ["Super Admin"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
   try {
     const { tenant, email } = req.body;
     if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${tenant}_${email}`);
@@ -66,4 +72,4 @@ const terminateSession = async (req, res) => {
   }
 };
 
-export { deleteCustomerByAdmin, syncTenant, getAllSession, terminateSession };
+export { deleteCustomerByAdmin, getAllSession, syncTenant, terminateSession };

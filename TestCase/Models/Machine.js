@@ -1,16 +1,16 @@
 export default (sequelize, DataTypes) => {
   const Machine = sequelize.define('machines', {
     name: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
       unique: 'name',
       validate: {
         notNull: true
       }
     },
     url: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
       unique: 'url',
       validate: {
         notNull: true
@@ -19,146 +19,146 @@ export default (sequelize, DataTypes) => {
   });
 
   sequelize.models.users.hasMany(sequelize.models.userRoles, {
-    foreignKey: 'userId',
-    constraints: false
+    constraints: false,
+    foreignKey: 'userId'
   });
   sequelize.models.roles.hasMany(sequelize.models.permissions, {
-    foreignKey: 'roleId',
-    constraints: false
+    constraints: false,
+    foreignKey: 'roleId'
   });
 
   sequelize.models.userRoles.hasMany(sequelize.models.permissions, {
-    foreignKey: 'roleId',
-    constraints: false
+    constraints: false,
+    foreignKey: 'roleId'
   });
 
   sequelize.models.userRoles.hasOne(sequelize.models.roles, {
+    constraints: false,
     foreignKey: 'id',
-    sourceKey: 'roleId',
-    constraints: false
+    sourceKey: 'roleId'
   });
 
   sequelize.models.projects.hasMany(sequelize.models.testCases, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'projectId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.objects.hasMany(sequelize.models.objectLocators, {
-    foreignKey: 'objectId',
     as: 'locators',
-    constraints: false
+    constraints: false,
+    foreignKey: 'objectId'
   });
 
   sequelize.models.projects.hasMany(sequelize.models.userProjects, {
-    foreignKey: 'projectId',
     as: 'members',
-    constraints: false
+    constraints: false,
+    foreignKey: 'projectId'
   });
   sequelize.models.userProjects.hasOne(sequelize.models.projects, {
+    constraints: false,
     foreignKey: 'id',
-    sourceKey: 'projectId',
-    constraints: false
+    sourceKey: 'projectId'
   });
   sequelize.models.userProjects.hasOne(sequelize.models.users, {
+    constraints: false,
     foreignKey: 'id',
-    sourceKey: 'userId',
-    constraints: false
+    sourceKey: 'userId'
   });
   sequelize.models.testCases.hasMany(sequelize.models.processes, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'testCaseId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.reusableProcesses.hasMany(sequelize.models.testSteps, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'reusableProcessId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.processes.hasMany(sequelize.models.testSteps, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'processId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.processes.hasOne(sequelize.models.reusableProcesses, {
-    sourceKey: 'reusableProcessId',
+    constraints: false,
     foreignKey: 'id',
-    constraints: false
+    sourceKey: 'reusableProcessId'
   });
 
   sequelize.models.testSteps.hasMany(sequelize.models.testParameters, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'testStepId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.testSteps.hasOne(sequelize.models.objects, {
-    sourceKey: 'objectId',
+    constraints: false,
     foreignKey: 'id',
-    constraints: false
+    sourceKey: 'objectId'
   });
   sequelize.models.executionHistories.hasMany(sequelize.models.processHistories, {
     as: 'process',
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'executionHistoryId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.processHistories.hasMany(sequelize.models.testStepHistories, {
     as: 'testSteps',
-    sourceKey: 'processId',
+    constraints: false,
     foreignKey: 'processId',
-    constraints: false
+    sourceKey: 'processId'
   });
   sequelize.models.environments.hasMany(sequelize.models.columns, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'envId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.testCases.hasMany(sequelize.models.environments, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'testCaseId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.projects.hasMany(sequelize.models.executionSuites, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'projectId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.executionSuites.hasMany(sequelize.models.testCaseExecutionMappings, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'executionSuiteId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.testCaseExecutionMappings.hasOne(sequelize.models.testCases, {
-    sourceKey: 'testCaseId',
+    constraints: false,
     foreignKey: 'id',
-    constraints: false
+    sourceKey: 'testCaseId'
   });
 
   sequelize.models.projects.hasMany(sequelize.models.jobManagers, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'projectId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.jobManagers.hasMany(sequelize.models.jobs, {
-    sourceKey: 'id',
+    constraints: false,
     foreignKey: 'jobManagerId',
-    constraints: false
+    sourceKey: 'id'
   });
 
   sequelize.models.customers.hasOne(sequelize.models.unverifieds, {
-    sourceKey: 'email',
+    constraints: false,
     foreignKey: 'email',
-    constraints: false
+    sourceKey: 'email'
   });
 
   return Machine;

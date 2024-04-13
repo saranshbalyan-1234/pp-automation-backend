@@ -1,14 +1,16 @@
 import express from 'express';
-import {
-  createEnvironment,
-  getAllEnvironmentsByTestCase,
-  createColumnForEnvironment,
-  updateColumnValue,
-  getAllEnvironmentNamesByTestCase,
-  deleteColumnFromEnvironment,
-  deleteEnvironment
-} from '../Controllers/environment.js';
+
 import { validatePermission } from '#middlewares/permissions.js';
+
+import {
+  createColumnForEnvironment,
+  createEnvironment,
+  deleteColumnFromEnvironment,
+  deleteEnvironment,
+  getAllEnvironmentNamesByTestCase,
+  getAllEnvironmentsByTestCase,
+  updateColumnValue
+} from '../Controllers/environment.js';
 const Router = express.Router();
 
 Router.get('/testCase/:testCaseId', validatePermission('Test Case', 'view'), getAllEnvironmentsByTestCase);

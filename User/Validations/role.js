@@ -5,11 +5,11 @@ const updateNameValidation = joi.object({
   roleId: joi.number().integer().required()
 });
 const updatePermissionValidation = joi.object({
-  name: joi.string().min(3).max(100).required(),
   add: joi.boolean().required(),
+  delete: joi.boolean().required(),
   edit: joi.boolean().required(),
-  view: joi.boolean().required(),
-  delete: joi.boolean().required()
+  name: joi.string().min(3).max(100).required(),
+  view: joi.boolean().required()
 });
 
 export { updateNameValidation, updatePermissionValidation };

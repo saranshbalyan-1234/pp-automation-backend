@@ -1,66 +1,66 @@
 export default (sequelize, DataTypes) => {
   const ExecutionHistory = sequelize.define('executionHistories', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true
-      }
+    continueOnError: {
+      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      values: [0, 1]
     },
     description: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    testCaseId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'testCases',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
-    },
-    totalSteps: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
+      allowNull: true,
+      type: DataTypes.STRING
     },
     executedByUser: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }
     },
     finishedAt: {
-      type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      type: DataTypes.DATE
+    },
+    headless: {
+      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      values: [0, 1]
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate: {
+        notNull: true
+      }
+    },
+    recordAllSteps: {
+      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      values: [0, 1]
     },
     result: {
       type: DataTypes.BOOLEAN,
       values: [0, 1]
     },
     status: {
+      defaultValue: 'EXECUTING',
       type: DataTypes.STRING,
-      values: ['EXECUTING', 'COMPLETE', 'INCOMPLETE'],
-      defaultValue: 'EXECUTING'
+      values: ['EXECUTING', 'COMPLETE', 'INCOMPLETE']
     },
-    continueOnError: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: 0,
-      values: [0, 1]
+    testCaseId: {
+      allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'testCases'
+      },
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: true
+      }
     },
-    headless: {
-      type: DataTypes.BOOLEAN,
+    totalSteps: {
       defaultValue: 0,
-      values: [0, 1]
-    },
-    recordAllSteps: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: 0,
-      values: [0, 1]
+      type: DataTypes.INTEGER
     }
   });
 

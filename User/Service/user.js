@@ -1,8 +1,9 @@
-import db from '#utils/dataBaseConnection.js';
 import bcrypt from 'bcryptjs';
-import { createToken } from '#utils/jwt.js';
-import cache from '#utils/cache.js';
+
 import errorContstants from '#constants/error.js';
+import cache from '#utils/cache.js';
+import db from '#utils/dataBaseConnection.js';
+import { createToken } from '#utils/jwt.js';
 
 // Main
 const Customer = db.customers;
@@ -23,25 +24,25 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const tenant = process.env.DATABASE_PREFIX + customer.tenantName;
 
     const user = await User.schema(tenant).findOne({
-      where: { email },
       include: [
         {
-          model: UserRole.schema(tenant),
           attributes: ['roleId'],
           include: [
             {
-              model: Role.schema(tenant),
               attributes: ['name'],
               include: [
                 {
-                  model: Permission.schema(tenant),
-                  attributes: ['name', 'view', 'add', 'edit', 'delete']
+                  attributes: ['name', 'view', 'add', 'edit', 'delete'],
+                  model: Permission.schema(tenant)
                 }
-              ]
+              ],
+              model: Role.schema(tenant)
             }
-          ]
+          ],
+          model: UserRole.schema(tenant)
         }
-      ]
+      ],
+      where: { email }
     });
 
     if (!user) throw new Error(errorContstants.RECORD_NOT_FOUND);
@@ -63,9 +64,9 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const superAdmin = customer.admin === 2;
     const customerAdmin = customer.admin || superAdmin;
 
-    const tokenData = { id, email, tenant: customer.tenantName };
+    const tokenData = { email, id, tenant: customer.tenantName };
     const accessToken = createToken(
-      { ...tokenData, customerAdmin, superAdmin, permissions: allPermissions },
+      { ...tokenData, customerAdmin, permissions: allPermissions, superAdmin },
       process.env.JWT_ACCESS_SECRET,
       rememberMe ? process.env.JWT_ACCESS_REMEMBER_EXPIRATION : process.env.JWT_ACCESS_EXPIRATION
     );

@@ -1,18 +1,20 @@
 import express from 'express';
+
+import { validatePermission } from '#middlewares/permissions.js';
+
 import {
-  getAllTestCase,
-  saveTestCase,
-  updateTestCase,
+  createTestCaseLog,
+  deleteProcess,
   deleteTestCase,
+  getAllTestCase,
   getTestCaseDetailsById,
+  getTestCaseLogsById,
   getTestStepByTestCase,
   saveProcess,
+  saveTestCase,
   updateProcess,
-  deleteProcess,
-  getTestCaseLogsById,
-  createTestCaseLog
+  updateTestCase
 } from '../Controllers/testCaseController.js';
-import { validatePermission } from '#middlewares/permissions.js';
 const Router = express.Router();
 
 Router.post('/', validatePermission('Test Case', 'add'), saveTestCase);

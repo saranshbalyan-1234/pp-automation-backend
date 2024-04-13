@@ -1,38 +1,38 @@
 export default (sequelize, DataTypes) => {
   const TestParameter = sequelize.define('testParameters', {
-    type: {
-      type: DataTypes.STRING,
+    method: {
       allowNull: false,
+      defaultValue: 'Static',
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
     property: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
-    method: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      defaultValue: 'Static'
-    },
     testStepId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'testSteps'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'testSteps',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      }
+    },
+    type: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate: {
+        notNull: true
+      }
     }
   });
 

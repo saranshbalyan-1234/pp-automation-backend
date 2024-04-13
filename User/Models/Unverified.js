@@ -1,37 +1,37 @@
 export default (sequelize, DataTypes) => {
   const Unverified = sequelize.define('unverifieds', {
-    name: {
-      type: DataTypes.STRING,
+    email: {
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'email',
+        model: 'customers'
+      },
+      type: DataTypes.STRING,
+      unique: 'email',
+      validate: {
+        isEmail: true,
+        notNull: true
+      }
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING,
 
       validate: {
         notNull: true
       }
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: 'email',
-      validate: {
-        isEmail: true,
-        notNull: true
-      },
-      references: {
-        model: 'customers',
-        key: 'email'
-      },
-      onDelete: 'CASCADE'
-    },
     password: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
       }
     },
     token: {
-      type: DataTypes.TEXT,
       allowNull: false,
+      type: DataTypes.TEXT,
       validate: {
         notNull: true
       }

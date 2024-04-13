@@ -1,5 +1,4 @@
-const resetPasswordHtml = (name, link) => {
-  return `<!DOCTYPE html>
+const resetPasswordHtml = (name, link) => `<!DOCTYPE html>
         <html>
             <body>
                 <p>Hi ${name}, As per your request, we have sent you a link to rest your password. </p>
@@ -9,5 +8,4 @@ const resetPasswordHtml = (name, link) => {
                 <a href=${link} target="_blank"">${link}</a>
                 </body>
         </html>`;
-};
 export default resetPasswordHtml;

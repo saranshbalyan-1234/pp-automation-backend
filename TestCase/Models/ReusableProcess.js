@@ -1,42 +1,42 @@
 export default (sequelize, DataTypes) => {
   const ReusableProcess = sequelize.define('reusableProcesses', {
-    name: {
-      type: DataTypes.STRING,
+    createdByUser: {
       allowNull: false,
+      references: {
+        key: 'id',
+        model: 'users'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }
     },
     description: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    name: {
+      allowNull: false,
       type: DataTypes.STRING,
-      allowNull: true
+      validate: {
+        notNull: true
+      }
     },
     projectId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'projects'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'projects',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      }
     },
     tags: {
-      type: DataTypes.JSON,
-      defaultValue: null
-    },
-    createdByUser: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: true
-      },
-      references: {
-        model: 'users',
-        key: 'id'
-      }
+      defaultValue: null,
+      type: DataTypes.JSON
     }
   });
 

@@ -1,14 +1,15 @@
-import express from 'express';
-import helmet from 'helmet';
-import fileupload from 'express-fileupload';
 import parser from 'body-parser';
-import { defaultMiddleware } from '#middlewares/default.js';
-import { registerRoutes } from '#routes/index.js';
+import express from 'express';
+import fileupload from 'express-fileupload';
+import helmet from 'helmet';
+
 import errorContstants from '#constants/error.js';
-import { morgalApiLogger } from '#utils/logger.js';
-import { setupTimeout, setupRateLimiter, setupCors, setupResponseInterceptor, setupErrorInterceptor, setupValidationErrorInterceptor } from '#middlewares/server.js';
+import defaultMiddleware from '#middlewares/default.js';
+import { setupCors, setupErrorInterceptor, setupRateLimiter, setupResponseInterceptor, setupTimeout, setupValidationErrorInterceptor } from '#middlewares/server.js';
+import registerRoutes from '#routes/index.js';
 import { syncDatabase } from '#user/Service/database.js';
-// import { scheduleInit } from "#scheduler/Service/schedulerService.js";
+import morgalApiLogger from '#utils/Logger/api.js';
+// Import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 const app = express();
 
 if (process.env.PRINT_ENV === 'true') {
@@ -16,6 +17,13 @@ if (process.env.PRINT_ENV === 'true') {
   console.debug(process.env);
   console.debug('======================ENV======================');
 }
+
+/*
+ * Console.log(a);
+ * console.log('safa ');
+ * console;
+ * function process () { }
+ */
 
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: false }));
@@ -40,10 +48,8 @@ if (process.env.NODE_ENV === 'production') {
   syncDatabase(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME);
 }
 
-app.use((req, res) => {
-  return res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND });
-});
+app.use((req, res) => res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND }));
 app.listen(process.env.PORT, () => {
   console.success(`Server started on PORT ${process.env.PORT} PROCESS_ID ${process.pid}`);
-  // scheduleInit();
+  // ScheduleInit();
 });

@@ -1,18 +1,19 @@
-import { Upload } from '@aws-sdk/lib-storage';
 import { S3 } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
+
 import errorContstants from '#constants/error.js';
 
 export const s3 = new S3({
-  region: 'ap-south-1',
   credentials: {
     accessKeyId: '',
     secretAccessKey: ''
-  }
+  },
+  region: 'ap-south-1'
 });
 
 export const listBuckets = () => {
   try {
-    s3.listBuckets(function (err, data) {
+    s3.listBuckets((err, data) => {
       if (err) throw new Error(err);
       return data.Buckets;
     });
@@ -28,9 +29,9 @@ export const uploadFile = async (file, bucketName, keyName) => {
     if (!keyName || !file) throw new Error(errorContstants.INVALID_FILE);
 
     const uploadParams = {
+      Body: file.data,
       Bucket: bucketName.toLowerCase(),
-      Key: keyName,
-      Body: file.data
+      Key: keyName
     };
 
     return await new Upload({
@@ -52,7 +53,7 @@ export const createBucket = (bucketName) => {
       }
     };
 
-    s3.createBucket(bucketParams, function (err, data) {
+    s3.createBucket(bucketParams, (err, data) => {
       if (err) {
         console.error('Failed to create s3 bucket', err);
       } else {
@@ -73,7 +74,7 @@ export const deleteBucket = (bucketName) => {
       Bucket: bucketName.toLowerCase()
     };
 
-    s3.deleteBucket(bucketParams, function (err) {
+    s3.deleteBucket(bucketParams, (err) => {
       if (err) {
         console.error(`Failed to delete s3 bucket ${bucketName.toLowerCase()}`);
         console.error(err);
@@ -94,7 +95,7 @@ export const listObjectsInBucket = (bucketName) => {
       Bucket: bucketName.toLowerCase()
     };
 
-    s3.listObjects(bucketParams, function (err, data) {
+    s3.listObjects(bucketParams, (err, data) => {
       if (err) throw new Error(err);
       return data;
     });
@@ -111,7 +112,7 @@ export const deleteObject = (bucketName, key) => {
 
     s3.deleteObject({ Bucket: bucketName.toLowerCase(), key }, (err) => {
       if (err) return false;
-      else return true;
+      return true;
     });
   } catch (err) {
     console.error('Unable to delete S3 Object', err);
@@ -148,10 +149,10 @@ export const deleteS3Folder = (bucketName, folderName) => {
 
   let params = {
     Bucket: bucketName.toLowerCase(),
-    Prefix: folderName + '/'
+    Prefix: `${folderName}/`
   };
   try {
-    s3.listObjects(params, function (err, data) {
+    s3.listObjects(params, (err, data) => {
       if (err) return console.log(err);
 
       if (data.Contents.length === 0) return;
@@ -159,15 +160,15 @@ export const deleteS3Folder = (bucketName, folderName) => {
       params = { Bucket: bucketName };
       params.Delete = { Objects: [] };
 
-      data.Contents.forEach(function (content) {
+      data.Contents.forEach((content) => {
         params.Delete.Objects.push({ Key: content.Key });
       });
 
-      s3.deleteObjects(params, function (err, data) {
-        if (err) return console.log(err);
-        if (data.Errors?.length > 0) {
+      s3.deleteObjects(params, (err1, data1) => {
+        if (err1) return console.log(err1);
+        if (data1.Errors?.length > 0) {
           console.log('Error in Deleting S3 Files');
-          console.log(data.Errors);
+          console.log(data1.Errors);
         }
       });
     });

@@ -1,38 +1,38 @@
 export default (sequelize, DataTypes) => {
   const ExecutionSuite = sequelize.define('executionSuites', {
-    name: {
-      type: DataTypes.STRING,
+    createdByUser: {
       allowNull: false,
+      references: {
+        key: 'id',
+        model: 'users'
+      },
+      type: DataTypes.INTEGER,
       validate: {
         notNull: true
       }
     },
     description: {
-      type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      type: DataTypes.STRING
     },
-    projectId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'projects',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
-    },
-    tags: {
-      type: DataTypes.JSON,
-      defaultValue: null
-    },
-    createdByUser: {
-      type: DataTypes.INTEGER,
+    name: {
       allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true
-      },
-      references: {
-        model: 'users',
-        key: 'id'
       }
+    },
+    projectId: {
+      onDelete: 'CASCADE',
+      references: {
+        key: 'id',
+        model: 'projects'
+      },
+      type: DataTypes.INTEGER
+    },
+    tags: {
+      defaultValue: null,
+      type: DataTypes.JSON
     }
   });
 

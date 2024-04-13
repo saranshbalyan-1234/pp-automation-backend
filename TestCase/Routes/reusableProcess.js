@@ -1,16 +1,18 @@
 import express from 'express';
-import {
-  getAllReusableProcess,
-  saveReusableProcess,
-  updateReusableProcess,
-  deleteReusableProcess,
-  getReusableProcessDetailsById,
-  getTestStepByReusableProcess,
-  createReusableProcessLog,
-  getReusableProcessLogsById,
-  convertToReusableProcess
-} from '../Controllers/reusableProcessController.js';
+
 import { validatePermission } from '#middlewares/permissions.js';
+
+import {
+  convertToReusableProcess,
+  createReusableProcessLog,
+  deleteReusableProcess,
+  getAllReusableProcess,
+  getReusableProcessDetailsById,
+  getReusableProcessLogsById,
+  getTestStepByReusableProcess,
+  saveReusableProcess,
+  updateReusableProcess
+} from '../Controllers/reusableProcessController.js';
 const Router = express.Router();
 
 Router.post('/', validatePermission('Reusable Process', 'add'), saveReusableProcess);

@@ -1,63 +1,64 @@
 import bcrypt from 'bcryptjs';
+
 import errorContstants from '#constants/error.js';
 export default (sequelize, DataTypes) => {
   const User = sequelize.define(
     'users',
     {
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-
-        validate: {
-          notNull: true
-        }
+      active: {
+        defaultValue: 1,
+        type: DataTypes.BOOLEAN,
+        values: [0, 1]
+      },
+      defaultProjectId: {
+        allowNull: true,
+        default: null,
+        type: DataTypes.INTEGER
       },
       email: {
-        type: DataTypes.STRING,
         allowNull: false,
+        type: DataTypes.STRING,
         unique: true,
         validate: {
           isEmail: true,
           notNull: true
         }
       },
-      password: {
-        type: DataTypes.STRING,
+      name: {
         allowNull: false,
+        type: DataTypes.STRING,
+
         validate: {
           notNull: true
-        },
+        }
+      },
+      password: {
+        allowNull: false,
         set (value) {
           const hashedPass = bcrypt.hashSync(value, 8);
           this.setDataValue('password', hashedPass);
+        },
+        type: DataTypes.STRING,
+        validate: {
+          notNull: true
         }
       },
       profileImage: {
-        type: DataTypes.BOOLEAN,
         defaultValue: 0,
+        type: DataTypes.BOOLEAN,
         values: [0, 1]
       },
       verifiedAt: {
-        type: DataTypes.DATE,
-        allowNull: true
-      },
-      active: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 1,
-        values: [0, 1]
-      },
-      defaultProjectId: {
-        type: DataTypes.INTEGER,
         allowNull: true,
-        default: null
+        type: DataTypes.DATE
       }
     },
     {
       hooks: {
-        afterFind: function (model) {
+        afterFind: function afterFind (model) {
           if (!Array.isArray(model)) {
             if (!model.dataValues.active) throw new Error(errorContstants.ACCOUNT_INACTIVE);
-            // if(model.dataValues.verifiedAt) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
+            // If(model.dataValues.verifiedAt) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
           }
         }
       }

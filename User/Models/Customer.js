@@ -3,28 +3,28 @@ export default (sequelize, DataTypes) => {
   const Customer = sequelize.define(
     'customers',
     {
+      admin: {
+        defaultValue: 0,
+        type: DataTypes.BOOLEAN,
+        values: [0, 1]
+      },
+      blocked: {
+        defaultValue: 0,
+        type: DataTypes.BOOLEAN,
+        values: [0, 1]
+      },
       email: {
-        type: DataTypes.STRING,
         allowNull: false,
+        type: DataTypes.STRING,
         unique: 'email',
         validate: {
           isEmail: true,
           notNull: true
         }
       },
-      blocked: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 0,
-        values: [0, 1]
-      },
-      admin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 0,
-        values: [0, 1]
-      },
       tenantName: {
-        type: DataTypes.STRING,
         allowNull: false,
+        type: DataTypes.STRING,
         validate: {
           notNull: true
         }
@@ -32,7 +32,7 @@ export default (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterFind: function (model) {
+        afterFind: function afterFind (model) {
           if (!Array.isArray(model)) {
             if (model.dataValues.blocked) throw new Error(errorContstants.ACCOUNT_BLOCKED);
           }

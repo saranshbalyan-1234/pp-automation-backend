@@ -2,15 +2,15 @@ import { Joi } from 'express-validation';
 
 const changePasswordValidation = {
   body: Joi.object({
-    oldPassword: Joi.string().min(8).max(15).required(),
-    newPassword: Joi.string().min(8).max(15).required()
+    newPassword: Joi.string().min(8).max(15).required(),
+    oldPassword: Joi.string().min(8).max(15).required()
   })
 };
 
 const changeDetailsValidation = {
   body: Joi.object({
-    name: Joi.string().max(100),
-    defaultProjectId: Joi.number().integer()
+    defaultProjectId: Joi.number().integer(),
+    name: Joi.string().max(100)
   })
 };
 
@@ -25,4 +25,4 @@ const userIdParamsValidation = {
   params: Joi.object({ userId: Joi.number().integer().required() })
 };
 
-export { changePasswordValidation, changeDetailsValidation, activeInactiveValidation, userIdParamsValidation };
+export { activeInactiveValidation, changeDetailsValidation, changePasswordValidation, userIdParamsValidation };
