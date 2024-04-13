@@ -44,6 +44,8 @@
         "no-plusplus":"off",
         "no-continue":"off",
         "no-await-in-loop":"off",
+        "unused-imports/no-unused-imports": "error",
+        "autofix/no-unused-vars": "error",
         "sort-imports": ["error", {
             "ignoreCase": true,
             "ignoreDeclarationSort": true,
@@ -64,6 +66,7 @@
         "eqeqeq-fix",
         "sort-keys-fix",
         "unused-imports",
-        "simple-import-sort"
+        "simple-import-sort",
+        "autofix"
     ]
 }
