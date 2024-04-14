@@ -14,7 +14,14 @@
         "plugin:react-hooks/recommended",
         "plugin:sonarjs/recommended",
         "plugin:sonar/recommended",
-        "plugin:react-redux/recommended"
+        "plugin:react-redux/recommended",
+        "hardcore"
+        // "hardcore/react",
+        // "hardcore/react-performance",
+        // "hardcore/react-testing-library",
+        // "hardcore/jest",
+        // "hardcore/fp"
+        // "hardcore/ts"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -60,6 +67,25 @@
     "settings": {
         "react": {
          "version": "detect"
+        },
+        "import/resolver": {
+            "alias": {
+                "map": [
+                    ["#validations", "./Utils/Validations"],
+                    ["#middlewares", "./Utils/Middlewares"],
+                    ["#constants", "./Utils/Constants"],
+                    ["#utils", "./Utils"],
+                    ["#storage", "./Storage"],
+                    ["#user", "./User"],
+                    ["#project", "./Project"],
+                    ["#testcase", "./TestCase"],
+                    ["#controllers", "./Controllers"],
+                    ["#routes", "./Routes"],
+                    ["#encryption", "./Encryption"],
+                    ["#scheduler", "./Scheduler"],
+                    ["#root", "."]
+                ]
+            }
         }
       },
     "plugins":[
