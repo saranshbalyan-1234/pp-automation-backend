@@ -8,7 +8,7 @@ import getError from '#utils/error.js';
 import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#validations/index.js';
 const TestCase = db.testCases;
 const Process = db.process;
-const Object = db.objects;
+const Objects = db.objects;
 const TestParameter = db.testParameters;
 const TestStep = db.testSteps;
 const ReusableProcess = db.reusableProcess;
@@ -175,13 +175,13 @@ const getTestStepByTestCase = async (req, res) => {
     const data = await Process.schema(req.database).findAll({
       include: [
         {
-          include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+          include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
           model: TestStep.schema(req.database)
         },
         {
           include: [
             {
-              include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+              include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
               model: TestStep.schema(req.database)
             }
           ],
@@ -244,13 +244,13 @@ const saveProcess = async (req, res) => {
     const process = await Process.schema(req.database).findByPk(data.id, {
       include: [
         {
-          include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+          include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
           model: TestStep.schema(req.database)
         },
         {
           include: [
             {
-              include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+              include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
               model: TestStep.schema(req.database)
             }
           ],
@@ -298,7 +298,7 @@ const updateProcess = async (req, res) => {
           {
             include: [
               {
-                include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+                include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
                 model: TestStep.schema(req.database)
               }
             ],

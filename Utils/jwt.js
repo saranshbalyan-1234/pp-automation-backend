@@ -14,13 +14,10 @@ const createToken = (data, secret, expiration) => {
 };
 
 const getTokenError = (e, type) => {
-  switch (e.name) {
-    case 'TokenExpiredError':
-      return `${type} Token Expired`;
-    default:
-      return `Invalid ${type} Found`;
-  }
+  if (e.name === 'TokenExpiredError') return `${type} Token Expired`;
+  return `Invalid ${type} Found`;
 };
+
 const extractToken = (req) =>
   req.headers.authorization || ''
   /*

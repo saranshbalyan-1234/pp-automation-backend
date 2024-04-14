@@ -32,7 +32,9 @@ const formatJSON = (data, extension) => {
 };
 
 const generateFile = (data, name, extension) => {
-  const fileName = `${name ? `${name}_${new Date().toISOString()}` : new Date().toISOString()}.${extension[0] === '.' ? extension.slice(1) : extension}`;
+  let fileName = '';
+  if (name) fileName = `${name}_${new Date().toISOString()}`;
+  else fileName = `${new Date().toISOString()}.${extension[0]}` === '.' ? extension.slice(1) : extension;
   console.log(`Generating file with name: ${fileName}`);
   const outputPath = `./Resource/Reports/${fileName}`;
 

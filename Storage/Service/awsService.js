@@ -111,7 +111,7 @@ export const deleteObject = (bucketName, key) => {
     if (!key) throw new Error(errorContstants.INVALID_FILE);
 
     s3.deleteObject({ Bucket: bucketName.toLowerCase(), key }, (err) => {
-      if (err) return false;
+      if (err) return;
       return true;
     });
   } catch (err) {

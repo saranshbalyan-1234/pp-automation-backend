@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === 'production') {
   syncDatabase(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME);
 }
 
-app.use((req, res) => res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND }));
+app.use((_req, res) => res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND }));
 app.listen(process.env.PORT, () => {
   console.success(`Server started on PORT ${process.env.PORT} PROCESS_ID ${process.pid}`);
   // ScheduleInit();

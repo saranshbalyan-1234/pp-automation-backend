@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { permissionList, permissionTypes } from '#constants/permission.js';
 import { validatePermission } from '#middlewares/permissions.js';
 
 import {
@@ -15,19 +16,22 @@ import {
 } from '../Controllers/reusableProcessController.js';
 const Router = express.Router();
 
-Router.post('/', validatePermission('Reusable Process', 'add'), saveReusableProcess);
-Router.put('/:reusableProcessId', validatePermission('Reusable Process', 'edit'), updateReusableProcess);
-Router.get('/:reusableProcessId/details', validatePermission('Reusable Process', 'view'), getReusableProcessDetailsById);
+const reusableProcessId = 'reusableProcessId';
+const permissionName = permissionList.reusableProcess;
 
-Router.get('/', validatePermission('Reusable Process', 'view'), getAllReusableProcess);
+Router.post('/', validatePermission(permissionName, permissionTypes.add), saveReusableProcess);
+Router.put(`/:${reusableProcessId}`, validatePermission(permissionName, permissionTypes.edit), updateReusableProcess);
+Router.get(`/:${reusableProcessId}/details`, validatePermission(permissionName, permissionTypes.view), getReusableProcessDetailsById);
 
-Router.get('/:reusableProcessId/teststeps', validatePermission('Reusable Process', 'view'), getTestStepByReusableProcess);
+Router.get('/', validatePermission(permissionName, permissionTypes.view), getAllReusableProcess);
 
-Router.delete('/:reusableProcessId', validatePermission('Reusable Process', 'delete'), deleteReusableProcess);
+Router.get(`/:${reusableProcessId}/teststeps`, validatePermission(permissionName, permissionTypes.view), getTestStepByReusableProcess);
 
-Router.post('/:reusableProcessId/logs', createReusableProcessLog);
-Router.get('/:reusableProcessId/logs', validatePermission('Reusable Process', 'view'), getReusableProcessLogsById);
+Router.delete(`/:${reusableProcessId}`, validatePermission(permissionName, permissionTypes.delete), deleteReusableProcess);
 
-Router.put('/convert/process/:processId', validatePermission('Reusable Process', 'view'), convertToReusableProcess);
+Router.post(`/:${reusableProcessId}/logs`, createReusableProcessLog);
+Router.get(`/:${reusableProcessId}/logs`, validatePermission(permissionName, permissionTypes.view), getReusableProcessLogsById);
+
+Router.put('/convert/process/:processId', validatePermission(permissionName, permissionTypes.view), convertToReusableProcess);
 
 export default Router;

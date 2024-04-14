@@ -14,8 +14,8 @@
         "plugin:react-hooks/recommended",
         "plugin:sonarjs/recommended",
         "plugin:sonar/recommended",
-        "plugin:react-redux/recommended",
-        "hardcore"
+        "plugin:react-redux/recommended"
+        // "hardcore"
         // "hardcore/react",
         // "hardcore/react-performance",
         // "hardcore/react-testing-library",
@@ -57,6 +57,7 @@
         "unused-imports/no-unused-imports": "error",
         "autofix/no-unused-vars": "error",
         "sonar/deprecation": 2,
+        "sonarjs/cognitive-complexity":"off",
         "sort-imports": ["error", {
             "ignoreCase": true,
             "ignoreDeclarationSort": true,

@@ -8,7 +8,7 @@ const swaggerFile = require('../swagger.json');
 
 const Router = express.Router();
 
-Router.get('/health', (req, res) =>
+Router.get('/health', (_req, res) =>
   /*  #swagger.tags = ["Health"] */
   res.json('Server is Working')
 );
@@ -16,7 +16,7 @@ Router.get('/health', (req, res) =>
 Router.use('/swagger', swaggerUi.serve);
 Router.get('/swagger', swaggerUi.setup(swaggerFile));
 
-Router.get('/favico.ico', (req, res) => {
+Router.get('/favico.ico', (_req, res) => {
   res.sendStatus(204);
 });
 

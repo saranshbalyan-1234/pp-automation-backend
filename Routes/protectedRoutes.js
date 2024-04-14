@@ -13,11 +13,13 @@ import testStepRoutes from '#testcase/Routes/testStepRoutes.js';
 import roleRoutes from '#user/Routes/roleRoutes.js';
 import superAdminRoutes from '#user/Routes/superAdminRoutes.js';
 import userRoutes from '#user/Routes/userRoutes.js';
-// Import schedulerRoutes from "#scheduler/Routes/schedulerRoutes.js";
+/*
+ * Import jobManagerRoutes from "#scheduler/Routes/jobManagerRoutes.js";
+ * Import jobRoutes from "#scheduler/Routes/jobRoutes.js";
+ */
 
 const protectedRoutes = [
   { list: constantRoutes, path: '/constant' },
-  // { path: "/scheduler", list: schedulerRoutes },
   { list: userRoutes, path: '/user' },
   { list: superAdminRoutes, path: '/super-admin' },
   { list: roleRoutes, path: '/role' },
@@ -32,6 +34,10 @@ const protectedRoutes = [
   { list: environmentRoutes, path: '/environment' },
   { list: machineRoutes, path: '/machines' },
   { list: executionSuiteRoutes, path: '/execution-suite' }
+  /*
+   * { path: "/scheduler/job-manager", list: jobManagerRoutes },
+   * { path: "/scheduler/job", list: jobRoutes },
+   */
 ];
 
 export default protectedRoutes;

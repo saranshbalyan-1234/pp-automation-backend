@@ -32,9 +32,7 @@ export default (sequelize, DataTypes) => sequelize.define(
   {
     hooks: {
       afterFind: function afterFind (model) {
-        if (!Array.isArray(model)) {
-          if (model.dataValues.blocked) throw new Error(errorContstants.ACCOUNT_BLOCKED);
-        }
+        if (!Array.isArray(model) && model.dataValues.blocked) throw new Error(errorContstants.ACCOUNT_BLOCKED);
       }
     }
   }

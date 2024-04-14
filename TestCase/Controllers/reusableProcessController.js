@@ -6,7 +6,7 @@ import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#utils/Validations/index.js';
 
-const Object = db.objects;
+const Objects = db.objects;
 const TestParameter = db.testParameters;
 const TestStep = db.testSteps;
 const ReusableProcess = db.reusableProcess;
@@ -156,7 +156,7 @@ const getTestStepByReusableProcess = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
 
     const data = await TestStep.schema(req.database).findAll({
-      include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+      include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
 
       order: [['step', 'ASC']],
       where: { reusableProcessId }
@@ -285,7 +285,7 @@ const convertToReusableProcess = async (req, res) => {
               {
                 include: [
                   {
-                    include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+                    include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
                     model: TestStep.schema(req.database)
                   }
                 ],

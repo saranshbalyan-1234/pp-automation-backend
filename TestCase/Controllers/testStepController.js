@@ -1,12 +1,13 @@
 import { Op } from 'sequelize';
 
 import errorContstants from '#constants/error.js';
+import { permissionList } from '#constants/permission.js';
 import { saveTestStepValidation, updateTestStepValidation } from '#testcase/Validations/testStep.js';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { idValidation } from '#validations/index.js';
 const TestStep = db.testSteps;
-const Object = db.objects;
+const Objects = db.objects;
 const TestParameter = db.testParameters;
 
 const saveTestStep = async (req, res) => {
@@ -19,7 +20,7 @@ const saveTestStep = async (req, res) => {
     await db.sequelize.transaction(async (transaction) => {
       const { processId, reusableProcessId, step } = req.body;
 
-      const permissionName = reusableProcessId ? 'Reusable Process' : 'Test Case';
+      const permissionName = getPermissionName(reusableProcessId);
 
       if (!req.user.customerAdmin) {
         const allowed = await req.user.permissions.some((permission) => permissionName === permission.name && permission.edit);
@@ -58,7 +59,7 @@ const saveTestStep = async (req, res) => {
         .map((el) => ({ ...el, testStepId: teststep.id }));
       await TestParameter.schema(req.database).bulkCreate(parameterPayload, { transaction });
       const stepData = await TestStep.schema(req.database).findByPk(teststep.id, {
-        include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+        include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
         transaction
       });
       return res.status(200).json(stepData);
@@ -80,7 +81,7 @@ const updateTestStep = async (req, res) => {
 
       const updatingStep = await TestStep.schema(req.database).findByPk(testStepId);
 
-      const permissionName = updatingStep.reusableProcessId ? 'Reusable Process' : 'Test Case';
+      const permissionName = getPermissionName(updatingStep.reusableProcessId);
 
       if (!req.user.customerAdmin) {
         const allowed = await req.user.permissions.some((permission) => permissionName === permission.name && permission.edit);
@@ -116,7 +117,7 @@ const updateTestStep = async (req, res) => {
 
       if (updatedTestStep[0]) {
         const step = await TestStep.schema(req.database).findByPk(testStepId, {
-          include: [{ model: Object.schema(req.database) }, { model: TestParameter.schema(req.database) }],
+          include: [{ model: Objects.schema(req.database) }, { model: TestParameter.schema(req.database) }],
           transaction
         });
 
@@ -144,7 +145,7 @@ const deleteTestStep = async (req, res) => {
 
       const deletingTestStep = await TestStep.schema(req.database).findByPk(testStepId);
 
-      const permissionName = deletingTestStep.reusableProcessId ? 'Reusable Process' : 'Test Case';
+      const permissionName = getPermissionName(deletingTestStep.reusableProcessId);
 
       if (!req.user.customerAdmin) {
         const allowed = await req.user.permissions.some((permission) => permissionName === permission.name && permission.edit);
@@ -192,4 +193,5 @@ const deleteTestStep = async (req, res) => {
   }
 };
 
+const getPermissionName = (isReusableProcess) => isReusableProcess ? permissionList.reusableProcess : permissionList.testCase;
 export { deleteTestStep, saveTestStep, updateTestStep };

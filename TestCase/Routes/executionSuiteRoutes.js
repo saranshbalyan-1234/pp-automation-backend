@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { permissionList, permissionTypes } from '#constants/permission.js';
 import { validatePermission } from '#middlewares/permissions.js';
 
 import {
@@ -12,15 +13,19 @@ import {
   getTestCaseByExecutionSuiteId,
   removeTestCaseFromExecutionSuite
 } from '../Controllers/executionSuiteController.js';
+
 const Router = express.Router();
 
-Router.post('/', validatePermission('Execution Suite', 'add'), addExecutionSuite);
-Router.put('/:executionSuiteId', validatePermission('Execution Suite', 'edit'), editExecutionSuite);
-Router.get('/', validatePermission('Execution Suite', 'view'), getAllExecutionSuite);
-Router.get('/:executionSuiteId/details', validatePermission('Execution Suite', 'view'), getExecutionSuiteDetailsById);
-Router.delete('/:executionSuiteId', validatePermission('Execution Suite', 'delete'), deleteExecutionSuite);
-Router.get('/:executionSuiteId/test-case', validatePermission('Execution Suite', 'view'), getTestCaseByExecutionSuiteId);
-Router.post('/add-test-case', validatePermission('Execution Suite', 'edit'), addTestCaseToExecutionSuite);
-Router.delete('/remove-test-case/:id', validatePermission('Execution Suite', 'edit'), removeTestCaseFromExecutionSuite);
+const executionSuiteId = 'executionSuiteId';
+const permissionName = permissionList.executionSuite;
+
+Router.post('/', validatePermission(permissionName, permissionTypes.add), addExecutionSuite);
+Router.put(`/:${executionSuiteId}`, validatePermission(permissionName, permissionTypes.edit), editExecutionSuite);
+Router.get('/', validatePermission(permissionName, permissionTypes.view), getAllExecutionSuite);
+Router.get(`/:${executionSuiteId}/details`, validatePermission(permissionName, permissionTypes.view), getExecutionSuiteDetailsById);
+Router.delete(`/:${executionSuiteId}`, validatePermission(permissionName, permissionTypes.delete), deleteExecutionSuite);
+Router.get(`/:${executionSuiteId}/test-case`, validatePermission(permissionName, permissionTypes.view), getTestCaseByExecutionSuiteId);
+Router.post('/add-test-case', validatePermission(permissionName, permissionTypes.edit), addTestCaseToExecutionSuite);
+Router.delete('/remove-test-case/:id', validatePermission(permissionName, permissionTypes.edit), removeTestCaseFromExecutionSuite);
 
 export default Router;

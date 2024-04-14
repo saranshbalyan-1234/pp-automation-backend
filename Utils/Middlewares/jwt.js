@@ -26,11 +26,4 @@ export const validateToken = () => (req, res, next) => {
   }
 };
 
-const handleCachedTokenCheck = (email, tenant, token) => {
-  if (process.env.JWT_ACCESS_CACHE) {
-    if (cache.get(`accesstoken_${tenant}_${email}`) !== token) {
-      return false;
-    }
-  }
-  return true;
-};
+const handleCachedTokenCheck = (email, tenant, token) => !(process.env.JWT_ACCESS_CACHE && cache.get(`accesstoken_${tenant}_${email}`) !== token);

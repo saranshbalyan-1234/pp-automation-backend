@@ -103,9 +103,10 @@ const sequelize = await createDBConnection({
   user: process.env.DATABASE_USER
 });
 
-const db = {};
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+const db = {
+  Sequelize, sequelize
+};
+
 db.sequelize.dialect.supports.schemas = true;
 
 db.customers = Customer(sequelize, DataTypes);

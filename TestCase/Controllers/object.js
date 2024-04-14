@@ -4,7 +4,7 @@ import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { createLogValidation, idValidation, nameDesTagPrjValidation } from '#validations/index.js';
 
-const Object = db.objects;
+const Objects = db.objects;
 const ObjectLocator = db.ObjectLocators;
 const ObjectLog = db.objectLogs;
 
@@ -20,7 +20,7 @@ const saveObject = async (req, res) => {
     const payload = { ...req.body };
     payload.createdByUser = req.user.id;
 
-    const object = await Object.schema(req.database).create(payload);
+    const object = await Objects.schema(req.database).create(payload);
     createObjectLog(req, res, object.id, [`created the object "${req.body.name}".`]);
     return res.status(200).json(object);
   } catch (err) {
@@ -38,7 +38,7 @@ const getObjectDetailsById = async (req, res) => {
     const { error } = idValidation.validate({ id: objectId });
     if (error) throw new Error(error.details[0].message);
 
-    const testCase = await Object.schema(req.database).findOne({
+    const testCase = await Objects.schema(req.database).findOne({
       attributes: ['id', 'name', 'createdAt', 'updatedAt', 'description', 'tags', 'createdByUser'],
       include: [
         {
@@ -71,7 +71,7 @@ const updateObject = async (req, res) => {
     });
     if (error) throw new Error(error.details[0].message);
 
-    const updatedObject = await Object.schema(req.database).update(req.body, {
+    const updatedObject = await Objects.schema(req.database).update(req.body, {
       where: {
         id: objectId
       }
@@ -98,7 +98,7 @@ const deleteObject = async (req, res) => {
     const { error } = idValidation.validate({ id: objectId });
     if (error) throw new Error(error.details[0].message);
 
-    const deletedObject = await Object.schema(req.database).destroy({
+    const deletedObject = await Objects.schema(req.database).destroy({
       where: { id: objectId }
     });
 
@@ -122,7 +122,7 @@ const getAllObject = async (req, res) => {
     const { error } = idValidation.validate({ id: projectId });
     if (error) throw new Error(error.details[0].message);
 
-    const objects = await Object.schema(req.database).findAll({
+    const objects = await Objects.schema(req.database).findAll({
       attributes: ['id', 'name', 'createdAt', 'updatedAt', 'tags', 'createdByUser'],
       order: [['name', 'ASC']],
       where: {

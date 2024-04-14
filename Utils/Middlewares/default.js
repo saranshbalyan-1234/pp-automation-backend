@@ -5,7 +5,7 @@
  * import pkg from "jsonwebtoken";
  */
 
-const defaultMiddleware = () => (req, res, next) => {
+const defaultMiddleware = () => (req, _res, next) => {
   req.user = {
     database: process.env.DATABASE_NAME,
     tenant: 'master'

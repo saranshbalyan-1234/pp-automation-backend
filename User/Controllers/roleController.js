@@ -123,7 +123,7 @@ const updateRolePermission = async (req, res) => {
     });
     if (error) throw new Error(error.details[0].message);
 
-    const check = permissionList.some((el) => req.body.some((el1) => el.name === el1.name));
+    const check = Object.values(permissionList).some((el) => req.body.some((el1) => el === el1.name));
 
     if (check) {
       const payload = [...req.body].map((el) => {

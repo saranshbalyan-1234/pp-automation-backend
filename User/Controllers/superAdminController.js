@@ -34,7 +34,7 @@ const syncTenant = async (req, res) => {
   }
 };
 
-const getAllSession = (req, res) => {
+const getAllSession = (_req, res) => {
   /*
    *  #swagger.tags = ["Super Admin"]
    *  #swagger.security = [{"apiKeyAuth": []}]

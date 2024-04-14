@@ -17,7 +17,7 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
       clientSecret: process.env.GOOGLE_SECRET,
       passReqToCallback: true
     },
-    async (req, accessToken, refreshToken, params, profile, done) => {
+    async (_req, _accessToken, _refreshToken, _params, profile, done) => {
       try {
         // Const email = profile.emails.find((el) => el.verified)?.value;
         const email = profile.emails[0]?.value;
@@ -43,7 +43,7 @@ if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
       passReqToCallback: true,
       scope: ['user:email']
     },
-    async (req, accessToken, refreshToken, profile, done) => {
+    async (_req, _accessToken, _refreshToken, profile, done) => {
       try {
         const email = profile.emails[0]?.value;
         const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true });
@@ -69,7 +69,7 @@ if (process.env.LINKEDIN_ID && process.env.LINKEDIN_SECRET) {
         passReqToCallback: true,
         scope: ['profile']
       },
-      async (req, accessToken, refreshToken, profile, done) => {
+      async (_req, _accessToken, _refreshToken, profile, done) => {
         try {
           const email = profile.emails[0]?.value;
           const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true });

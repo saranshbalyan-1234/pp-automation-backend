@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { permissionList, permissionTypes } from '#constants/permission.js';
 import { validatePermission } from '#middlewares/permissions.js';
 
 import {
@@ -14,20 +15,24 @@ import {
   saveObjectLocator,
   updateObject
 } from '../Controllers/object.js';
+
 const Router = express.Router();
 
-Router.post('/', validatePermission('Test Case', 'add'), saveObject);
-Router.put('/:objectId', validatePermission('Test Object', 'edit'), updateObject);
-Router.delete('/:objectId', validatePermission('Test Object', 'delete'), deleteObject);
-Router.delete('/locator/:locatorId', validatePermission('Test Object', 'edit'), deleteObjectLocator);
+const objectId = 'objectId';
+const permissionName = permissionList.testCase;
 
-Router.get('/', validatePermission('Test Object', 'view'), getAllObject);
-Router.get('/:objectId/details', validatePermission('Test Object', 'view'), getObjectDetailsById);
+Router.post('/', validatePermission(permissionName, permissionTypes.add), saveObject);
+Router.put(`/:${objectId}`, validatePermission(permissionName, permissionTypes.edit), updateObject);
+Router.delete(`/:${objectId}`, validatePermission(permissionName, permissionTypes.delete), deleteObject);
+Router.delete('/locator/:locatorId', validatePermission(permissionName, permissionTypes.edit), deleteObjectLocator);
 
-Router.get('/:objectId/locator', validatePermission('Test Object', 'view'), getObjectLocatorsByObjectId);
-Router.post('/locator', validatePermission('Test Object', 'add'), saveObjectLocator);
+Router.get('/', validatePermission(permissionName, permissionTypes.view), getAllObject);
+Router.get(`/:${objectId}/details`, validatePermission(permissionName, permissionTypes.view), getObjectDetailsById);
 
-Router.post('/:objectId/logs', createObjectLog);
-Router.get('/:objectId/logs', validatePermission('Test Object', 'view'), getObjectLogsByObjectId);
+Router.get(`/:${objectId}/locator`, validatePermission(permissionName, permissionTypes.view), getObjectLocatorsByObjectId);
+Router.post('/locator', validatePermission(permissionName, permissionTypes.add), saveObjectLocator);
+
+Router.post(`/:${objectId}/logs`, createObjectLog);
+Router.get(`/:${objectId}/logs`, validatePermission(permissionName, permissionTypes.view), getObjectLogsByObjectId);
 
 export default Router;

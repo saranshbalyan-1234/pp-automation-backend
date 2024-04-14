@@ -55,10 +55,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     let allPermissions = [];
     await user.userRoles.map((el) => {
       allPermissions = [...allPermissions, ...el.role.permissions];
-      const tempRole = {};
-      tempRole.name = el.role.name;
-      tempRole.permissions = el.role.permissions;
-      return tempRole;
+      return { name: el.role.name, permissions: el.role.permissions };
     });
 
     const superAdmin = customer.admin === 2;

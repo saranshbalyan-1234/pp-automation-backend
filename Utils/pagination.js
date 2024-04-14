@@ -22,12 +22,11 @@ const paginate = (model) => {
       data.limit = parseInt(size);
     }
 
-    if (sort) {
-      if (sort.split(',').length === 2) {
-        const sortData = sort.split(',');
-        data.order = [sortData];
-      }
+    if (sort && sort.split(',').length === 2) {
+      const sortData = sort.split(',');
+      data.order = [sortData];
     }
+
     if (searchable.length && search) {
       data.where = {
         [Op.or]: searchable.map((el) => ({ [el]: { [Op.like]: `%${search}%` } }))
