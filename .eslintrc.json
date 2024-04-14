@@ -14,7 +14,8 @@
         "plugin:react-hooks/recommended",
         "plugin:sonarjs/recommended",
         "plugin:sonar/recommended",
-        "plugin:react-redux/recommended"
+        "plugin:react-redux/recommended",
+        "plugin:import/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -94,6 +95,7 @@
         "autofix",
         "sonarjs",
         "sonar",
-        "react-redux"
+        "react-redux",
+        "import"
     ]
 }

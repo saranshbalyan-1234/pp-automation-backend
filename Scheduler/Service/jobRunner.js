@@ -1,5 +1,5 @@
 import fs from 'fs';
-import XLSX from 'xlsx';
+// Import XLSX from 'xlsx';
 export const executeQuery = async (connection, job) => {
   const { name, query, extension } = job;
   if (!query) return;
@@ -40,10 +40,12 @@ const generateFile = (data, name, extension) => {
 
   try {
     if (extension === 'xlsx') {
-      const workSheet = XLSX.utils.json_to_sheet(data);
-      const workBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workBook, workSheet, 'Report');
-      return XLSX.writeFile(workBook, outputPath);
+      /*
+       * Const workSheet = XLSX.utils.json_to_sheet(data);
+       * const workBook = XLSX.utils.book_new();
+       * XLSX.utils.book_append_sheet(workBook, workSheet, 'Report');
+       * return XLSX.writeFile(workBook, outputPath);
+       */
     }
     const output = fs.createWriteStream(outputPath, { encoding: 'utf8' });
     output.write(formatJSON(data, extension));

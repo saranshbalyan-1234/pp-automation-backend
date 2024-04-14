@@ -1,4 +1,4 @@
-import Scheduler from 'cron-job-manager';
+// Import Scheduler from 'cron-job-manager';
 
 import { getAllTenant } from '#user/Service/database.js';
 import db, { createDBConnection } from '#utils/dataBaseConnection.js';
@@ -43,7 +43,7 @@ export const startManagerJobs = async (manager, tenant) => {
       console.log('Starting Manager Connection');
       await addToConnectionPool(manager.id, tenant, manager.connection);
     } else console.log('No Connection Found');
-    jobManagerMap[`${tenant}_${manager.id}`] = new Scheduler();
+    // JobManagerMap[`${tenant}_${manager.id}`] = new Scheduler();
 
     manager.jobs?.forEach((job) => {
       addJob(manager.id, job, tenant);

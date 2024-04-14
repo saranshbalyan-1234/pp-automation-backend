@@ -34,7 +34,7 @@ import paginate from '#utils/pagination.js';
 
 overrideConsole();
 
-const createDBConnection = async (data) => {
+export const createDBConnection = async (data) => {
   try {
     /*
      * Console.log("Connection Details: ")
