@@ -15,13 +15,6 @@
         "plugin:sonarjs/recommended",
         "plugin:sonar/recommended",
         "plugin:react-redux/recommended"
-        // "hardcore"
-        // "hardcore/react",
-        // "hardcore/react-performance",
-        // "hardcore/react-testing-library",
-        // "hardcore/jest",
-        // "hardcore/fp"
-        // "hardcore/ts"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
