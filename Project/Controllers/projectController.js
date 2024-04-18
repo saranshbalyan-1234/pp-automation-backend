@@ -8,9 +8,6 @@ import { addProjectValidation, memberProjectValidation, updateProjectValidation 
 const UserProject = db.userProjects;
 const Project = db.projects;
 const User = db.users;
-const TestCase = db.testCases;
-const ReusableProcess = db.reusableProcess;
-const Objects = db.objects;
 const getMyProject = async (req, res) => {
   /*
    *  #swagger.tags = ["Project"]
@@ -81,17 +78,7 @@ const getProjectById = async (req, res) => {
 
     temp.members = temp.members.map((user) => user.dataValues.user);
 
-    const testCase = await TestCase.schema(req.database).count({
-      where: { projectId }
-    });
-    const reusableProcess = await ReusableProcess.schema(req.database).count({
-      where: { projectId }
-    });
-    const object = await Objects.schema(req.database).count({
-      where: { projectId }
-    });
-
-    return res.status(200).json({ ...temp, count: { object, reusableProcess, testCase } });
+    return res.status(200).json({ ...temp });
   } catch (error) {
     getError(error, res);
   }

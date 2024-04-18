@@ -17,15 +17,6 @@ const endpointsFiles = [
 
   './Storage/Routes/awsRoutes.js',
 
-  './TestCase/Routes/testCase.js',
-  './TestCase/Routes/testStepRoutes.js',
-  './TestCase/Routes/object.js',
-  './TestCase/Routes/reusableProcess.js',
-  './TestCase/Routes/environment.js',
-  './TestCase/Routes/executionHistory.js',
-  './TestCase/Routes/executionSuiteRoutes.js',
-  './TestCase/Routes/machineRoutes.js',
-
   './Scheduler/Routes/schedulerRoutes.js'
 ];
 

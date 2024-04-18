@@ -5,24 +5,6 @@ import Project from '#project/Models/Project.js';
 import UserProject from '#project/Models/UserProject.js';
 import Job from '#scheduler/Models/job.js';
 import JobManager from '#scheduler/Models/JobManager.js';
-import Column from '#testcase/Models/Environment/Column.js';
-import Environment from '#testcase/Models/Environment/Environment.js';
-import ExecutionHistory from '#testcase/Models/ExecutionHistory/ExecutionHistory.js';
-import ProcessHistory from '#testcase/Models/ExecutionHistory/ProcessHistory.js';
-import TestStepHistory from '#testcase/Models/ExecutionHistory/TestStepHistory.js';
-import Machine from '#testcase/Models/Machine.js';
-import Object from '#testcase/Models/Object/Object.js';
-import ObjectLocator from '#testcase/Models/Object/ObjectLocator.js';
-import ObjectLog from '#testcase/Models/Object/ObjectLog.js';
-import Process from '#testcase/Models/Process.js';
-import ReusableProcess from '#testcase/Models/ReusableProcess.js';
-import ReusableProcessLog from '#testcase/Models/ReusableProcessLog.js';
-import TestCase from '#testcase/Models/TestCase.js';
-import TestCaseLog from '#testcase/Models/TestCaseLog.js';
-import ExecutionSuite from '#testcase/Models/TestExecution/ExecutionSuite.js';
-import TestCaseExecutionMapping from '#testcase/Models/TestExecution/TestCaseExecutionMapping.js';
-import TestParameter from '#testcase/Models/TestParameter.js';
-import TestStep from '#testcase/Models/TestStep.js';
 import Customer from '#user/Models/Customer.js';
 import Permission from '#user/Models/RolePermission/Permission.js';
 import Role from '#user/Models/RolePermission/Role.js';
@@ -121,36 +103,8 @@ db.permissions = Permission(sequelize, DataTypes);
 db.projects = Project(sequelize, DataTypes);
 db.userProjects = UserProject(sequelize, DataTypes);
 
-db.testCases = TestCase(sequelize, DataTypes);
-db.testCaseLogs = TestCaseLog(sequelize, DataTypes);
-
-db.reusableProcess = ReusableProcess(sequelize, DataTypes);
-db.reusableProcessLogs = ReusableProcessLog(sequelize, DataTypes);
-
-db.process = Process(sequelize, DataTypes);
-
-db.objects = Object(sequelize, DataTypes);
-db.ObjectLocators = ObjectLocator(sequelize, DataTypes);
-db.objectLogs = ObjectLog(sequelize, DataTypes);
-
-db.testSteps = TestStep(sequelize, DataTypes);
-db.testParameters = TestParameter(sequelize, DataTypes);
-
-db.executionHistory = ExecutionHistory(sequelize, DataTypes);
-db.processHistory = ProcessHistory(sequelize, DataTypes);
-db.testStepHistory = TestStepHistory(sequelize, DataTypes);
-
-db.enviroments = Environment(sequelize, DataTypes);
-db.columns = Column(sequelize, DataTypes);
-
-db.executionSuites = ExecutionSuite(sequelize, DataTypes);
-db.testCaseExecutionMappings = TestCaseExecutionMapping(sequelize, DataTypes);
-
 db.jobs = Job(sequelize, DataTypes);
 db.jobManagers = JobManager(sequelize, DataTypes);
-
-// All associations
-db.machines = Machine(sequelize, DataTypes);
 
 db.customers.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).sync({ alter: true, force: false });
 db.unverifieds.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).sync({ alter: true, force: false });

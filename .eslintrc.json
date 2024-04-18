@@ -73,7 +73,6 @@
                     ["#storage", "./Storage"],
                     ["#user", "./User"],
                     ["#project", "./Project"],
-                    ["#testcase", "./TestCase"],
                     ["#controllers", "./Controllers"],
                     ["#routes", "./Routes"],
                     ["#encryption", "./Encryption"],

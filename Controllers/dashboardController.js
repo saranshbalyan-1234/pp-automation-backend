@@ -3,9 +3,6 @@ import { Op, Sequelize } from 'sequelize';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 const User = db.users;
-const TestCase = db.testCases;
-const ReusableProcess = db.reusableProcess;
-const Objects = db.objects;
 const UserProject = db.userProjects;
 const Project = db.projects;
 const ExecutionHistory = db.executionHistory;
@@ -48,25 +45,12 @@ export const createdReport = async (req, res) => {
    *  #swagger.security = [{"apiKeyAuth": []}]
    */
   try {
-    const reusableProcess = await ReusableProcess.schema(req.database).count({
-      where: { createdByUser: req.body.userId }
-    });
-    const object = await Objects.schema(req.database).count({
-      where: { createdByUser: req.body.userId }
-    });
-
     const projects = await Project.schema(req.database).count({
-      where: { createdByUser: req.body.userId }
-    });
-    const testCase = await TestCase.schema(req.database).count({
       where: { createdByUser: req.body.userId }
     });
 
     return res.status(200).json({
-      Object: object,
       Projects: projects,
-      Reusable: reusableProcess,
-      TestCase: testCase
     });
   } catch (error) {
     getError(error, res);
