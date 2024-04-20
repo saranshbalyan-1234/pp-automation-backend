@@ -10,11 +10,5 @@ const UserSchema = BaseSchema({
   }
 });
 
-/*
- *  Schema.pre('update', function( next ) {
- *   this.update({}, { $inc: { __v: 1 } }, next );
- *  });
- */
-
 const model = mongoose.model('saranshes', UserSchema);
 export default model;

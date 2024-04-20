@@ -7,7 +7,7 @@ const BaseSchema = (schemaDefinition, schemaOptions) => {
   }, {
     optimisticConcurrency: true,
     strict: 'throw',
-    timestamps: true,
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     ...schemaOptions
   });
 
