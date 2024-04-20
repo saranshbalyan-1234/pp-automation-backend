@@ -17,7 +17,7 @@ const protectedRoutes = [
   { list: roleRoutes, path: '/role' },
   { list: projectRoutes, path: '/project' },
   { list: dashboardRoutes, path: '/dashboard' },
-  { list: storageRoutes, path: '/storage' },
+  { list: storageRoutes, path: '/storage' }
   /*
    * { path: "/scheduler/job-manager", list: jobManagerRoutes },
    * { path: "/scheduler/job", list: jobRoutes },

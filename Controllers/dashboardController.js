@@ -50,7 +50,7 @@ export const createdReport = async (req, res) => {
     });
 
     return res.status(200).json({
-      Projects: projects,
+      Projects: projects
     });
   } catch (error) {
     getError(error, res);

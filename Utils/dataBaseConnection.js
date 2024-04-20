@@ -61,7 +61,7 @@ export const createDBConnection = async (data) => {
 };
 const customModelMethods = (models) => {
   for (const modelName in models) {
-    if (Object.prototype.hasOwnProperty.call(models, modelName)) {
+    if (Object.hasOwn(models, modelName)) {
       const model = models[modelName];
       paginate(model);
     }

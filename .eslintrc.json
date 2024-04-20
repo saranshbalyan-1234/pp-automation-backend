@@ -52,6 +52,8 @@
         "autofix/no-unused-vars": "error",
         "sonar/deprecation": 2,
         "sonarjs/cognitive-complexity":"off",
+        "no-underscore-dangle":"off",
+        "no-invalid-this":"off",
         "sort-imports": ["error", {
             "ignoreCase": true,
             "ignoreDeclarationSort": true,
