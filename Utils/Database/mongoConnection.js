@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-
+import autopopulate from 'mongoose-autopopulate';
+import autoIncrementV from '../../Mongo/Plugins/autoIncrementV.js'
 const clientOption = {
   /*
    * SocketTimeoutMS: 30000,
@@ -8,6 +9,11 @@ const clientOption = {
   maxPoolSize: 5
 };
 mongoose.set('debug', true);
+
+// GLOBAL PLUGINS
+mongoose.plugin(autoIncrementV)
+mongoose.plugin(autopopulate);
+  
 // CONNECTION EVENTS
 mongoose.connection.on('connected', () => console.log('connected'));
 mongoose.connection.on('open', () => console.log('open'));
