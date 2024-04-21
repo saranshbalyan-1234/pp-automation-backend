@@ -18,9 +18,9 @@ mongoose.connection.on('close', () => console.log('close'));
 
 // If the Node process ends, close the Mongoose connection
 process.on('SIGINT', () => {
-    mongoose.connection.close();
-    console.log('Application crashed');
-    process.exit(0);
+  mongoose.connection.close();
+  console.log('Application crashed');
+  process.exit(0);
 });
 
 export const createDbConnection = DB_URL => {

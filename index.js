@@ -67,12 +67,14 @@ createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net
 
 app.use('/saransh', async (_req, res) => {
   try {
-      const article = new ArticleModel({ name: "saransh", dummy: [1,2] });
-     await article.save();
-     
-    // const article = await ArticleModel.findOneAndUpdate({ name: 'saransh' }, { name: 'saransh' }, {
-    //   new: true
-    // });
+    const article = new ArticleModel({ dummy: [1, 2], name: 'saransh' });
+    await article.save();
+
+    /*
+     * Const article = await ArticleModel.findOneAndUpdate({ name: 'saransh' }, { name: 'saransh' }, {
+     *   new: true
+     * });
+     */
 
     return res.status(200).json(article);
   } catch (err) {

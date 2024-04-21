@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import autopopulate from 'mongoose-autopopulate';
 const BaseSchema = (schemaDefinition, schemaOptions) => {
   const schema = new mongoose.Schema({
     is_verified: { default: false, type: Boolean },
@@ -11,7 +11,8 @@ const BaseSchema = (schemaDefinition, schemaOptions) => {
     ...schemaOptions
   });
 
-  schema.pre(/updateOne|updateMany|findOneAndUpdate/, function pre (next) {
+  // Version update
+  schema.pre(/updateOne|updateMany|findOneAndUpdate/, function autoIncrementV (next) {
     const isVersionModified = this.getUpdate().$set.__v;
     if (isVersionModified) return next();
     try {
@@ -22,6 +23,8 @@ const BaseSchema = (schemaDefinition, schemaOptions) => {
       return next(error);
     }
   });
+
+  schema.plugin(autopopulate);
 
   return schema;
 };
