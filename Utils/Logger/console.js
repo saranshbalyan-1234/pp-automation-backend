@@ -13,7 +13,7 @@ const overrideInfo = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.blue('INFO:'), fileName, ...e]);
+      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.blue('INFO:'), fileName, ...e]);
     }
   };
 };
@@ -30,7 +30,7 @@ const overrideWarn = () => {
   } catch (error) {
     console.warn = (...e) => {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.yellow('WARN:'), fileName, ...e]);
+      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.yellow('WARN:'), fileName, ...e]);
     };
   }
 };
@@ -47,7 +47,7 @@ const overrideError = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.red('ERROR:'), fileName, ...e]);
+      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.red('ERROR:'), fileName, ...e]);
     }
   };
 };
@@ -65,7 +65,7 @@ const overrideDebug = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.magenta('DEBUG:'), fileName, ...e]);
+      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.magenta('DEBUG:'), fileName, ...e]);
     }
   };
 };
@@ -84,7 +84,7 @@ const overrideSuccess = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, ['\n', `[${new Date().toLocaleString()}]`, chalk.green('SUCCESS:'), fileName, ...e]);
+      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.green('SUCCESS:'), fileName, ...e]);
     }
   };
 };

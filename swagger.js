@@ -17,7 +17,8 @@ const endpointsFiles = [
 
   './Storage/Routes/awsRoutes.js',
 
-  './Scheduler/Routes/schedulerRoutes.js'
+  './Scheduler/Routes/jobRoutes.js',
+  './Scheduler/Routes/jobManagerRoutes.js'
 ];
 
 const doc = {

@@ -6,7 +6,8 @@ const clientOption = {
    * SocketTimeoutMS: 30000,
    * ServerSelectionTimeoutMS:30000,
    */
-  maxPoolSize: 5
+  maxPoolSize: 5,
+  minPoolSize:1
 };
 mongoose.set('debug', true);
 
@@ -15,8 +16,8 @@ mongoose.plugin(autoIncrementV)
 mongoose.plugin(autopopulate);
   
 // CONNECTION EVENTS
-mongoose.connection.on('connected', () => console.log('connected'));
-mongoose.connection.on('open', () => console.log('open'));
+mongoose.connection.on('connected', () => console.success('connected'));
+mongoose.connection.on('open', () => console.success('open'));
 mongoose.connection.on('disconnected', () => console.log('disconnected'));
 mongoose.connection.on('reconnected', () => console.log('reconnected'));
 mongoose.connection.on('disconnecting', () => console.log('disconnecting'));
