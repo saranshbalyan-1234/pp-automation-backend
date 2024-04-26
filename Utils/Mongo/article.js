@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 import BaseSchema from './BaseSchema.js';
 
 const UserSchema = BaseSchema({
@@ -9,5 +7,5 @@ const UserSchema = BaseSchema({
   }
 });
 
-const model = mongoose.model('saranshes', UserSchema);
-export default model;
+// const model = mongoose.model('saranshes', UserSchema);
+export default UserSchema;
