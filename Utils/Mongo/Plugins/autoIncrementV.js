@@ -1,6 +1,6 @@
-const autoIncrementV = function autoIncrementV(schema) {
+const autoIncrementV = function autoIncrementV (schema) {
   // Version update
-  schema.pre(/updateOne|updateMany|findOneAndUpdate/, function pre(next) {
+  schema.pre(/updateOne|updateMany|findOneAndUpdate/, function pre (next) {
     const isVersionModified = this.getUpdate().$set.__v;
     if (isVersionModified) return next();
     try {

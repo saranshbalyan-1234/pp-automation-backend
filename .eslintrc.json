@@ -15,8 +15,7 @@
         "plugin:sonarjs/recommended",
         "plugin:sonar/recommended",
         "plugin:react-redux/recommended",
-        "plugin:import/recommended",
-        "prettier"
+        "plugin:import/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -99,7 +98,6 @@
         "sonarjs",
         "sonar",
         "react-redux",
-        "import",
-        "prettier"
+        "import"
     ]
 }

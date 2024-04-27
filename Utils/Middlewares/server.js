@@ -17,7 +17,7 @@ const setupTimeout = (app) => {
         res.jsonP =
         res.end =
         res.sendStatus =
-          function sendStatus() {
+          function sendStatus () {
             return this;
           };
     });
@@ -57,7 +57,7 @@ const setupCors = (app) => {
   const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Access-Control-Allow-Origin', 'Origin', 'Accept', 'x-project-id"'],
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-    origin: function origin(og, callback) {
+    origin: function origin (og, callback) {
       if (whitelist.indexOf(og) !== -1 || !process.env.CORS) {
         callback(null, true);
       } else {
@@ -73,7 +73,7 @@ const setupResponseInterceptor = (app) => {
   console.log('Response Interceptor is Turned ON');
   app.use((req, res, next) => {
     const originalSend = res.send;
-    res.send = function send(...args) {
+    res.send = function send (...args) {
       const errorObj = args[0];
       if (typeof errorObj === 'object' && errorObj.error) {
         errorObj.method = req.method;

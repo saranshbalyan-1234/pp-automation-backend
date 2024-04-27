@@ -34,7 +34,7 @@ export default (sequelize, DataTypes) =>
       },
       password: {
         allowNull: false,
-        set(value) {
+        set (value) {
           const hashedPass = bcrypt.hashSync(value, 8);
           this.setDataValue('password', hashedPass);
         },
@@ -55,7 +55,7 @@ export default (sequelize, DataTypes) =>
     },
     {
       hooks: {
-        afterFind: function afterFind(model) {
+        afterFind: function afterFind (model) {
           if (!Array.isArray(model) && !model.dataValues.active) throw new Error(errorContstants.ACCOUNT_INACTIVE);
           // If(model.dataValues.verifiedAt) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
         }

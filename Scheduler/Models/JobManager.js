@@ -8,11 +8,11 @@ export default (sequelize, DataTypes) =>
     },
     connection: {
       allowNull: true,
-      get() {
+      get () {
         const token = this.getDataValue('connection');
         return token ? decryptJwt(token) : null;
       },
-      set(value) {
+      set (value) {
         this.setDataValue('connection', createToken(value, process.env.JWT_ACCESS_SECRET));
       },
       type: DataTypes.TEXT
@@ -24,11 +24,11 @@ export default (sequelize, DataTypes) =>
     },
     kmsData: {
       allowNull: true,
-      get() {
+      get () {
         const token = this.getDataValue('kmsData');
         return token ? decryptJwt(token) : null;
       },
-      set(value) {
+      set (value) {
         this.setDataValue('kmsData', createToken(value, process.env.JWT_ACCESS_SECRET));
       },
       type: DataTypes.JSON
