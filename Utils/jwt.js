@@ -18,15 +18,12 @@ const getTokenError = (e, type) => {
   return `Invalid ${type} Found`;
 };
 
-const extractToken = (req) =>
-  req.headers.authorization || ''
-  /*
-   * If (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
-   *     return req.headers.authorization.split(" ")[1];
-   * } else return null;
-   */
-;
-
+const extractToken = (req) => req.headers.authorization || '';
+/*
+ * If (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
+ *     return req.headers.authorization.split(" ")[1];
+ * } else return null;
+ */
 const decryptJwt = (jwt) => {
   if (!jwt || typeof jwt !== 'string') return {};
   return verify(jwt, process.env.JWT_ACCESS_SECRET);

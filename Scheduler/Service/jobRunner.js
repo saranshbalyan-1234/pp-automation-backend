@@ -28,7 +28,8 @@ const formatJSON = (data, extension) => {
     const csv = formatterData.map((row) => Object.values(row));
     csv.unshift(Object.keys(data[0]));
     return csv.join('\n');
-  } return JSON.stringify(data);
+  }
+  return JSON.stringify(data);
 };
 
 const generateFile = (data, name, extension) => {

@@ -62,9 +62,11 @@ const getTeam = async (req, res) => {
         };
       }
     });
-    Promise.all(teamWithImages).then((data) => res.status(200).json(data)).catch((err) => {
-      throw new Error(err);
-    });
+    Promise.all(teamWithImages)
+      .then((data) => res.status(200).json(data))
+      .catch((err) => {
+        throw new Error(err);
+      });
   } catch (error) {
     getError(error, res);
   }
@@ -247,7 +249,8 @@ const uploadProfileImage = async (req, res) => {
         }
       );
       return res.status(200).json({ message: successConstants.UPDATED });
-    } throw new Error('Unable to upload profile image!');
+    }
+    throw new Error('Unable to upload profile image!');
   } catch (error) {
     getError(error, res);
   }
@@ -390,15 +393,4 @@ const logout = (req, res) => {
  * };
  */
 
-export {
-  addUser,
-  changeDetails,
-  changePassword,
-  deleteCustomerUser,
-  deleteUser,
-  getTeam,
-  getUserDetailsByEmail,
-  logout,
-  resendVerificationEmail,
-  uploadProfileImage
-};
+export { addUser, changeDetails, changePassword, deleteCustomerUser, deleteUser, getTeam, getUserDetailsByEmail, logout, resendVerificationEmail, uploadProfileImage };

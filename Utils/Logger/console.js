@@ -13,7 +13,7 @@ const overrideInfo = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.blue('INFO:   '), fileName, ...e]);
+      log.apply(console, [`[${new Date().toLocaleString()}]`, chalk.blue('INFO:   '), fileName, ...e]);
     }
   };
 };
@@ -30,7 +30,7 @@ const overrideWarn = () => {
   } catch (error) {
     console.warn = (...e) => {
       const fileName = getFileNameFromError(error);
-      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.yellow('WARN:   '), fileName, ...e]);
+      log.apply(console, [`[${new Date().toLocaleString()}]`, chalk.yellow('WARN:   '), fileName, ...e]);
     };
   }
 };
@@ -47,7 +47,7 @@ const overrideError = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.red('ERROR:  '), fileName, ...e]);
+      log.apply(console, [`[${new Date().toLocaleString()}]`, chalk.red('ERROR:  '), fileName, ...e]);
     }
   };
 };
@@ -65,7 +65,7 @@ const overrideDebug = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.magenta('DEBUG:  '), fileName, ...e]);
+      log.apply(console, [`[${new Date().toLocaleString()}]`, chalk.magenta('DEBUG:  '), fileName, ...e]);
     }
   };
 };
@@ -84,7 +84,7 @@ const overrideSuccess = () => {
       throw new Error();
     } catch (error) {
       const fileName = getFileNameFromError(error);
-      log.apply(console, [ `[${new Date().toLocaleString()}]`, chalk.green('SUCCESS:'), fileName, ...e]);
+      log.apply(console, [`[${new Date().toLocaleString()}]`, chalk.green('SUCCESS:'), fileName, ...e]);
     }
   };
 };
@@ -100,7 +100,6 @@ const overrideConsole = () => {
 export default overrideConsole;
 
 const getFileNameFromError = (error) => {
-  const str = `[${error.stack.split('\n')[2].split('/').at(-1).replace(/\)/, '')}]`.substring(0,30)
-  const fixedStr = str + new Array(31 - str.length).fill('\xa0').join('')
-  return fixedStr
+  const str = `[${error.stack.split('\n')[2].split('/').at(-1).replace(/\)/, '')}]`.substring(0, 30);
+  return str + Array(31 - str.length).fill('\xa0').join('');
 };

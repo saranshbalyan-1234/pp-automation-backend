@@ -54,4 +54,3 @@ export const createdReport = async (req, res) => {
     getError(error, res);
   }
 };
-

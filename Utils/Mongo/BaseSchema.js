@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
 
-const BaseSchema = (schemaDefinition, schemaOptions) => {
-  const schema = new mongoose.Schema({
-    ...schemaDefinition
-  }, {
-    optimisticConcurrency: true,
-    strict: 'throw',
-    timestamps:true,
-    ...schemaOptions
-  });
-
-  return schema;
-};
+const BaseSchema = (schemaDefinition, schemaOptions) =>
+  new mongoose.Schema(
+    {
+      ...schemaDefinition
+    },
+    {
+      optimisticConcurrency: true,
+      strict: 'throw',
+      timestamps: true,
+      ...schemaOptions
+    }
+  );
 export default BaseSchema;

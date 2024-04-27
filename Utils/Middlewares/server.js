@@ -30,7 +30,6 @@ const setupRateLimiter = (app) => {
   app.set('trust proxy', true);
   console.log(`Rate Limiter is turned ON with ${process.env.RATE_LIMIT_WINDOW}:${process.env.RATE_LIMIT}`);
   const limiter = rateLimit({
-
     // Draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
     legacyHeaders: false,
 

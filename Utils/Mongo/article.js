@@ -1,4 +1,4 @@
-import BaseSchema from './BaseSchema.js';
+import BaseSchema from '#utils/Mongo/BaseSchema.js';
 
 const UserSchema = BaseSchema({
   name: {
@@ -7,5 +7,5 @@ const UserSchema = BaseSchema({
   }
 });
 
-// const model = mongoose.model('saranshes', UserSchema);
+// Const model = mongoose.model('saranshes', UserSchema);
 export default UserSchema;

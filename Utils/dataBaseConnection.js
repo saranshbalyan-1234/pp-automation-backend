@@ -86,7 +86,8 @@ const sequelize = await createDBConnection({
 });
 
 const db = {
-  Sequelize, sequelize
+  Sequelize,
+  sequelize
 };
 
 db.sequelize.dialect.supports.schemas = true;

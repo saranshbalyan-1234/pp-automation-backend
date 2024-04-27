@@ -4,21 +4,25 @@
  * import errorContstants from "#constants/error.js";
  * import pkg from "jsonwebtoken";
  */
-import {getTenantDB} from '#utils/Mongo/mongoConnection.js'
+import { getTenantDB } from '#utils/Mongo/mongoConnection.js';
 
 const defaultMiddleware = () => (req, _res, next) => {
-    req.models = getTenantDB().models;
-  // req.user = {
-  //   database: process.env.DATABASE_PREFIX+ process.env.DATABASE_NAME,
-  //   tenant: 'master'
-  // };
+  req.models = getTenantDB().models;
+  /*
+   * Req.user = {
+   *   Database: process.env.DATABASE_PREFIX+ process.env.DATABASE_NAME,
+   *   Tenant: 'master'
+   * };
+   */
 
-  // const db = mongoose.connection.useDb(`${process.env.DATABASE_PREFIX+req.user.tenant}`, {
-  //   // `useCache` tells Mongoose to cache connections by database name, so
-  //   // `mongoose.connection.useDb('foo', { useCache: true })` returns the
-  //   // same reference each time.
-  //   useCache: true
-  // });
+  /*
+   * Const db = mongoose.connection.useDb(`${process.env.DATABASE_PREFIX+req.user.tenant}`, {
+   *   // `useCache` tells Mongoose to cache connections by database name, so
+   *   // `mongoose.connection.useDb('foo', { useCache: true })` returns the
+   *   // same reference each time.
+   *   UseCache: true
+   * });
+   */
 
   next();
 };
