@@ -101,5 +101,10 @@ export default overrideConsole;
 
 const getFileNameFromError = (error) => {
   const str = `[${error.stack.split('\n')[2].split('/').at(-1).replace(/\)/, '')}]`.substring(0, 30);
-  return str + Array(31 - str.length).fill('\xa0').join('');
+  return (
+    str +
+    Array(31 - str.length)
+      .fill('\xa0')
+      .join('')
+  );
 };

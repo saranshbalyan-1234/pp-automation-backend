@@ -12,14 +12,14 @@ const setupTimeout = (app) => {
       console.error('Request has timed out.', req);
       res.status(408).json({ error: errorContstants.TIMEOUT });
       res.json =
-                res.send =
-                res.sendFile =
-                res.jsonP =
-                res.end =
-                res.sendStatus =
-                    function sendStatus () {
-                      return this;
-                    };
+        res.send =
+        res.sendFile =
+        res.jsonP =
+        res.end =
+        res.sendStatus =
+          function sendStatus () {
+            return this;
+          };
     });
     next();
   });

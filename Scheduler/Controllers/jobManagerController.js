@@ -63,12 +63,12 @@ export const updateJobManagerById = async (req, res) => {
         const { host, port, dialect, user, password, db: database } = connection;
         if (
           (host && port && dialect && user && password) ||
-                    prevConnectionData.host !== host ||
-                    prevConnectionData.port !== port ||
-                    prevConnectionData.dialect !== dialect ||
-                    prevConnectionData.user !== user ||
-                    prevConnectionData.password !== password ||
-                    prevConnectionData.db !== database
+          prevConnectionData.host !== host ||
+          prevConnectionData.port !== port ||
+          prevConnectionData.dialect !== dialect ||
+          prevConnectionData.user !== user ||
+          prevConnectionData.password !== password ||
+          prevConnectionData.db !== database
         ) {
           console.log('New Connection Found');
           deleteFromConnectionPool(`${req.user.tenant}_${prevJobManager.dataValues.id}`);
