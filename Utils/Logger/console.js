@@ -99,4 +99,8 @@ const overrideConsole = () => {
 
 export default overrideConsole;
 
-const getFileNameFromError = (error) => `[${error.stack.split('\n')[2].split('/').at(-1).replace(/\)/, '')}]`;
+const getFileNameFromError = (error) => {
+  const str = `[${error.stack.split('\n')[2].split('/').at(-1).replace(/\)/, '')}]`.substring(0,30)
+  const fixedStr = str + new Array(31 - str.length).fill('\xa0').join('')
+  return fixedStr
+};

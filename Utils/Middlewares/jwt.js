@@ -4,6 +4,7 @@ import errorContstants from '#constants/error.js';
 import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
 import { extractToken } from '#utils/jwt.js';
+import {getTenantDB} from '#utils/Mongo/mongoConnection.js'
 const { verify } = pkg;
 export const validateToken = () => (req, res, next) => {
   try {
@@ -18,7 +19,8 @@ export const validateToken = () => (req, res, next) => {
       delete temp.iat;
       delete temp.exp;
       req.user = temp;
-      req.database = process.env.DATABASE_PREFIX + temp.tenant;
+      // req.database = process.env.DATABASE_PREFIX + temp.tenant;
+      req.models = getTenantDB(process.env.DATABASE_PREFIX + temp.tenant).models;
       next();
     }
   } catch (e) {

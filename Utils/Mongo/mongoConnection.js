@@ -11,7 +11,7 @@ const clientOption = {
   minPoolSize:1
 };
 const connectionsObj = {}
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 
 // GLOBAL PLUGINS
 mongoose.plugin(autoIncrementV)
@@ -24,9 +24,9 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-export const createDbConnection = (DB_URL, tenant = process.env.DATABASE_PREFIX+process.env.DATABASE_NAME) => {
+export const createDbConnection = (DB_URL='', tenant = process.env.DATABASE_PREFIX+process.env.DATABASE_NAME) => {
   try {
-    const conn = mongoose.createConnection(DB_URL, clientOption);
+    const conn = mongoose.createConnection(DB_URL.at(-1)=="/"? DB_URL:`${DB_URL}/`+ tenant, clientOption);
     registerAllSchema(conn)
     connectionEvents(conn)
     connectionsObj[tenant] = conn
