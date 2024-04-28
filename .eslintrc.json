@@ -54,7 +54,9 @@
         "sonarjs/cognitive-complexity":"off",
         "no-underscore-dangle":"off",
         "no-invalid-this":"off",
-        "func-call-spacing": "off",
+        "new-cap":"off",
+        "prefer-named-capture-group":"off",
+        "no-useless-escape":"off",
         "sort-imports": ["error", {
             "ignoreCase": true,
             "ignoreDeclarationSort": true,

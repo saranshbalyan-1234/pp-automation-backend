@@ -17,24 +17,24 @@ overrideConsole();
 createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
 app.use('/saransh', async (req, res) => {
   try {
-    /*
-     *  Const db= createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
-     * Const article = new db.models.createConnection({  name: 'saransh' });
-     * Await article.save();
-     */
+    const db = createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
+    const article = new db.models.customers(req.query);
+    await article.save();
 
-    const article = await req.models.createConnection.findOneAndUpdate(
-      { name: 'saransh' },
-      { name: 'saransh' },
-      {
-        new: true
-      }
-    );
+    /*
+     * Const article = await req.models.createConnection.findOneAndUpdate(
+     *   { name: 'saransh' },
+     *   { name: 'saransh' },
+     *   {
+     *     new: true
+     *   }
+     * );
+     */
 
     return res.status(200).json(article);
   } catch (err) {
     console.log(err);
-    return res.status(200).json(err);
+    return res.status(400).json(err);
   }
 });
 

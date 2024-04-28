@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import autopopulate from 'mongoose-autopopulate';
 
+import CustomerSchema from '../../User/Models/Customer.schema.js';
 import ArticleModel from './article.js';
 import autoIncrementV from './Plugins/autoIncrementV.js';
 const clientOption = {
@@ -39,6 +40,7 @@ export const createDbConnection = (DB_URL = '', tenant = process.env.DATABASE_PR
 
 const registerAllSchema = (db) => {
   db.model('createConnection', ArticleModel);
+  db.model('customers', CustomerSchema);
 };
 const connectionEvents = (conn) => {
   conn.on('connected', () => console.success('connected'));
