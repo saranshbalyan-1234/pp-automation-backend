@@ -1,10 +1,10 @@
 import pkg from 'jsonwebtoken';
 
 import errorContstants from '#constants/error.js';
+import { getTenantDB } from '#root/mongoConnection.js';
 import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
 import { extractToken } from '#utils/jwt.js';
-import { getTenantDB } from '#utils/Mongo/mongoConnection.js';
 const { verify } = pkg;
 export const validateToken = () => (req, res, next) => {
   try {

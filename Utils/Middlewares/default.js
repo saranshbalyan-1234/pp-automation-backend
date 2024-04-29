@@ -4,7 +4,7 @@
  * import errorContstants from "#constants/error.js";
  * import pkg from "jsonwebtoken";
  */
-import { getTenantDB } from '#utils/Mongo/mongoConnection.js';
+import { getTenantDB } from '#root/mongoConnection.js';
 
 const defaultMiddleware = () => (req, _res, next) => {
   req.models = getTenantDB().models;

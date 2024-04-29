@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
 import autopopulate from 'mongoose-autopopulate';
 
-import CustomerSchema from '../../User/Models/Customer.schema.js';
-import ArticleModel from './article.js';
-import autoIncrementV from './Plugins/autoIncrementV.js';
+import { getDirectories } from '#utils/file.js';
+
 const clientOption = {
   /*
    * SocketTimeoutMS: 30000,
@@ -15,9 +14,22 @@ const clientOption = {
 const connectionsObj = {};
 // Mongoose.set('debug', true);
 
-// GLOBAL PLUGINS
-mongoose.plugin(autoIncrementV);
-mongoose.plugin(autopopulate);
+const registerAllPlugins = () => {
+  mongoose.plugin(autopopulate);
+  getDirectories('.', 'plugin', (err, res) => {
+    if (err) {
+      console.e('Error', err);
+    } else {
+      res.forEach(async element => {
+        const schema = await import(element);
+        const defaultFile = schema.default;
+        mongoose.plugin(defaultFile);
+      });
+    }
+  });
+};
+
+registerAllPlugins();
 
 // If the Node process ends, close the Mongoose connection
 process.on('SIGINT', () => {
@@ -39,9 +51,21 @@ export const createDbConnection = (DB_URL = '', tenant = process.env.DATABASE_PR
 };
 
 const registerAllSchema = (db) => {
-  db.model('createConnection', ArticleModel);
-  db.model('customers', CustomerSchema);
+  getDirectories('.', 'schema', (err, res) => {
+    if (err) {
+      console.e('Error', err);
+    } else {
+      res.forEach(async element => {
+        const schema = await import(element);
+        const defaultFile = schema.default;
+        const tempAr = element.split('.');
+        const name = tempAr[tempAr.length - 3].split('/')[tempAr.length - 1];
+        db.model(name.toLowerCase(), defaultFile);
+      });
+    }
+  });
 };
+
 const connectionEvents = (conn) => {
   conn.on('connected', () => console.success('connected'));
   conn.on('open', () => console.log('open'));

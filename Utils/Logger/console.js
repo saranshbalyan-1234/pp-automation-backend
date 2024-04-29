@@ -7,7 +7,7 @@ const overrideInfo = () => {
     };
   }
 
-  const { log } = console;
+  const log = console.info;
   console.log = (...e) => {
     try {
       throw new Error();
@@ -24,7 +24,7 @@ const overrideWarn = () => {
       // Do nothing.
     };
   }
-  const log = console.warn;
+  const log = console.info;
   try {
     throw new Error();
   } catch (error) {
@@ -41,7 +41,7 @@ const overrideError = () => {
       // Do nothing.
     };
   }
-  const log = console.error;
+  const log = console.info;
   console.error = (...e) => {
     try {
       throw new Error();
@@ -59,7 +59,7 @@ const overrideDebug = () => {
     };
   }
 
-  const log = console.debug;
+  const log = console.info;
   console.debug = (...e) => {
     try {
       throw new Error();

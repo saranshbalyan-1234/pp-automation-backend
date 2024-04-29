@@ -5,9 +5,9 @@ import helmet from 'helmet';
 
 import errorContstants from '#constants/error.js';
 import defaultMiddleware from '#middlewares/default.js';
-// Import registerRoutes from '#routes/index.js';
+import { createDbConnection } from '#root/mongoConnection.js';
+import registerRoutes from '#routes/index.js';
 import overrideConsole from '#utils/Logger/console.js';
-import { createDbConnection } from '#utils/Mongo/mongoConnection.js';
 // Import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 
 const app = express();
@@ -17,23 +17,24 @@ overrideConsole();
 createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
 app.use('/saransh', async (req, res) => {
   try {
-    const db = createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
-    const article = new db.models.customers(req.query);
-    await article.save();
-
-    /*
-     * Const article = await req.models.createConnection.findOneAndUpdate(
-     *   { name: 'saransh' },
-     *   { name: 'saransh' },
-     *   {
-     *     new: true
-     *   }
-     * );
-     */
+    // console.log('asransh');
+    // const article = new req.models.customers(req.query);
+    // console.log('asransh');
+    // await article.save();
+    // console.log('asransh');
+    
+     const article = await req.models.customers.findOneAndUpdate(
+        { tenant: 'saransh' },
+        { tenant: 'saransh' },
+        {
+          new: true
+        }
+      );
+     
 
     return res.status(200).json(article);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(400).json(err);
   }
 });
@@ -58,7 +59,7 @@ app.use(fileupload());
  */
 
 /*
- * SetupCors(app);
+ * setupCors(app);
  * setupResponseInterceptor(app);
  * setupErrorInterceptor(app);
  * setupTimeout(app);
@@ -67,6 +68,7 @@ app.use(fileupload());
  * registerRoutes(app);
  * setupValidationErrorInterceptor(app);
  */
+registerRoutes(app);
 
 app.use((_req, res) => res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND }));
 
