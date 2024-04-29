@@ -17,14 +17,11 @@ overrideConsole();
 createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
 app.use('/saransh', async (req, res) => {
   try {
-    // console.log('asransh');
-    // const article = new req.models.customers(req.query);
-    // console.log('asransh');
+    // const article = new req.models.customer(req.query);
     // await article.save();
-    // console.log('asransh');
     
-     const article = await req.models.customers.findOneAndUpdate(
-        { tenant: 'saransh' },
+     const article = await req.models.customer.findOneAndUpdate(
+        { tenant: 'saranshs' },
         { tenant: 'saransh' },
         {
           new: true
