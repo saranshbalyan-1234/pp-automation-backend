@@ -40,7 +40,7 @@ process.on('SIGINT', () => {
 
 export const createDbConnection = (DB_URL = '', tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) => {
   try {
-    const conn = mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL+tenant : `${DB_URL}/${tenant}`, clientOption);
+    const conn = mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, clientOption);
     registerAllSchema(conn);
     connectionEvents(conn);
     connectionsObj[tenant] = conn;
@@ -59,7 +59,8 @@ const registerAllSchema = (db) => {
         const schema = await import(element);
         const defaultFile = schema.default;
         const tempAr = element.split('.');
-        const name = tempAr[tempAr.length - 3].split('/')[tempAr.length - 1];
+        const tempAr1 = tempAr[tempAr.length - 3].split('/');
+        const name = tempAr1[tempAr1.length - 1];
         db.model(name.toLowerCase(), defaultFile);
       });
     }

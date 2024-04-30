@@ -6,8 +6,9 @@ import helmet from 'helmet';
 import errorContstants from '#constants/error.js';
 import defaultMiddleware from '#middlewares/default.js';
 import { createDbConnection } from '#root/mongoConnection.js';
-import registerRoutes from '#routes/index.js';
 import overrideConsole from '#utils/Logger/console.js';
+
+import registerRoutes from './registerRoutes.js';
 // Import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 
 const app = express();
@@ -17,17 +18,18 @@ overrideConsole();
 createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
 app.use('/saransh', async (req, res) => {
   try {
-    // const article = new req.models.customer(req.query);
-    // await article.save();
-    
-     const article = await req.models.customer.findOneAndUpdate(
-        { tenant: 'saranshs' },
-        { tenant: 'saransh' },
-        {
-          new: true
-        }
-      );
-     
+    /*
+     * const article = new req.models.customer(req.query);
+     * await article.save();
+     */
+
+    const article = await req.models.customer.findOneAndUpdate(
+      { tenant: 'saranshs' },
+      { tenant: 'saransh' },
+      {
+        new: true
+      }
+    );
 
     return res.status(200).json(article);
   } catch (err) {
