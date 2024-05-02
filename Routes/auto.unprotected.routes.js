@@ -3,7 +3,7 @@ import express from 'express';
 // import { createdReport, dashboard } from '../Controllers/dashboardController.js';
 const Router = express.Router();
 
-Router.get('/', (_req, res) => {
+Router.get('/saransh', (_req, res) => {
   res.status(200).json('test routes');
 });
 

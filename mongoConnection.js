@@ -16,16 +16,12 @@ const connectionsObj = {};
 
 const registerAllPlugins = () => {
   mongoose.plugin(autopopulate);
-  getDirectories('.', 'plugin', (err, res) => {
-    if (err) {
-      console.e('Error', err);
-    } else {
-      res.forEach(async element => {
-        const schema = await import(element);
-        const defaultFile = schema.default;
-        mongoose.plugin(defaultFile);
-      });
-    }
+  const files = getDirectories('.', 'plugin');
+
+  files.forEach(async element => {
+    const schema = await import(element);
+    const defaultFile = schema.default;
+    mongoose.plugin(defaultFile);
   });
 };
 
@@ -51,19 +47,14 @@ export const createDbConnection = (DB_URL = '', tenant = process.env.DATABASE_PR
 };
 
 const registerAllSchema = (db) => {
-  getDirectories('.', 'schema', (err, res) => {
-    if (err) {
-      console.e('Error', err);
-    } else {
-      res.forEach(async element => {
-        const schema = await import(element);
-        const defaultFile = schema.default;
-        const tempAr = element.split('.');
-        const tempAr1 = tempAr[tempAr.length - 3].split('/');
-        const name = tempAr1[tempAr1.length - 1];
-        db.model(name.toLowerCase(), defaultFile);
-      });
-    }
+  const files = getDirectories('.', 'schema');
+  files.forEach(async element => {
+    const schema = await import(element);
+    const defaultFile = schema.default;
+    const tempAr = element.split('.');
+    const tempAr1 = tempAr[tempAr.length - 3].split('/');
+    const name = tempAr1[tempAr1.length - 1];
+    db.model(name.toLowerCase(), defaultFile);
   });
 };
 

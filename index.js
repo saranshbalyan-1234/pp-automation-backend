@@ -3,7 +3,6 @@ import express from 'express';
 import fileupload from 'express-fileupload';
 import helmet from 'helmet';
 
-import errorContstants from '#constants/error.js';
 import defaultMiddleware from '#middlewares/default.js';
 import { createDbConnection } from '#root/mongoConnection.js';
 import overrideConsole from '#utils/Logger/console.js';
@@ -12,31 +11,11 @@ import registerRoutes from './registerRoutes.js';
 // Import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 
 const app = express();
+
 app.use(defaultMiddleware());
 
 overrideConsole();
 createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
-app.use('/saransh', async (req, res) => {
-  try {
-    /*
-     * const article = new req.models.customer(req.query);
-     * await article.save();
-     */
-
-    const article = await req.models.customer.findOneAndUpdate(
-      { tenant: 'saranshs' },
-      { tenant: 'saransh' },
-      {
-        new: true
-      }
-    );
-
-    return res.status(200).json(article);
-  } catch (err) {
-    console.error(err);
-    return res.status(400).json(err);
-  }
-});
 
 if (process.env.PRINT_ENV === 'true') {
   console.debug('======================ENV======================');
@@ -69,7 +48,7 @@ app.use(fileupload());
  */
 registerRoutes(app);
 
-app.use((_req, res) => res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND }));
+// app.use((_req, res) => res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND }));
 
 app.listen(process.env.PORT, () => {
   console.success(`Server started on PORT ${process.env.PORT} PROCESS_ID ${process.pid}`);
