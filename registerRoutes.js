@@ -15,6 +15,7 @@ const getRoutes = async (app, type) => {
     const name = tempAr1[tempAr1.length - 1];
     app.use(`/${name}`, defaultFile);
   };
+  console.log(type,'registred')
 };
 
 const registerUnprotectedRoutes = async (app) => {
