@@ -46,7 +46,7 @@ app.use(fileupload());
  * registerRoutes(app);
  * setupValidationErrorInterceptor(app);
  */
-registerRoutes(app);
+await registerRoutes(app);
 
 // app.use((_req, res) => res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND }));
 
