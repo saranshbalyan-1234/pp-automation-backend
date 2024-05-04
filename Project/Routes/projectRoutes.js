@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { validatePermission, validateUserProject } from '#middlewares/permissions.js';
+import { validatePermission, validateUserProject } from '#Middlewares/permissions.middleware.js';
 
 import { addMember, addProject, deleteMember, deleteProject, editProject, getMyProject, getProjectById } from '../Controllers/projectController.js';
 const Router = express.Router();

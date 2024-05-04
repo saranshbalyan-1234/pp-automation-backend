@@ -1,7 +1,7 @@
 import express from 'express';
 import { validate } from 'express-validation';
 
-import { validateCustomerAdmin, validatePermission } from '#middlewares/permissions.js';
+import { validateCustomerAdmin, validatePermission } from '#Middlewares/permissions.middleware.js';
 
 import {
   addUser,

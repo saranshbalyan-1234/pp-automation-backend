@@ -12,7 +12,7 @@ const clientOption = {
   minPoolSize: 1
 };
 const connectionsObj = {};
-// Mongoose.set('debug', true);
+mongoose.set('debug', true);
 
 const registerAllPlugins = () => {
   mongoose.plugin(autopopulate);
@@ -34,10 +34,10 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-export const createDbConnection = (DB_URL = '', tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) => {
+export const createDbConnection = async (DB_URL = '', tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) => {
   try {
     const conn = mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, clientOption);
-    registerAllSchema(conn);
+    await registerAllSchema(conn);
     connectionEvents(conn);
     connectionsObj[tenant] = conn;
     return conn;
@@ -46,16 +46,19 @@ export const createDbConnection = (DB_URL = '', tenant = process.env.DATABASE_PR
   }
 };
 
-const registerAllSchema = (db) => {
+const registerAllSchema = async (db) => {
   const files = getDirectories('.', 'schema');
-  files.forEach(async element => {
+  for (let i = 0; i < files.length; i++) {
+    const element = files[i];
     const schema = await import(element);
     const defaultFile = schema.default;
+
     const tempAr = element.split('.');
     const tempAr1 = tempAr[tempAr.length - 3].split('/');
     const name = tempAr1[tempAr1.length - 1];
+    
     db.model(name.toLowerCase(), defaultFile);
-  });
+  };
 };
 
 const connectionEvents = (conn) => {

@@ -19,8 +19,8 @@ export const validateToken = () => (req, res, next) => {
       delete temp.iat;
       delete temp.exp;
       req.user = temp;
-      // Req.database = process.env.DATABASE_PREFIX + temp.tenant;
-      req.models = getTenantDB(process.env.DATABASE_PREFIX + temp.tenant).models;
+      req.tenant = temp.tenant
+      req.models = getTenantDB(temp.tenant).models;
       next();
     }
   } catch (e) {

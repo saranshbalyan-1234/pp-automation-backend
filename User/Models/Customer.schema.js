@@ -21,8 +21,7 @@ const Customer = BaseSchema({
     lowercase: true,
     required: 'Tenant is required',
     trim: true,
-    type: Array,
-    unique: true
+    type: Array
   }
 });
 

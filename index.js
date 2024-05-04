@@ -3,7 +3,7 @@ import express from 'express';
 import fileupload from 'express-fileupload';
 import helmet from 'helmet';
 
-import defaultMiddleware from '#middlewares/default.js';
+import defaultMiddleware from '#middlewares/default.middleware.js';
 import { createDbConnection } from '#root/mongoConnection.js';
 import overrideConsole from '#utils/Logger/console.js';
 
@@ -15,7 +15,7 @@ const app = express();
 app.use(defaultMiddleware());
 
 overrideConsole();
-createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
+const conn = await createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
 
 if (process.env.PRINT_ENV === 'true') {
   console.debug('======================ENV======================');
@@ -46,9 +46,11 @@ app.use(fileupload());
  * registerRoutes(app);
  * setupValidationErrorInterceptor(app);
  */
-await registerRoutes(app);
 
-// app.use((_req, res) => res.status(404).json({ error: errorContstants.ENDPOINT_NOT_FOUND }));
+conn.models.customer.findOneAndUpdate({ 'email': "superadmin@mail.com" },{ 'email': 'superadmin@mail.com', tenant: process.env.DATABASE_PREFIX+process.env.DATABASE_NAME } , {upsert: true })
+conn.models.user.findOneAndUpdate({ email: "superadmin@mail.com" }, { email: 'superadmin@mail.com', name: 'Super Admin', password: 'superAdmin' }, { upsert: true })
+
+await registerRoutes(app);
 
 app.listen(process.env.PORT, () => {
   console.success(`Server started on PORT ${process.env.PORT} PROCESS_ID ${process.pid}`);
