@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import defaultMiddleware from '#middlewares/default.middleware.js';
 import { createDbConnection } from '#root/mongoConnection.js';
 import overrideConsole from '#utils/Logger/console.js';
-
+import seedSuperAdmin from '#user/Seed/superadmin.js'
 import registerRoutes from './registerRoutes.js';
 // Import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 
@@ -47,9 +47,7 @@ app.use(fileupload());
  * setupValidationErrorInterceptor(app);
  */
 
-conn.models.customer.findOneAndUpdate({ 'email': "superadmin@mail.com" },{ 'email': 'superadmin@mail.com', tenant: process.env.DATABASE_PREFIX+process.env.DATABASE_NAME } , {upsert: true })
-conn.models.user.findOneAndUpdate({ email: "superadmin@mail.com" }, { email: 'superadmin@mail.com', name: 'Super Admin', password: 'superAdmin' }, { upsert: true })
-
+await seedSuperAdmin(conn)
 await registerRoutes(app);
 
 app.listen(process.env.PORT, () => {

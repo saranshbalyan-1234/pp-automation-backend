@@ -33,26 +33,6 @@ const deleteCustomer = async (email) => {
   }
 };
 
-const syncDatabase = async (database, force = false, alter = false) => {
-  try {
-    console.log('Please wait, while models are being synced');
-    const models = Object.values(db.sequelize.models);
-    const synced = [];
-    for (let i = 0; i < models.length; i++) {
-      const model = models[i];
-      if (model.name === 'customers' || model.name === 'unverifieds') continue;
-      console.debug(`synced ${model.name} in ${database}`);
-      synced.push(model.name);
-      await model.schema(database).sync({ alter, force });
-    }
-    await createSuperAdmin();
-    console.success('MODEL SYNC COMPLETED');
-    return synced;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
-
 const getAllTenant = async () => {
   try {
     // Customer
@@ -75,30 +55,6 @@ const getCachedKeys = () => {
   }
 };
 
-const createSuperAdmin = async () => {
-  const email = 'superadmin@mail.com';
-  const password = 'superadmin';
-  const name = 'Super Admin';
-  try {
-    const Customer = db.customers;
-    const User = db.users;
-    await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).create({
-      admin: 2,
-      email,
-      tenantName: process.env.DATABASE_NAME
-    });
-    await User.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).create({
-      email,
-      name,
-      password,
-      verifiedAt: moment()
-    });
-    console.success('Super admin Created successfully');
-  } catch (e) {
-    console.error('SuperAdmin Already Exist', e);
-  }
-};
-
 const dropDatabase = async (database) => {
   if (process.env.MULTI_TENANT === 'false') return true;
 
@@ -114,4 +70,4 @@ const dropDatabase = async (database) => {
     return false;
   }
 };
-export { createSuperAdmin, deleteCustomer, dropDatabase, getAllTenant, getCachedKeys, syncDatabase };
+export { deleteCustomer, dropDatabase, getAllTenant, getCachedKeys };

@@ -9,7 +9,7 @@ import getError from '#utils/error.js';
 import { createToken, getTokenError } from '#utils/jwt.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
 
-import { dropDatabase, syncDatabase } from '../Service/database.js';
+import { dropDatabase } from '../Service/database.js';
 import { loginWithCredentals } from '../Service/user.js';
 const { verify } = pkg;
 
@@ -115,7 +115,6 @@ const verifyCustomer = async (req, res) => {
                 console.log(err);
                 throw new Error(errorContstants.CUSTOMER_DATABASE_ALREADY_EXIST);
               });
-              await syncDatabase(database);
               createBucket(tenantName);
             }
 
