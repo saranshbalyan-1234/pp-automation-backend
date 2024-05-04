@@ -18,6 +18,7 @@ const errorContstants = {
   TIMEOUT: 'Timeout!',
   UNABLE_TO_DELETE_MASTER_DATABASE: 'Unable To Delete Master Database!',
   UNAUTHORIZED: 'Unauthorized!',
+  UNAUTHORIZED_TENANT: 'Unauthorized Tenant!',
   UNAUTHORIZED_ORIGIN: 'Unauthorized Origin'
 };
 export default errorContstants;
