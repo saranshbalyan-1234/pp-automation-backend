@@ -341,7 +341,7 @@ const logout = (req, res) => {
    *  #swagger.security = [{"apiKeyAuth": []}]
    */
   try {
-    if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${req.user.tenant}_${req.user.email}`);
+    if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${req.user.email}`);
     return res.status(200).json({ message: 'Logout Successfull' });
   } catch (error) {
     getError(error, res);

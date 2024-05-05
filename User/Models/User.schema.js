@@ -1,6 +1,7 @@
-import BaseSchema from '#utils/Mongo/BaseSchema.js';
+import { Schema } from 'mongoose';
 
-const tenant = BaseSchema({
+import BaseSchema from '#utils/Mongo/BaseSchema.js';
+const tenantSchema = BaseSchema({
   name: {
     lowercase: true,
     required: 'Tenant is required',
@@ -16,6 +17,13 @@ const tenant = BaseSchema({
     type: String
   }
 }, { _id: false });
+
+/*
+ * const defaultRolesSchema = BaseSchema({
+ *     roleId: { type: Schema.Types.ObjectId, ref: 'role' },
+ *     permissions: [permissionsSchema]
+ * }, { _id: false })
+ */
 
 const User = BaseSchema({
   defaultProjectId: {
@@ -44,6 +52,7 @@ const User = BaseSchema({
   profileImage: {
     type: String
   },
+  roles: [{ ref: 'roles', type: Schema.Types.ObjectId }],
   status: {
     default: 'active',
     enum: ['active', 'inactive', 'blocked'],
@@ -52,7 +61,7 @@ const User = BaseSchema({
     trim: true,
     type: String
   },
-  tenant: [tenant],
+  tenant: [tenantSchema],
   verifiedAt: {
     required: 'Verified date is required',
     type: Date

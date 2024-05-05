@@ -12,7 +12,7 @@ export const validateToken = () => (req, res, next) => {
     if (!token) return res.status(401).json({ error: errorContstants.ACCESS_TOKEN_NOT_FOUND });
     const data = verify(token, process.env.JWT_ACCESS_SECRET);
     if (data) {
-      const tokenCheck = handleCachedTokenCheck(data.email, data.tenant, token);
+      const tokenCheck = handleCachedTokenCheck(data.email, token);
       if (!tokenCheck) return res.status(401).json({ error: errorContstants.NOT_AN_ACTIVE_SESSION });
 
       const temp = { ...data };
@@ -32,4 +32,4 @@ export const validateToken = () => (req, res, next) => {
   }
 };
 
-const handleCachedTokenCheck = (email, tenant, token) => !(process.env.JWT_ACCESS_CACHE && cache.get(`accesstoken_${tenant}_${email}`) !== token);
+const handleCachedTokenCheck = (email, token) => !(process.env.JWT_ACCESS_CACHE && cache.get(`accesstoken_${email}`) !== token);

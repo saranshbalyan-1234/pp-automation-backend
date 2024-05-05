@@ -49,8 +49,8 @@ const terminateSession = (req, res) => {
    *  #swagger.security = [{"apiKeyAuth": []}]
    */
   try {
-    const { tenant, email } = req.body;
-    if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${tenant}_${email}`);
+    const { email } = req.body;
+    if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${email}`);
     return res.status(200).json({ message: 'Session Terminated!' });
   } catch (error) {
     getError(error, res);
