@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { validateSuperAdmin } from '#Middlewares/permissions.middleware.js';
+import { validateSuperAdmin } from '#middlewares/permissions.middleware.js';
 
 import { deleteCustomerByAdmin, getAllSession, terminateSession } from '../Controllers/superAdminController.js';
 

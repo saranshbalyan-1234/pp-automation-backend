@@ -12,7 +12,7 @@ const clientOption = {
   minPoolSize: 1
 };
 const connectionsObj = {};
-mongoose.set('debug', true);
+mongoose.set('debug', false);
 
 const registerAllPlugins = () => {
   mongoose.plugin(autopopulate);
@@ -56,7 +56,7 @@ const registerAllSchema = async (db) => {
     const tempAr = element.split('.');
     const tempAr1 = tempAr[tempAr.length - 3].split('/');
     const name = tempAr1[tempAr1.length - 1];
-    
+
     db.model(name.toLowerCase(), defaultFile);
   };
 };

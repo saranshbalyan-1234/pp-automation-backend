@@ -8,7 +8,7 @@ import { getTenantDB } from '#root/mongoConnection.js';
 
 const defaultMiddleware = () => (req, _res, next) => {
   req.models = getTenantDB().models;
-  req.tenant= process.env.DATABASE_PREFIX+ process.env.DATABASE_NAME
+  req.tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME;
   /*
    * Req.user = {
    *   Database: process.env.DATABASE_PREFIX+ process.env.DATABASE_NAME,

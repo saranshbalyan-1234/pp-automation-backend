@@ -4,9 +4,11 @@ import fileupload from 'express-fileupload';
 import helmet from 'helmet';
 
 import defaultMiddleware from '#middlewares/default.middleware.js';
+import { setupErrorInterceptor, setupValidationErrorInterceptor } from '#middlewares/server.middleware.js';
 import { createDbConnection } from '#root/mongoConnection.js';
+import seedSuperAdmin from '#user/Seed/superadmin.seed.js';
 import overrideConsole from '#utils/Logger/console.js';
-import seedSuperAdmin from '#user/Seed/superadmin.js'
+
 import registerRoutes from './registerRoutes.js';
 // Import { scheduleInit } from "#scheduler/Service/schedulerService.js";
 
@@ -27,6 +29,7 @@ app.use(parser.json());
 app.use(parser.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(fileupload());
+await registerRoutes(app);
 
 // App.use(defaultMiddleware());
 
@@ -46,9 +49,9 @@ app.use(fileupload());
  * registerRoutes(app);
  * setupValidationErrorInterceptor(app);
  */
-
-await seedSuperAdmin(conn)
-await registerRoutes(app);
+setupValidationErrorInterceptor(app);
+setupErrorInterceptor(app);
+await seedSuperAdmin(conn);
 
 app.listen(process.env.PORT, () => {
   console.success(`Server started on PORT ${process.env.PORT} PROCESS_ID ${process.pid}`);

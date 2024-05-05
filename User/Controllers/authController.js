@@ -71,7 +71,7 @@ const login = async (req, res) => {
   try {
     const { email, password, rememberMe = false } = req.body;
 
-    const loggedInUser = await loginWithCredentals({ email, password, rememberMe });
+    const loggedInUser = await loginWithCredentals({ email, password, rememberMe, req });
     return res.status(200).json(loggedInUser);
   } catch (error) {
     getError(error, res);

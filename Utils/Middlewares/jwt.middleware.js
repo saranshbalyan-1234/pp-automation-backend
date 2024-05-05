@@ -23,7 +23,7 @@ export const validateToken = () => (req, res, next) => {
 
       //Check whether header tenant is assigned to user or not
       if (!temp.tenant.includes(req.tenant)) return res.status(401).json({ error: errorContstants.UNAUTHORIZED_TENANT });
-      
+
       req.models = getTenantDB(temp.tenant).models;
       next();
     }
