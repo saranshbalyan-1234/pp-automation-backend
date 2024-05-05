@@ -1,5 +1,22 @@
 import BaseSchema from '#utils/Mongo/BaseSchema.js';
 
+const tenant = BaseSchema({
+  name: {
+    lowercase: true,
+    required: 'Tenant is required',
+    trim: true,
+    type: String
+  },
+  type: {
+    default: 'user',
+    enum: ['user', 'admin', 'owner', 'superadmin'],
+    lowercase: true,
+    required: 'Type is required',
+    trim: true,
+    type: String
+  }
+}, { _id: false });
+
 const User = BaseSchema({
   defaultProjectId: {
     type: String
@@ -35,17 +52,8 @@ const User = BaseSchema({
     trim: true,
     type: String
   },
-  type: {
-    default: 'user',
-    enum: ['user', 'admin', 'owner', 'superadmin'],
-    lowercase: true,
-    required: 'Type is required',
-    trim: true,
-    type: String
-  },
+  tenant: [tenant],
   verifiedAt: {
-    default: Date.now,
-    immutable: true,
     required: 'Verified date is required',
     type: Date
   }
