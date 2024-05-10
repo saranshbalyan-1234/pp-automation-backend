@@ -1,19 +1,21 @@
 import BaseSchema from '#utils/Mongo/BaseSchema.js';
 
-const Unverified = BaseSchema({
+const customerSchema = BaseSchema({
+  blocked: {
+    default: false,
+    lowercase: true,
+    required: 'Blocked Status is required',
+    trim: true,
+    type: Boolean
+  },
   email: {
+    immutable: true,
     lowercase: true,
     match: [/^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$/, 'Enter valid email address'],
     required: 'Email address is required',
     trim: true,
     type: String,
     unique: true
-  },
-  name: {
-    lowercase: true,
-    required: 'Name is required',
-    trim: true,
-    type: String
   },
   password: {
     required: 'Password is required',
@@ -23,7 +25,14 @@ const Unverified = BaseSchema({
   tenant: {
     required: 'tenant is required',
     type: Array
-  }
+  },
+  superAdmin: {
+    default: false,
+    lowercase: true,
+    required: 'SuperAdmin is required',
+    trim: true,
+    type: Boolean
+  },
 });
 
-export default Unverified;
+export default customerSchema;

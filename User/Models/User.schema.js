@@ -1,33 +1,10 @@
 import { Schema } from 'mongoose';
 
 import BaseSchema from '#utils/Mongo/BaseSchema.js';
-const tenantSchema = BaseSchema({
-  name: {
-    lowercase: true,
-    required: 'Tenant is required',
-    trim: true,
-    type: String
-  },
-  type: {
-    default: 'user',
-    enum: ['user', 'admin', 'owner', 'superadmin'],
-    lowercase: true,
-    required: 'Type is required',
-    trim: true,
-    type: String
-  }
-}, { _id: false });
-
-/*
- * const defaultRolesSchema = BaseSchema({
- *     roleId: { type: Schema.Types.ObjectId, ref: 'role' },
- *     permissions: [permissionsSchema]
- * }, { _id: false })
- */
 
 const User = BaseSchema({
   defaultProjectId: {
-    type: String
+    type: Number
   },
   email: {
     immutable: true,
@@ -44,11 +21,6 @@ const User = BaseSchema({
     trim: true,
     type: String
   },
-  password: {
-    required: 'Password is required',
-    trim: true,
-    type: String
-  },
   profileImage: {
     type: String
   },
@@ -61,7 +33,14 @@ const User = BaseSchema({
     trim: true,
     type: String
   },
-  tenant: [tenantSchema],
+  type: {
+    default: 'user',
+    enum: ['user', 'admin', 'owner'],
+    lowercase: true,
+    required: 'Type is required',
+    trim: true,
+    type: String
+  },
   verifiedAt: {
     required: 'Verified date is required',
     type: Date
