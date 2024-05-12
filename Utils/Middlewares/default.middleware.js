@@ -12,9 +12,9 @@ const defaultMiddleware = () => async (req, _res, next) => {
     req.models = db.models;
     req.tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME;
 
-    const session = await db.startSession();
-    session.startTransaction();
-    req.session = session;
+    // const session = await db.startSession();
+    // session.startTransaction();
+    // req.session = session;
 
     next();
   } catch (err) {

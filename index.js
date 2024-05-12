@@ -4,7 +4,7 @@ import fileupload from 'express-fileupload';
 import helmet from 'helmet';
 
 import defaultMiddleware from '#middlewares/default.middleware.js';
-import { setupErrorInterceptor, setupValidationErrorInterceptor } from '#middlewares/server.middleware.js';
+import { setupErrorInterceptor, setupValidationErrorInterceptor,setupResponseInterceptor } from '#middlewares/server.middleware.js';
 import { createDbConnection } from '#root/mongoConnection.js';
 import seedSuperAdmin from '#user/Seed/superadmin.seed.js';
 import overrideConsole from '#utils/Logger/console.js';
@@ -17,6 +17,7 @@ const app = express();
 app.use(defaultMiddleware());
 
 overrideConsole();
+
 const conn = await createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
 
 if (process.env.PRINT_ENV === 'true') {
@@ -29,7 +30,6 @@ app.use(parser.json());
 app.use(parser.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(fileupload());
-await registerRoutes(app);
 
 // App.use(defaultMiddleware());
 
@@ -41,18 +41,18 @@ await registerRoutes(app);
 
 /*
  * setupCors(app);
- * setupResponseInterceptor(app);
  * setupErrorInterceptor(app);
  * setupTimeout(app);
  * setupRateLimiter(app);
  * morgalApiLogger(app);
- * registerRoutes(app);
- * setupValidationErrorInterceptor(app);
  */
-setupValidationErrorInterceptor(app);
-setupErrorInterceptor(app);
-// setupResponseInterceptor(app);
+
+setupResponseInterceptor(app);
+
 await seedSuperAdmin(conn);
+await registerRoutes(app);
+
+setupValidationErrorInterceptor(app);
 
 app.listen(process.env.PORT, () => {
   console.success(`Server started on PORT ${process.env.PORT} PROCESS_ID ${process.pid}`);
