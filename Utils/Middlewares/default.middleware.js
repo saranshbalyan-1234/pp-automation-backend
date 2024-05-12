@@ -6,26 +6,21 @@
  */
 import { getTenantDB } from '#root/mongoConnection.js';
 
-const defaultMiddleware = () => (req, _res, next) => {
-  req.models = getTenantDB().models;
-  req.tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME;
-  /*
-   * Req.user = {
-   *   Database: process.env.DATABASE_PREFIX+ process.env.DATABASE_NAME,
-   *   Tenant: 'master'
-   * };
-   */
+const defaultMiddleware = () => async (req, _res, next) => {
+  try {
+    const db = getTenantDB();
+    req.models = db.models;
+    req.tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME;
 
-  /*
-   * Const db = mongoose.connection.useDb(`${process.env.DATABASE_PREFIX+req.user.tenant}`, {
-   *   // `useCache` tells Mongoose to cache connections by database name, so
-   *   // `mongoose.connection.useDb('foo', { useCache: true })` returns the
-   *   // same reference each time.
-   *   UseCache: true
-   * });
-   */
+    const session = await db.startSession();
+    session.startTransaction();
+    req.session = session;
 
-  next();
+    next();
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 };
 
 export default defaultMiddleware;

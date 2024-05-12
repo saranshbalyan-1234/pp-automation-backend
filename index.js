@@ -51,6 +51,7 @@ await registerRoutes(app);
  */
 setupValidationErrorInterceptor(app);
 setupErrorInterceptor(app);
+// setupResponseInterceptor(app);
 await seedSuperAdmin(conn);
 
 app.listen(process.env.PORT, () => {

@@ -71,8 +71,10 @@ const setupCors = (app) => {
 
 const setupResponseInterceptor = (app) => {
   console.log('Response Interceptor is Turned ON');
-  app.use((req, res, next) => {
+  app.use(async (req, res, next) => {
+    await req.session.commitTransaction();
     const originalSend = res.send;
+
     res.send = function send (...args) {
       const errorObj = args[0];
       if (typeof errorObj === 'object' && errorObj.error) {
@@ -92,7 +94,7 @@ const setupResponseInterceptor = (app) => {
 
 const setupErrorInterceptor = (app) => {
   console.log('ERROR Interceptor is Turned ON');
-  app.use((err, req, res, next) => {
+  app.use(async (err, req, res, next) => {
     const errorObj = getErrorObj(req, res);
     const error = String(err);
     if (error === 'Error: Not allowed by CORS') {
@@ -100,6 +102,8 @@ const setupErrorInterceptor = (app) => {
         ...errorObj
       });
     } else if (error) {
+      await req.session.abortTransaction();
+      req.session.endSession();
       return res.status(403).json({
         error,
         errorObj

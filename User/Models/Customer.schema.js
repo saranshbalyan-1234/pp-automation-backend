@@ -22,10 +22,6 @@ const customerSchema = BaseSchema({
     trim: true,
     type: String
   },
-  tenant: {
-    required: 'tenant is required',
-    type: Array
-  },
   superAdmin: {
     default: false,
     lowercase: true,
@@ -33,6 +29,10 @@ const customerSchema = BaseSchema({
     trim: true,
     type: Boolean
   },
+  tenant: {
+    required: 'tenant is required',
+    type: Array
+  }
 });
 
 export default customerSchema;

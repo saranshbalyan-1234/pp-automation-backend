@@ -8,10 +8,10 @@ const seedSuperAdmin = async (conn) => {
     {
       email: superAdmin.email,
       password: superAdmin.password,
-      superAdmin:true
+      superAdmin: true
     },
     { upsert: true });
-  
+
   return console.success('super admin seeded');
 };
 
