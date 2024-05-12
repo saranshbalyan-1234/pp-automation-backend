@@ -47,7 +47,7 @@ export const createDBConnection = async (data) => {
 
     await sequelizenew
       .authenticate()
-      .then(() => console.success(`Database Connected: ${dialect} => ${host}:${port}`))
+      // .then(() => console.success(`Database Connected: ${dialect} => ${host}:${port}`))
       .catch((err) => {
         console.error('Sequalize Error');
         console.log(data);

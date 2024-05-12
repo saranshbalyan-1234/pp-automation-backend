@@ -35,7 +35,7 @@ const User = BaseSchema({
   },
   type: {
     default: 'user',
-    enum: ['user', 'admin', 'owner'],
+    enum: ['user', 'admin', 'issuer'],
     lowercase: true,
     required: 'Type is required',
     trim: true,

@@ -6,7 +6,7 @@ const UserProject = db.userProjects;
 
 const validatePermission = (permissionName, method) => async (req, res, next) => {
   try {
-    if (!req.user.customerAdmin) {
+    if (!(req.user.type=='issuer' ||req.user.type=='admin' )  ) {
       const allowed = await req.user.permissions.some((permission) => permissionName === permission.name && permission[method] === true);
       if (!allowed) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
     }
