@@ -1,9 +1,4 @@
-/*
- * Import { extractToken } from "../jwt.js";
- * import getError from "../sequelizeError.js";
- * import errorContstants from "#constants/error.js";
- * import pkg from "jsonwebtoken";
- */
+
 import { getTenantDB } from '#root/mongoConnection.js';
 
 const defaultMiddleware = () => async (req, _res, next) => {
@@ -12,9 +7,9 @@ const defaultMiddleware = () => async (req, _res, next) => {
     req.models = db.models;
     req.tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME;
 
-    // const session = await db.startSession();
-    // session.startTransaction();
-    // req.session = session;
+    const session = await db.startSession();
+    session.startTransaction();
+    req.session = session;
 
     next();
   } catch (err) {

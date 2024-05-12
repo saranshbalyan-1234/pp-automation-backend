@@ -10,7 +10,7 @@ import { createToken, getTokenError } from '#utils/jwt.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
 
 import { dropDatabase } from '../Service/database.js';
-import { loginWithCredentals } from '../Service/user.js';
+import { loginWithCredentals } from '../Service/user.service.js';
 const { verify } = pkg;
 
 // Main
@@ -29,6 +29,14 @@ const register = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
 
   try {
+
+   const t =  await req.models.customer.create([{ email: req.body.email ,password:req.body.email}], { session: req.session })
+console.log(t)
+throw new Error("saransh")
+    // await req.models.user.create({ email: req.body.email }, { session: req.session }).lean()
+    
+    return;
+
     await db.sequelize.transaction(async (transaction) => {
       const { name, email, password } = req.body;
 

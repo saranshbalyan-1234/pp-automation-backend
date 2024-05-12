@@ -4,7 +4,7 @@ import { Strategy as GitHubStrategy } from 'passport-github2';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
-import { loginWithCredentals } from './user.js';
+import { loginWithCredentals } from './user.service.js';
 
 /**
  * Sign in with Google.

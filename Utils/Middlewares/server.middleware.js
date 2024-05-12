@@ -72,16 +72,17 @@ const setupCors = (app) => {
 const setupResponseInterceptor = (app) => {
   console.log('Response Interceptor is Turned ON');
   app.use(async (req, res, next) => {
-    // await req.session.commitTransaction();
     const originalSend = res.send;
 
-    res.send = function send (...args) {
+    res.send = async function send (...args) {
       const errorObj = JSON.parse(args[0]);
       if (typeof errorObj === 'object' && errorObj.error) {
         errorObj.method = req.method;
         errorObj.path = req.url;
         errorObj.status = res.statusCode;
         args[0] = JSON.stringify(errorObj);
+      } else { 
+        await req.session.commitTransaction();
       }
       if (process.env.ENCRYPTION === 'true' && !(req.url.includes('decrypt') || req.url.includes('encrypt'))) args[0] = JSON.stringify(encryptWithAES(args[0]));
       // Console.log(result)
@@ -104,8 +105,10 @@ const setupErrorInterceptor = (app) => {
       });
     } else if (error) {
       console.debug("error")
-      // await req.session.abortTransaction();
-      // req.session.endSession();
+
+      await req.session.abortTransaction();
+      req.session.endSession();
+      
       return res.status(403).json({
         error,
         errorObj
@@ -120,6 +123,7 @@ const setupValidationErrorInterceptor = (app) => {
     const errorObj = getErrorObj(req, res);
     if (err instanceof ValidationError) {
       const error = err.details.body?.[0].message || err.details.params?.[0].message || err.details.query?.[0].message || err.details.headers?.[0].message;
+      console.error(error)
       return res.status(400).json({ error, ...errorObj });
     }
     next(err);
