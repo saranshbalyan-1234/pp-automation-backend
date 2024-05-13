@@ -29,12 +29,25 @@ const register = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
 
   try {
-
-   const t =  await req.models.customer.create([{ email: req.body.email ,password:req.body.email}], { session: req.session })
-console.log(t)
-throw new Error("saransh")
-    // await req.models.user.create({ email: req.body.email }, { session: req.session }).lean()
+    const { name, email, password } = req.body;
+    const tenant = [process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_PREFIX + process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')];
     
+    await req.models.customer.create(
+      [{ email, password, tenant }],
+      { session: req.session }
+    )
+
+    await req.models.unverified.create(
+      [{ email, name, password,tenant }],
+      { session: req.session }
+    );
+
+   await sendMail({ email, name }, 'customerRegister');
+
+    return res.status(200).json({
+      message: 'Registered successfuly, Please check email to verify account.'
+    });
+
     return;
 
     await db.sequelize.transaction(async (transaction) => {

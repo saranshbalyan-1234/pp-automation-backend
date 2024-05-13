@@ -12,7 +12,7 @@ const clientOption = {
   minPoolSize: 1
 };
 const connectionsObj = {};
-mongoose.set('debug', false);
+mongoose.set('debug', true);
 
 const registerAllPlugins = () => {
   mongoose.plugin(autopopulate);
@@ -34,8 +34,9 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-export const createDbConnection = async (DB_URL = '', tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) => {
+export const createDbConnection = async ( tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) => {
   try {
+    const DB_URL=process.env.DATABASE_URL
     const conn = mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, clientOption);
     await registerAllSchema(conn);
     connectionEvents(conn);

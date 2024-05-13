@@ -18,7 +18,7 @@ app.use(defaultMiddleware());
 
 overrideConsole();
 
-const conn = await createDbConnection('mongodb+srv://saransh:ysoserious@saransh.jvitvgq.mongodb.net');
+const conn = await createDbConnection();
 
 if (process.env.PRINT_ENV === 'true') {
   console.debug('======================ENV======================');
