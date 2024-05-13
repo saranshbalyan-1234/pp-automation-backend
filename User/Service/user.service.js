@@ -1,4 +1,4 @@
-import errorContstants from '#constants/error.constants.js';
+import errorContstants from '#constants/error.constant.js';
 import cache from '#utils/cache.js';
 import { createToken } from '#utils/jwt.js';
 

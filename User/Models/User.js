@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-import errorContstants from '#constants/error.constants.js';
+import errorContstants from '#constants/error.constant.js';
 export default (sequelize, DataTypes) =>
   sequelize.define(
     'users',

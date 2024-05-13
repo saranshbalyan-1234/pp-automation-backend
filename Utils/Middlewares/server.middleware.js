@@ -2,7 +2,7 @@ import cors from 'cors';
 import { rateLimit } from 'express-rate-limit';
 import { ValidationError } from 'express-validation';
 
-import errorContstants from '#constants/error.constants.js';
+import errorContstants from '#constants/error.constant.js';
 import { encryptWithAES } from '#encryption/Service/aes.service.js';
 const setupTimeout = (app) => {
   if (!process.env.TIMEOUT) return console.log('Timeout is turned OFF');

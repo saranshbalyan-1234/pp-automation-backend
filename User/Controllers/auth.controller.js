@@ -1,7 +1,7 @@
 import pkg from 'jsonwebtoken';
 
-import errorContstants from '#constants/error.constants.js';
-import successConstants from '#constants/success.js';
+import errorConstants from '#constants/error.constant.js';
+import successConstants from '#constants/success.contant.js';
 // import { createBucket } from '#storage/Service/awsService.js';
 import getError from '#utils/error.js';
 import { createToken, getTokenError } from '#utils/jwt.js';
@@ -59,13 +59,10 @@ const verifyCustomer = async (req, res) => {
 
     try {
       const unverifiedUser = await req.models.unverified.findOneAndDelete({ email }, { session: req.session }).lean();
-      if (!unverifiedUser) throw new Error('Unverified user not found');
-
       const customer = await req.models.unverified.findOne({ email }).lean();
-      if (!customer) throw new Error('Customer user not found');
-
       const tenant = customer.tenant[0];
-      if (!tenant) throw new Error('No tenant found');
+
+      if (!unverifiedUser || !tenant || !tenant) throw new Error(errorConstants.RECORD_NOT_FOUND);
 
       const { name } = unverifiedUser;
 
@@ -100,7 +97,7 @@ const verifyUser = async (req, res) => {
       });
 
       if (user) {
-        if (user.verifiedAt) throw new Error(errorContstants.EMAIL_ALREADY_VERIFIED);
+        if (user.verifiedAt) throw new Error(errorConstants.EMAIL_ALREADY_VERIFIED);
         await User.schema(database).update(
           { active: true, verifiedAt: new Date() },
           {
@@ -111,7 +108,7 @@ const verifyUser = async (req, res) => {
         );
         return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
       }
-      throw new Error(errorContstants.RECORD_NOT_FOUND);
+      throw new Error(errorConstants.RECORD_NOT_FOUND);
     }
   } catch (error) {
     getError(error, res, 'Email Verification');
@@ -137,7 +134,7 @@ const resetPassword = async (req, res) => {
         }
       );
       if (updatedUser[0]) return res.status(200).json({ message: successConstants.PASSWORD_RESET_SUCCESSFULL });
-      throw new Error(errorContstants.RECORD_NOT_FOUND);
+      throw new Error(errorConstants.RECORD_NOT_FOUND);
     }
   } catch (error) {
     getError(error, res, 'Password Reset');
@@ -150,7 +147,7 @@ const sendResetPasswordMail = async (req, res) => {
     const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
       where: { email }
     });
-    if (!customer) throw new Error(errorContstants.RECORD_NOT_FOUND);
+    if (!customer) throw new Error(errorConstants.RECORD_NOT_FOUND);
     const database = process.env.DATABASE_PREFIX + customer.tenantName;
 
     const user = await User.schema(database).findOne({

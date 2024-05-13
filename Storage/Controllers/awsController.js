@@ -1,4 +1,4 @@
-import errorContstants from '#constants/error.constants.js';
+import errorContstants from '#constants/error.constant.js';
 
 import { getAwsObject } from '../Service/awsService.js';
 

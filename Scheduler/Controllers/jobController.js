@@ -1,5 +1,5 @@
-import errorContstants from '#constants/error.constants.js';
-import successContstants from '#constants/success.js';
+import errorContstants from '#constants/error.constant.js';
+import successContstants from '#constants/success.contant.js';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { idValidation } from '#validations/index.js';
