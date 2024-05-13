@@ -3,13 +3,24 @@ import nodemailer from 'nodemailer';
 import { createToken } from '#utils/jwt.js';
 import registerHTML from '#utils/Mail/HTML/register.js';
 import resetPasswordHtml from '#utils/Mail/HTML/resetPassword.js';
-const transporter = nodemailer.createTransport({
+
+const smtp = {
   auth: {
     pass: process.env.MAILER_PASS,
     user: process.env.MAILER_USER
   },
-  service: process.env.MAILER_SERVICE
-});
+}
+if (process.env.MAILER_SERVICE) {
+  smtp.service = process.env.MAILER_SERVICE
+} else { 
+  if (process.env.MAILER_HOST && process.env.MAILER_PORT) {
+    smtp.host = process.env.MAILER_HOST
+    smtp.port = process.env.MAILER_PORT
+  } else { 
+    console.error("Unable to connect to SMTP")
+  }
+}
+const transporter = nodemailer.createTransport(smtp);
 
 const sendMailApi = (req, res) => {
   /*
@@ -66,7 +77,7 @@ const sendMail = async (data, type) => {
         break;
     }
     await transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM })
-    console.success("Mail send")
+    console.success("Mail send",mailOption)
     return true;
   } catch (err) { 
     console.error(err)

@@ -47,42 +47,7 @@ const register = async (req, res) => {
     return res.status(200).json({
       message: 'Registered successfuly, Please check email to verify account.'
     });
-
-    return;
-
-    await db.sequelize.transaction(async (transaction) => {
-      const { name, email, password } = req.body;
-
-      const tenantName = process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
-      await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME)
-        .create({ admin: true, email, tenantName }, { transaction })
-        .catch((e) => {
-          console.error(e);
-          throw new Error('Customer already exist');
-        });
-      const token = createToken({ email }, process.env.JWT_VERIFICATION_SECRET);
-      await Unverified.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).create(
-        {
-          email,
-          name,
-          password,
-          token
-        },
-        { transaction }
-      );
-      sendMail({ email, name }, 'customerRegister');
-
-      if (process.env.NODE_ENV === 'development') {
-        return res.status(200).json({
-          message: 'Registered successfuly, Please check email to verify account.',
-          verifyToken: token
-        });
-      }
-
-      return res.status(200).json({
-        message: 'Registered successfuly, Please check email to verify account.'
-      });
-    });
+    
   } catch (error) {
     getError(error, res);
   }
