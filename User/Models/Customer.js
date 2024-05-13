@@ -1,4 +1,4 @@
-import errorContstants from '#constants/error.js';
+import errorContstants from '#constants/error.constants.js';
 export default (sequelize, DataTypes) =>
   sequelize.define(
     'customers',

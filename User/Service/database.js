@@ -1,4 +1,4 @@
-import errorContstants from '#constants/error.js';
+import errorContstants from '#constants/error.constants.js';
 import { deleteBucket } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
 import db from '#utils/dataBaseConnection.js';

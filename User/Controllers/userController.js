@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-import errorContstants from '#constants/error.js';
+import errorContstants from '#constants/error.constants.js';
 import successConstants from '#constants/success.js';
 import { s3, uploadFile } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';

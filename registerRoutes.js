@@ -1,4 +1,4 @@
-import errorContstants from '#constants/error.js';
+import errorContstants from '#constants/error.constants.js';
 import { validateToken } from '#middlewares/jwt.middleware.js';
 import { getDirectories } from '#utils/file.js';
 

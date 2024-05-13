@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import errorContstants from '#constants/error.js';
+import errorContstants from '#constants/error.constants.js';
 import successContstants from '#constants/success.js';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';

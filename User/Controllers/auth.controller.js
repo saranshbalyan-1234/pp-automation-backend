@@ -1,6 +1,6 @@
 import pkg from 'jsonwebtoken';
 
-import errorContstants from '#constants/error.js';
+import errorContstants from '#constants/error.constants.js';
 import successConstants from '#constants/success.js';
 // import { createBucket } from '#storage/Service/awsService.js';
 import getError from '#utils/error.js';
@@ -121,10 +121,7 @@ const verifyUser = async (req, res) => {
 const resetPassword = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
   try {
-    const token = req.params.token;
-    if (!token) return res.status(401).json({ error: errorContstants.TOKEN_NOT_FOUND });
-
-    const data = verify(token, process.env.JWT_RESET_SECRET);
+    const data = verify( req.params.token, process.env.JWT_RESET_SECRET);
 
     if (data) {
       const { email, tenant } = data;

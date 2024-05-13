@@ -1,7 +1,7 @@
 import { S3 } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 
-import errorContstants from '#constants/error.js';
+import errorContstants from '#constants/error.constants.js';
 
 export const s3 = new S3({
   credentials: {

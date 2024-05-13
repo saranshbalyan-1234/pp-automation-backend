@@ -1,4 +1,4 @@
-import errorContstants from '#constants/error.js';
+import errorContstants from '#constants/error.constants.js';
 import { permissionList } from '#constants/permission.js';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
