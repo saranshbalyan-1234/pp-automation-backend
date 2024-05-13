@@ -8,17 +8,15 @@ const smtp = {
   auth: {
     pass: process.env.MAILER_PASS,
     user: process.env.MAILER_USER
-  },
-}
-if (process.env.MAILER_SERVICE) {
-  smtp.service = process.env.MAILER_SERVICE
-} else { 
-  if (process.env.MAILER_HOST && process.env.MAILER_PORT) {
-    smtp.host = process.env.MAILER_HOST
-    smtp.port = process.env.MAILER_PORT
-  } else { 
-    console.error("Unable to connect to SMTP")
   }
+};
+if (process.env.MAILER_SERVICE) {
+  smtp.service = process.env.MAILER_SERVICE;
+} else if (process.env.MAILER_HOST && process.env.MAILER_PORT) {
+  smtp.host = process.env.MAILER_HOST;
+  smtp.port = process.env.MAILER_PORT;
+} else {
+  console.error('Unable to connect to SMTP');
 }
 const transporter = nodemailer.createTransport(smtp);
 
@@ -76,12 +74,12 @@ const sendMail = async (data, type) => {
       default:
         break;
     }
-    await transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM })
-    console.success("Mail send",mailOption)
+    await transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM });
+    console.success('Mail send', mailOption);
     return true;
-  } catch (err) { 
-    console.error(err)
-    throw new Error("Failed to send mail")
+  } catch (err) {
+    console.error(err);
+    throw new Error('Failed to send mail');
   }
 };
 export { sendMail, sendMailApi };

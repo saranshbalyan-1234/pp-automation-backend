@@ -4,7 +4,7 @@ import fileupload from 'express-fileupload';
 import helmet from 'helmet';
 
 import defaultMiddleware from '#middlewares/default.middleware.js';
-import { setupErrorInterceptor, setupValidationErrorInterceptor,setupResponseInterceptor } from '#middlewares/server.middleware.js';
+import { setupResponseInterceptor, setupValidationErrorInterceptor } from '#middlewares/server.middleware.js';
 import { createDbConnection } from '#root/mongoConnection.js';
 import seedSuperAdmin from '#user/Seed/superadmin.seed.js';
 import overrideConsole from '#utils/Logger/console.js';

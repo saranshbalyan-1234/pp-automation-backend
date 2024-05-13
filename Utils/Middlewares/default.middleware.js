@@ -1,4 +1,3 @@
-
 import { getTenantDB } from '#root/mongoConnection.js';
 
 const defaultMiddleware = () => async (req, _res, next) => {

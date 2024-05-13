@@ -1,29 +1,14 @@
 import pkg from 'jsonwebtoken';
-import moment from 'moment';
 
 import errorContstants from '#constants/error.js';
 import successConstants from '#constants/success.js';
-import { createBucket } from '#storage/Service/awsService.js';
-import db from '#utils/dataBaseConnection.js';
+// import { createBucket } from '#storage/Service/awsService.js';
 import getError from '#utils/error.js';
 import { createToken, getTokenError } from '#utils/jwt.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
 
-import { dropDatabase } from '../Service/database.js';
 import { loginWithCredentals } from '../Service/user.service.js';
 const { verify } = pkg;
-
-// Main
-const Customer = db.customers;
-const Unverified = db.unverifieds;
-
-// Tenant
-const User = db.users;
-/*
- * Const Role = db.roles;
- * const Permission = db.permissions;
- * const UserRole = db.userRoles;
- */
 
 const register = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
@@ -31,23 +16,22 @@ const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const tenant = [process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_PREFIX + process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')];
-    
+
     await req.models.customer.create(
       [{ email, password, tenant }],
       { session: req.session }
-    )
+    );
 
     await req.models.unverified.create(
-      [{ email, name, password,tenant }],
+      [{ email, name, password, tenant }],
       { session: req.session }
     );
 
-   await sendMail({ email, name }, 'customerRegister');
+    await sendMail({ email, name }, 'customerRegister');
 
     return res.status(200).json({
       message: 'Registered successfuly, Please check email to verify account.'
     });
-    
   } catch (error) {
     getError(error, res);
   }
@@ -73,51 +57,28 @@ const verifyCustomer = async (req, res) => {
 
     console.log('Verifying Customer', email);
 
-    const unverifiedUser = await Unverified.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
-      where: { email }
-    });
-    const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
-      where: { email }
-    });
-    const { tenantName } = customer;
-    const { name, password } = unverifiedUser;
-    const database = process.env.DATABASE_PREFIX + tenantName;
-
     try {
-      await db.sequelize.transaction(async (transaction) => {
-        if (data) {
-          if (unverifiedUser) {
-            await Unverified.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).destroy({
-              transaction,
-              where: {
-                email
-              }
-            });
+      const unverifiedUser = await req.models.unverified.findOneAndDelete({ email }, { session: req.session }).lean();
+      if (!unverifiedUser) throw new Error('Unverified user not found');
 
-            if (tenantName !== process.env.DATABASE_NAME) {
-              console.log('Creating database', database);
-              await db.sequelize.query(`create DATABASE ${database}`).catch((err) => {
-                console.error(database);
-                console.log(err);
-                throw new Error(errorContstants.CUSTOMER_DATABASE_ALREADY_EXIST);
-              });
-              createBucket(tenantName);
-            }
+      const customer = await req.models.unverified.findOne({ email }).lean();
+      if (!customer) throw new Error('Customer user not found');
 
-            await User.schema(database).create({
-              email,
-              name,
-              password,
-              verifiedAt: moment()
-            });
+      const tenant = customer.tenant[0];
+      if (!tenant) throw new Error('No tenant found');
 
-            return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
-          }
-          return res.status(500).json({ error: errorContstants.EMAIL_ALREADY_VERIFIED });
-        }
-      });
+      const { name } = unverifiedUser;
+
+      // if (process.env.MULTI_TENANT !== 'false') createBucket(tenant.replace(process.env.DATABASE_PREFIX,''));
+
+      await req.models.user.create([{
+        email,
+        name,
+        verifiedAt: Date.now()
+      }], { session: req.session });
+
+      return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
     } catch (error) {
-      dropDatabase(database);
       getError(error, res);
     }
   } catch (error) {

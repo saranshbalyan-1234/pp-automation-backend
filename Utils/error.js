@@ -15,7 +15,7 @@ const getError = (e, res, tokenType) => {
       default:
         message = e.message;
     }
-    const formattedMessage = message.replace("Error: ",'')
+    const formattedMessage = message.replace('Error: ', '');
     return res.status(code).json({ error: formattedMessage });
   }
   return res.status(500).json(e);

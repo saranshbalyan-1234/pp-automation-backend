@@ -71,7 +71,7 @@ const setupCors = (app) => {
 
 const setupResponseInterceptor = (app) => {
   console.log('Response Interceptor is Turned ON');
-  app.use(async (req, res, next) => {
+  app.use((req, res, next) => {
     const originalSend = res.send;
 
     res.send = async function send (...args) {
@@ -81,7 +81,7 @@ const setupResponseInterceptor = (app) => {
         errorObj.path = req.url;
         errorObj.status = res.statusCode;
         args[0] = JSON.stringify(errorObj);
-      } else { 
+      } else {
         await req.session.commitTransaction();
       }
       if (process.env.ENCRYPTION === 'true' && !(req.url.includes('decrypt') || req.url.includes('encrypt'))) args[0] = JSON.stringify(encryptWithAES(args[0]));
@@ -96,7 +96,7 @@ const setupResponseInterceptor = (app) => {
 const setupErrorInterceptor = (app) => {
   console.log('ERROR Interceptor is Turned ON');
   app.use(async (err, req, res, next) => {
-    console.debug("error")
+    console.debug('error');
     const errorObj = getErrorObj(req, res);
     const error = String(err);
     if (error === 'Error: Not allowed by CORS') {
@@ -104,11 +104,11 @@ const setupErrorInterceptor = (app) => {
         ...errorObj
       });
     } else if (error) {
-      console.debug("error")
+      console.debug('error');
 
       await req.session.abortTransaction();
       req.session.endSession();
-      
+
       return res.status(403).json({
         error,
         errorObj
@@ -123,7 +123,7 @@ const setupValidationErrorInterceptor = (app) => {
     const errorObj = getErrorObj(req, res);
     if (err instanceof ValidationError) {
       const error = err.details.body?.[0].message || err.details.params?.[0].message || err.details.query?.[0].message || err.details.headers?.[0].message;
-      console.error(error)
+      console.error(error);
       return res.status(400).json({ error, ...errorObj });
     }
     next(err);
