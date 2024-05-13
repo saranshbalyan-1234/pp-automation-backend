@@ -20,9 +20,16 @@ const emailBodyValidation = {
   })
 };
 
-const tokenBodyValidation = {
-  body: Joi.object({
+const tokenParamsValidation = {
+  params: Joi.object({
     token: Joi.string().required()
   })
 };
-export { emailBodyValidation, loginValidation, registerValidation, tokenBodyValidation };
+
+const passwordBodyValidation = {
+  body: Joi.object({
+    password: Joi.string().min(5).max(15).required()
+  })
+};
+
+export { emailBodyValidation, loginValidation, passwordBodyValidation, registerValidation, tokenParamsValidation };

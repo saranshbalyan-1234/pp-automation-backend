@@ -52,7 +52,7 @@ const verifyCustomer = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
 
   try {
-    const data = verify(req.body.token, process.env.JWT_VERIFICATION_SECRET);
+    const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
     const { email } = data;
 
     console.log('Verifying Customer', email);
@@ -89,7 +89,7 @@ const verifyCustomer = async (req, res) => {
 const verifyUser = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
   try {
-    const data = verify(req.body.token, process.env.JWT_VERIFICATION_SECRET);
+    const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
     if (data) {
       const { email, tenant } = data;
 
@@ -121,7 +121,11 @@ const verifyUser = async (req, res) => {
 const resetPassword = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
   try {
-    const data = verify(req.body.token, process.env.JWT_RESET_SECRET);
+    const token = req.params.token;
+    if (!token) return res.status(401).json({ error: errorContstants.TOKEN_NOT_FOUND });
+
+    const data = verify(token, process.env.JWT_RESET_SECRET);
+
     if (data) {
       const { email, tenant } = data;
 
@@ -164,11 +168,9 @@ const sendResetPasswordMail = async (req, res) => {
 
 const refreshToken = (req, res) => {
   /*  #swagger.tags = ["Auth"] */
-  const { token } = req.body;
-  if (!token) return res.status(401).json({ error: errorContstants.REFRESH_TOKEN_NOT_FOUND });
 
   try {
-    const data = verify(token, process.env.JWT_REFRESH_SECRET);
+    const data = verify(req.params.token, process.env.JWT_REFRESH_SECRET);
     if (data) {
       const tokenData = { email: data.email, id: data.id };
       const accessToken = createToken(tokenData, process.env.JWT_ACCESS_SECRET, process.env.JWT_ACCESS_EXPIRATION);
