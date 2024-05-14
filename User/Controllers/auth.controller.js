@@ -76,7 +76,8 @@ const verifyCustomer = async (req, res) => {
       await db.models.user.create([{
         email,
         name,
-        verifiedAt: Date.now()
+        verifiedAt: Date.now(),
+        type:'issuer'
       }]);
 
       return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
