@@ -4,8 +4,8 @@ import { getTenantDB } from '#root/mongoConnection.js';
 const defaultMiddleware = () => async (req, _res, next) => {
   try {
     // const token = extractToken(req);
-    const skipRoute = ['auth'];
-    if (!skipRoute.includes(req.url.split('/')[1])) return next();
+    const allowRoutes = ['auth'];
+    if (!allowRoutes.includes(req.url.split('/')[1])) return next();
 
     const db = await getTenantDB();
     req.models = db.models;
