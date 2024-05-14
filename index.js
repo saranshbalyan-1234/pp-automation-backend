@@ -5,7 +5,7 @@ import helmet from 'helmet';
 
 import defaultMiddleware from '#middlewares/default.middleware.js';
 import { setupResponseInterceptor, setupValidationErrorInterceptor } from '#middlewares/server.middleware.js';
-import { createDbConnection } from '#root/mongoConnection.js';
+import { getTenantDB } from '#root/mongoConnection.js';
 import seedSuperAdmin from '#user/Seed/superadmin.seed.js';
 import overrideConsole from '#utils/Logger/console.js';
 
@@ -18,7 +18,7 @@ app.use(defaultMiddleware());
 
 overrideConsole();
 
-const conn = await createDbConnection();
+const conn = await getTenantDB();
 
 if (process.env.PRINT_ENV === 'true') {
   console.debug('======================ENV======================');

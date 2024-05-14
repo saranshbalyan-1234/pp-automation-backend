@@ -6,7 +6,7 @@ import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
 import { extractToken } from '#utils/jwt.js';
 const { verify } = pkg;
-export const validateToken = () => (req, res, next) => {
+export const validateToken = () => async (req, res, next) => {
   try {
     const token = extractToken(req);
     if (!token) return res.status(401).json({ error: errorContstants.ACCESS_TOKEN_NOT_FOUND });
@@ -24,7 +24,13 @@ export const validateToken = () => (req, res, next) => {
       //Check whether header tenant is assigned to user or not
       if (!temp.tenant.includes(req.tenant)) return res.status(401).json({ error: errorContstants.UNAUTHORIZED_TENANT });
 
-      req.models = getTenantDB(temp.tenant).models;
+      const db = await getTenantDB(temp.tenant);
+      req.models = db.models;
+
+      const session = await db.startSession();
+      session.startTransaction();
+      req.session = session;
+
       next();
     }
   } catch (e) {

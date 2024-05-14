@@ -2,6 +2,7 @@ import pkg from 'jsonwebtoken';
 
 import errorConstants from '#constants/error.constant.js';
 import successConstants from '#constants/success.contant.js';
+import { getTenantDB } from '#root/mongoConnection.js';
 // import { createBucket } from '#storage/Service/awsService.js';
 import getError from '#utils/error.js';
 import { createToken, getTokenError } from '#utils/jwt.js';
@@ -66,13 +67,17 @@ const verifyCustomer = async (req, res) => {
 
       const { name } = unverifiedUser;
 
-      // if (process.env.MULTI_TENANT !== 'false') createBucket(tenant.replace(process.env.DATABASE_PREFIX,''));
+      let db = req;
+      if (process.env.MULTI_TENANT !== 'false') {
+        // createBucket(tenant.replace(process.env.DATABASE_PREFIX, ''))
+        db = await getTenantDB(tenant);
+      };
 
-      await req.models.user.create([{
+      await db.models.user.create([{
         email,
         name,
         verifiedAt: Date.now()
-      }], { session: req.session });
+      }]);
 
       return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
     } catch (error) {
@@ -118,7 +123,7 @@ const verifyUser = async (req, res) => {
 const resetPassword = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
   try {
-    const data = verify( req.params.token, process.env.JWT_RESET_SECRET);
+    const data = verify(req.params.token, process.env.JWT_RESET_SECRET);
 
     if (data) {
       const { email, tenant } = data;
