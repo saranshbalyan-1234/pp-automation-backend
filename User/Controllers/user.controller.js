@@ -17,6 +17,41 @@ const userProject = db.userProjects;
 const Role = db.roles;
 const Permission = db.permissions;
 
+const addOrUpdateUser = async (req, res) => {
+  /*
+   *  #swagger.tags = ["User"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
+  try {
+    const { name, email, password } = req.body;
+
+    delete req.body.verifiedAt;
+
+    if (password) {
+      await req.models.customers.findOneAndUpdate(
+        { email },
+        { password },
+        { upsert: true });
+    }
+
+    const user = await req.models.users.findOneAndUpdate(
+      { email },
+      { ...req.body },
+      { new: true, upsert: true });
+
+    if (email) sendMail({ email, name, tenant: req.database }, 'addUser');
+
+    return res.status(200).json({
+      email,
+      id: user.id,
+      message: 'User added, Verify user\'s email to login',
+      name
+    });
+  } catch (error) {
+    getError(error, res);
+  }
+};
+
 const getTeam = async (req, res) => {
   /*
    *  #swagger.tags = ["User"]
@@ -67,42 +102,6 @@ const getTeam = async (req, res) => {
       .catch((err) => {
         throw new Error(err);
       });
-  } catch (error) {
-    getError(error, res);
-  }
-};
-
-const addUser = async (req, res) => {
-  /*
-   *  #swagger.tags = ["User"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
-  try {
-    const { name, email, password } = req.body;
-    const { database } = req;
-
-    await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME)
-      .create({ email, tenantName: req.user.tenant })
-      .catch((e) => {
-        console.error(e);
-        throw new Error('User already exist');
-      });
-
-    const hash = await bcrypt.hash(password, 8);
-    const user = await User.schema(req.database).create({
-      active: false,
-      email,
-      name,
-      password: hash
-    });
-    sendMail({ email, name, tenant: database }, 'addUser');
-
-    return res.status(200).json({
-      email,
-      id: user.id,
-      message: 'User added, Verify user\'s email to login',
-      name
-    });
   } catch (error) {
     getError(error, res);
   }
@@ -199,28 +198,6 @@ const changePassword = async (req, res) => {
         }
       }
     );
-    if (updatedUser[0]) return res.status(200).json({ message: successConstants.UPDATED });
-    throw new Error(errorContstants.RECORD_NOT_FOUND);
-  } catch (error) {
-    getError(error, res);
-  }
-};
-
-const changeDetails = async (req, res) => {
-  /*
-   *  #swagger.tags = ["User"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
-  try {
-    const userId = req.params.userId || req.user.id;
-    const body = req.user.id === userId ? req.body : { active: req.body.active };
-    delete body.password;
-
-    const updatedUser = await User.schema(req.database).update(body || {}, {
-      where: {
-        id: userId
-      }
-    });
     if (updatedUser[0]) return res.status(200).json({ message: successConstants.UPDATED });
     throw new Error(errorContstants.RECORD_NOT_FOUND);
   } catch (error) {
@@ -393,4 +370,4 @@ const logout = (req, res) => {
  * };
  */
 
-export { addUser, changeDetails, changePassword, deleteCustomerUser, deleteUser, getTeam, getUserDetailsByEmail, logout, resendVerificationEmail, uploadProfileImage };
+export { addOrUpdateUser, changePassword, deleteCustomerUser, deleteUser, getTeam, getUserDetailsByEmail, logout, resendVerificationEmail, uploadProfileImage };

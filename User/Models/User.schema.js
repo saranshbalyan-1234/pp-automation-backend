@@ -42,6 +42,7 @@ const User = BaseSchema({
     type: String
   },
   verifiedAt: {
+    immutable: doc => doc.verifiedAt,
     required: 'Verified date is required',
     type: Date
   }

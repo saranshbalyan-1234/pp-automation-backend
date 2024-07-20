@@ -24,6 +24,7 @@ const customerSchema = BaseSchema({
   },
   superAdmin: {
     default: false,
+    immutable: true,
     lowercase: true,
     required: 'SuperAdmin is required',
     trim: true,

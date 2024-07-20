@@ -72,7 +72,7 @@ const connectionEvents = (conn) => {
 };
 
 export const getTenantDB = async (tenant = process.env.DATABASE_NAME) => {
-  const tenantWithPrefix = process.env.DATABASE_PREFIX + tenant; 
+  const tenantWithPrefix = process.env.DATABASE_PREFIX + tenant;
   const connection = connectionsObj[tenantWithPrefix];
   if (connection) return connection;
   return await createDbConnection(tenantWithPrefix);

@@ -3,7 +3,11 @@ import mongoose from 'mongoose';
 const BaseSchema = (schemaDefinition, schemaOptions) =>
   new mongoose.Schema(
     {
-      ...schemaDefinition
+      ...schemaDefinition,
+      createdAt: {
+        immutable: true,
+        type: Date
+      }
     },
     {
       optimisticConcurrency: true,

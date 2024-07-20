@@ -1,21 +1,6 @@
 import BaseSchema from '#utils/Mongo/BaseSchema.js';
 
 const permissionsSchema = BaseSchema({
-  name: {
-    required: 'Permission name is required',
-    trim: true,
-    type: String
-  },
-  view: {
-    default: false,
-    required: 'View Permission is required',
-    type: Boolean
-  },
-  edit: {
-    default: false,
-    required: 'Edit Permission is required',
-    type: Boolean
-  },
   add: {
     default: false,
     required: 'Add Permission is required',
@@ -26,6 +11,21 @@ const permissionsSchema = BaseSchema({
     required: 'delete Permission is required',
     type: Boolean
   },
+  edit: {
+    default: false,
+    required: 'Edit Permission is required',
+    type: Boolean
+  },
+  name: {
+    required: 'Permission name is required',
+    trim: true,
+    type: String
+  },
+  view: {
+    default: false,
+    required: 'View Permission is required',
+    type: Boolean
+  }
 }, { _id: false });
 
 const Roles = BaseSchema({
