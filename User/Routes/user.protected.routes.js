@@ -10,14 +10,14 @@ import {
   logout,
   resendVerificationEmail,
   uploadProfileImage,
-  addOrUpdateUser
+  getAddOrUpdateUser
 } from '../Controllers/user.controller.js';
 import { emailBodyValidation } from '../Validations/auth.js';
 import { changePasswordValidation, userIdParamsValidation } from '../Validations/user.js';
 
 const Router = express.Router();
 
-Router.post('/', addOrUpdateUser);
+Router.post('/', getAddOrUpdateUser);
 
 // Router.delete('/customer', validateCustomerAdmin(), deleteCustomerUser);
 // Router.get('/team', validatePermission('Team', 'view'), getTeam);

@@ -1,6 +1,6 @@
 import getError from '#utils/error.js';
 
-const createOrUpdateRole = async (req, res) => {
+const getCreateOrUpdateRole = async (req, res) => {
   /*  #swagger.tags = ["Auth"] */
 
   try {
@@ -15,4 +15,4 @@ const createOrUpdateRole = async (req, res) => {
   }
 };
 
-export { createOrUpdateRole };
+export { getCreateOrUpdateRole };

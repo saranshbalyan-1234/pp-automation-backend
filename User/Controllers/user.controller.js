@@ -15,7 +15,7 @@ const Customer = db.customers;
 const UserRole = db.userRoles;
 const userProject = db.userProjects;
 
-const addOrUpdateUser = async (req, res) => {
+const getAddOrUpdateUser = async (req, res) => {
   /*
    *  #swagger.tags = ["User"]
    *  #swagger.security = [{"apiKeyAuth": []}]
@@ -262,4 +262,4 @@ const logout = (req, res) => {
  * };
  */
 
-export { addOrUpdateUser, deleteCustomerUser, deleteUser, getTeam, logout, resendVerificationEmail, uploadProfileImage };
+export { getAddOrUpdateUser, deleteCustomerUser, deleteUser, getTeam, logout, resendVerificationEmail, uploadProfileImage };
