@@ -5,20 +5,20 @@ swaggerAutogen();
 const outputFile = './swagger.json';
 
 const endpointsFiles = [
-  './User/Routes/authRoutes.js',
-  './User/Routes/userRoutes.js',
-  './User/Routes/roleRoutes.js',
-  './User/Routes/superAdminRoutes.js',
+  './User/Routes/auth.unprotected.routes.js',
+  // './User/Routes/userRoutes.js',
+  // './User/Routes/roleRoutes.js',
+  // './User/Routes/superAdminRoutes.js',
 
-  './Routes/constantRoutes.js',
-  './Routes/dashboardRoutes.js',
+  // './Routes/constantRoutes.js',
+  // './Routes/dashboardRoutes.js',
 
-  './Project/Routes/projectRoutes.js',
+  // './Project/Routes/projectRoutes.js',
 
-  './Storage/Routes/awsRoutes.js',
+  // './Storage/Routes/awsRoutes.js',
 
-  './Scheduler/Routes/jobRoutes.js',
-  './Scheduler/Routes/jobManagerRoutes.js'
+  // './Scheduler/Routes/jobRoutes.js',
+  // './Scheduler/Routes/jobManagerRoutes.js'
 ];
 
 const doc = {
