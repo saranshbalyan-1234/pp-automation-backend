@@ -7,8 +7,8 @@ import cache from '#utils/cache.js';
 import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
-
 import { deleteCustomer } from '../Service/database.js';
+import { getTenantDB } from '#root/mongoConnection.js';
 
 const User = db.users;
 const Customer = db.customers;
@@ -23,30 +23,29 @@ const addOrUpdateUser = async (req, res) => {
    *  #swagger.security = [{"apiKeyAuth": []}]
    */
   try {
-    const { name, email, password } = req.body;
+    let body = { ...req.body }
+    delete body.verifiedAt;
+    delete body.status
+    delete body.type
 
-    delete req.body.verifiedAt;
+    const { name, email, password } = body;
 
     if (password) {
-      await req.models.customers.findOneAndUpdate(
+     let db = await getTenantDB();
+      await db.models.customers.findOneAndUpdate(
         { email },
         { password },
         { upsert: true });
     }
 
-    const user = await req.models.users.findOneAndUpdate(
+    const user = await req.models.user.findOneAndUpdate(
       { email },
       { ...req.body },
       { new: true, upsert: true });
 
-    if (email) sendMail({ email, name, tenant: req.database }, 'addUser');
+    if (email && !user.verifiedAt) sendMail({ email, name, tenant: req.database }, 'addUser');
 
-    return res.status(200).json({
-      email,
-      id: user.id,
-      message: 'User added, Verify user\'s email to login',
-      name
-    });
+    return res.status(200).json(user);
   } catch (error) {
     getError(error, res);
   }
