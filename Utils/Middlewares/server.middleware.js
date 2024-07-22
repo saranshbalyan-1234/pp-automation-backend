@@ -82,7 +82,7 @@ const setupResponseInterceptor = (app) => {
         errorObj.status = res.statusCode;
         args[0] = JSON.stringify(errorObj);
       } else {
-        await req.session.commitTransaction();
+      if(req.session) await req.session.commitTransaction();
       }
       if (process.env.ENCRYPTION === 'true' && !(req.url.includes('decrypt') || req.url.includes('encrypt'))) args[0] = JSON.stringify(encryptWithAES(args[0]));
       // Console.log(result)
