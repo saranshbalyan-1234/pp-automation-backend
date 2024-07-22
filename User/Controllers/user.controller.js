@@ -4,12 +4,12 @@ import errorContstants from '#constants/error.constant.js';
 import successConstants from '#constants/success.contant.js';
 import { s3, uploadFile } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
-import db from '#utils/dataBaseConnection.js';
+// import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
 import { deleteCustomer } from '../Service/database.js';
 import { getTenantDB } from '#root/mongoConnection.js';
-
+const db = {}
 const User = db.users;
 const Customer = db.customers;
 const UserRole = db.userRoles;

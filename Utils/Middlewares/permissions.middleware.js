@@ -1,9 +1,9 @@
 import errorContstants from '#constants/error.constant.js';
-import db from '#utils/dataBaseConnection.js';
+// import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { idValidation } from '#validations/index.js';
+const db = {}
 const UserProject = db.userProjects;
-
 const validatePermission = (permissionName, method) => async (req, res, next) => {
   try {
     if (!(req.user.type === 'issuer' || req.user.type === 'admin')) {
