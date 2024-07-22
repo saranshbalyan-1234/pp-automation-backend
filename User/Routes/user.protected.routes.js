@@ -4,11 +4,9 @@ import { validate } from 'express-validation';
 import { validateCustomerAdmin, validatePermission } from '#middlewares/permissions.middleware.js';
 
 import {
-  changePassword,
   deleteCustomerUser,
   deleteUser,
   getTeam,
-  getUserDetailsByEmail,
   logout,
   resendVerificationEmail,
   uploadProfileImage,

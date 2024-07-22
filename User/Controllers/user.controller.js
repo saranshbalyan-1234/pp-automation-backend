@@ -14,8 +14,6 @@ const User = db.users;
 const Customer = db.customers;
 const UserRole = db.userRoles;
 const userProject = db.userProjects;
-const Role = db.roles;
-const Permission = db.permissions;
 
 const addOrUpdateUser = async (req, res) => {
   /*
@@ -178,32 +176,6 @@ const deleteCustomerUser = async (req, res) => {
   }
 };
 
-const changePassword = async (req, res) => {
-  /*
-   *  #swagger.tags = ["User"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
-  try {
-    const { oldPassword, newPassword } = req.body;
-
-    const user = await User.schema(req.database).findByPk(req.user.id);
-    const isAuthenticated = await bcrypt.compare(oldPassword, user.password);
-    if (!isAuthenticated) return res.status(400).json({ error: errorContstants.INCORRECT_PASSWORD });
-    const updatedUser = await User.schema(req.database).update(
-      { password: newPassword },
-      {
-        where: {
-          id: req.user.id
-        }
-      }
-    );
-    if (updatedUser[0]) return res.status(200).json({ message: successConstants.UPDATED });
-    throw new Error(errorContstants.RECORD_NOT_FOUND);
-  } catch (error) {
-    getError(error, res);
-  }
-};
-
 const uploadProfileImage = async (req, res) => {
   /*
    *  #swagger.tags = ["User"]
@@ -227,85 +199,6 @@ const uploadProfileImage = async (req, res) => {
       return res.status(200).json({ message: successConstants.UPDATED });
     }
     throw new Error('Unable to upload profile image!');
-  } catch (error) {
-    getError(error, res);
-  }
-};
-
-const getUserDetailsByEmail = async (req, res) => {
-  /*
-   *  #swagger.tags = ["User"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
-  try {
-    const { database } = req.user;
-    const email = req.body.email || req.user.email;
-    const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
-      where: { email }
-    });
-
-    const user = await User.schema(database).findOne({
-      include: [
-        {
-          attributes: ['roleId'],
-          include: [
-            {
-              attributes: ['name'],
-              include: [
-                {
-                  attributes: ['name', 'view', 'add', 'edit', 'delete'],
-                  model: Permission.schema(database)
-                }
-              ],
-              model: Role.schema(database)
-            }
-          ],
-          model: UserRole.schema(database)
-        }
-      ],
-      where: { email }
-    });
-
-    if (!user) throw new Error(errorContstants.RECORD_NOT_FOUND);
-
-    const { id, name, verifiedAt, defaultProjectId, profileImage } = user;
-    if (!verifiedAt) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
-
-    let allPermissions = [];
-    const newRoles = await user.userRoles.map((el) => {
-      allPermissions = [...allPermissions, ...el.role.permissions];
-      return { name: el.role.name, permissions: el.role.permissions };
-    });
-
-    const superAdmin = customer.admin === 2;
-    const customerAdmin = customer.admin || superAdmin;
-
-    let base64ProfileImage = '';
-    if (profileImage) {
-      const getParams = {
-        Bucket: customer.tenantName,
-        Key: email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase()
-      };
-
-      const data = await s3.getObject(getParams);
-
-      if (data?.Body) {
-        base64ProfileImage = await data.Body.transformToString('base64');
-      } else {
-        base64ProfileImage = data;
-      }
-    }
-
-    return res.status(200).json({
-      customerAdmin,
-      defaultProjectId,
-      email,
-      id,
-      name,
-      profileImage: profileImage ? base64ProfileImage : '',
-      roles: newRoles,
-      verifiedAt
-    });
   } catch (error) {
     getError(error, res);
   }
@@ -369,4 +262,4 @@ const logout = (req, res) => {
  * };
  */
 
-export { addOrUpdateUser, changePassword, deleteCustomerUser, deleteUser, getTeam, getUserDetailsByEmail, logout, resendVerificationEmail, uploadProfileImage };
+export { addOrUpdateUser, deleteCustomerUser, deleteUser, getTeam, logout, resendVerificationEmail, uploadProfileImage };
