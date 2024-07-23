@@ -4,11 +4,11 @@ import errorContstants from '#constants/error.constant.js';
 import { getTenantDB } from '#root/mongoConnection.js';
 import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
-import { extractToken } from '#utils/jwt.js';
+
 const { verify } = pkg;
 export const validateToken = () => async (req, res, next) => {
   try {
-    const token = extractToken(req);
+    const token = req.headers.authorization
     if (!token) return res.status(401).json({ error: errorContstants.ACCESS_TOKEN_NOT_FOUND });
     const data = verify(token, process.env.JWT_ACCESS_SECRET);
     if (data) {

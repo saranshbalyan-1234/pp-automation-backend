@@ -1,9 +1,8 @@
 import { getTenantDB } from '#root/mongoConnection.js';
-// import { extractToken } from '#utils/jwt.js';
 
 const defaultMiddleware = () => async (req, _res, next) => {
   try {
-    // const token = extractToken(req);
+
     const allowRoutes = ['auth'];
     if (!allowRoutes.includes(req.url.split('/')[1])) return next();
 

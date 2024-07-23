@@ -32,8 +32,8 @@ const doc = {
   consumes: ['application/json'],
   host: 'localhost:3001',
   info: {
-    description: 'Automateum',
-    title: 'Automation Api Structure',
+    description: 'Node | Express | Mongo | Multi Tenant | Social Login',
+    title: 'Starter Package',
     version: '1.0.0'
   },
   produces: ['application/json'],

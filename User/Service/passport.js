@@ -6,7 +6,6 @@ import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
 import { loginWithCredentals } from './user.service.js';
 import { BasicStrategy} from 'passport-http' ;
-import { getTenantDB } from '#root/mongoConnection.js';
 
 /**
  * Sign in with Username and Password.
