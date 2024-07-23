@@ -5,6 +5,25 @@ import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
 import { loginWithCredentals } from './user.service.js';
+import { BasicStrategy} from 'passport-http' ;
+import { getTenantDB } from '#root/mongoConnection.js';
+
+/**
+ * Sign in with Username and Password.
+ */
+passport.use(new BasicStrategy(
+  async function (username, password, done) {
+    try {
+      const user = await loginWithCredentals({ email: username, password, rememberMe: true })
+      if (!user) { return done(null, false); }
+      return done(null, user);
+    }
+    catch (e) {
+      return done(null, false);
+    }
+  }
+));
+
 
 /**
  * Sign in with Google.

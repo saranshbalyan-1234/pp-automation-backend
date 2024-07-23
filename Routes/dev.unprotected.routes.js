@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport'
 // Swagger
 import { createRequire } from 'module';
 import swaggerUi from 'swagger-ui-express';
@@ -13,8 +14,7 @@ Router.get('/health', (_req, res) =>
   res.json('Server is Working')
 );
 
-Router.use('/swagger', swaggerUi.serve);
-Router.get('/swagger', swaggerUi.setup(swaggerFile));
+Router.use('/swagger',  passport.authenticate('basic', { session: false }),swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 Router.get('/favico.ico', (_req, res) => {
   res.sendStatus(204);

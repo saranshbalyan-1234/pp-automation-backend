@@ -1,12 +1,20 @@
 import errorContstants from '#constants/error.constant.js';
+import { getTenantDB } from '#root/mongoConnection.js';
 import cache from '#utils/cache.js';
 import { createToken } from '#utils/jwt.js';
 
-const loginWithCredentals = async ({ req, email, password, rememberMe, isPassRequired = true }) => {
+const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired = true, tenant = process.env.DATABASE_NAME}) => {
   try {
-    const customer = await req.models.customer.findOne({ email: req.body.email }).lean();
+    const db = await getTenantDB();
+    const customer = await db.models.customer.findOne({ email }).lean();
     if (!customer) throw new Error(errorContstants.RECORD_NOT_FOUND);
-    const user = await req.models.user.findOne({ email: req.body.email }).populate('roles').lean() || {};
+
+    if (process.env.MULTI_TENANT !== 'false') {
+      if(tenant ==  process.env.DATABASE_NAME) throw new Error(errorContstants.UNAUTHORIZED_TENANT)
+      db = await getTenantDB(tenant);
+    };
+
+    const user = await db.models.user.findOne({ email }).populate('roles').lean() || {};
     if (!user && !customer.superAdmin) throw new Error(errorContstants.RECORD_NOT_FOUND);
 
     const isAuthenticated = !isPassRequired || customer.password === password;
