@@ -42,7 +42,7 @@ const login = async (req, res) => {
   try {
     const { email, password, rememberMe = false } = req.body;
 
-    const loggedInUser = await loginWithCredentals({ email, password, rememberMe,models: req.models });
+    const loggedInUser = await loginWithCredentals({ email, password, rememberMe,models: req.models,tenant:req.headers['x-tenant-id'] });
     return res.status(200).json(loggedInUser);
   } catch (error) {
     getError(error, res);
