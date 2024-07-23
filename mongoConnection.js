@@ -30,7 +30,7 @@ registerAllPlugins();
 // If the Node process ends, close the Mongoose connection
 process.on('SIGINT', () => {
   mongoose.connection.close();
-  console.log('Application crashed');
+  console.error('Application crashed');
   process.exit(0);
 });
 

@@ -9,6 +9,9 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const customer = await db.models.customer.findOne({ email }).lean();
     if (!customer) throw new Error(errorContstants.RECORD_NOT_FOUND);
 
+    const isAuthenticated = !isPassRequired || customer.password === password;
+    if (!isAuthenticated) throw new Error(errorContstants.INCORRECT_PASSWORD);
+
     if (customer.tenant.length > 1) {
       if (!tenant) return { tenant: [...customer.tenant], message: "send tenant in x-tenant-id header" }
       else db = await getTenantDB(tenant);
@@ -17,8 +20,6 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const user = await db.models.user.findOne({ email }).populate('roles').lean();
     if (!user && !customer.superAdmin || !user ) throw new Error(errorContstants.RECORD_NOT_FOUND);
 
-    const isAuthenticated = !isPassRequired || customer.password === password;
-    if (!isAuthenticated) throw new Error(errorContstants.INCORRECT_PASSWORD);
     const { id, verifiedAt } = user;
     if (!verifiedAt && !customer.superAdmin) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
 
@@ -36,6 +37,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
 
     return combinedUserData;
   } catch (e) {
+    console.log(e)
     throw new Error(e);
   }
 };
