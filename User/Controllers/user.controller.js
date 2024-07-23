@@ -39,7 +39,7 @@ const getAddOrUpdateUser = async (req, res) => {
       { ...req.body },
       { new: true, upsert: true });
 
-    if (email && !user.verifiedAt) sendMail({ email, name, tenant: req.database }, 'addUser');
+    if (email && !user.verifiedAt) sendMail({ email, name, tenant: req.tenant }, 'addUser');
 
     return res.status(200).json(user);
   } catch (error) {

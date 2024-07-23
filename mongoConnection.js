@@ -71,9 +71,8 @@ const connectionEvents = (conn) => {
   conn.on('close', () => console.log('close'));
 };
 
-export const getTenantDB = async (tenant = process.env.DATABASE_NAME) => {
-  const tenantWithPrefix = process.env.DATABASE_PREFIX + tenant;
-  const connection = connectionsObj[tenantWithPrefix];
+export const getTenantDB = async (tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) => {
+  const connection = connectionsObj[tenant];
   if (connection) return connection;
-  return await createDbConnection(tenantWithPrefix);
+  return await createDbConnection(tenant);
 };

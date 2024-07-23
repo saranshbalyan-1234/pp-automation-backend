@@ -16,7 +16,7 @@ const register = async (req, res) => {
 
   try {
     const { name, email, password } = req.body;
-    const tenant = [process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_PREFIX + process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')];
+    const tenant = process.env.DATABASE_PREFIX + [process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')];
 
     await req.models.customer.create(
       [{ email, password, tenant }],
