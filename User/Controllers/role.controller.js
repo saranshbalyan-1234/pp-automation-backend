@@ -1,7 +1,10 @@
 import getError from '#utils/error.js';
 
 const getCreateOrUpdateRole = async (req, res) => {
-  /*  #swagger.tags = ["Auth"] */
+  /*
+   *  #swagger.tags = ["Role"]
+   *  #swagger.security = [{"apiKeyAuth": []}]
+   */
 
   try {
     const role = await req.models.roles.findOneAndUpdate(

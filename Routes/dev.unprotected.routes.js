@@ -10,14 +10,10 @@ const swaggerFile = require('../swagger.json');
 const Router = express.Router();
 
 Router.get('/health', (_req, res) =>
-  /*  #swagger.tags = ["Health"] */
+  /*  #swagger.tags = ["Dev"] */
   res.json('Server is Working')
 );
 
-Router.use('/swagger',  passport.authenticate('basic', { session: false }),swaggerUi.serve, swaggerUi.setup(swaggerFile));
-
-Router.get('/favico.ico', (_req, res) => {
-  res.sendStatus(204);
-});
+Router.use('/swagger',passport.authenticate('basic', { session: false }),swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 export default Router;
