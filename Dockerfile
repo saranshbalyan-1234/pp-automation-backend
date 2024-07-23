@@ -10,8 +10,6 @@ WORKDIR /usr/src/app
 # ENV DATABASE_NAME automation_master
 # ENV WEBSITE_HOME 
 
-ENV SAVE_LOGS false
-
 ENV PORT 8080
 
 # Install app dependencies
