@@ -4,7 +4,7 @@ const User = db.users;
 const UserProject = db.userProjects;
 const Project = db.projects;
 const ExecutionHistory = db.executionHistory;
-const db = {}
+const db = {};
 export const dashboard = async (req, res) => {
   /*
    *  #swagger.tags = ["Dashboard"]

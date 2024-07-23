@@ -1,7 +1,6 @@
 const autoIncrementV = function autoIncrementV (schema) {
   // Version update
-  schema.pre(/updateOne|updateMany|findOneAndUpdate/, function pre(next) {
-
+  schema.pre(/updateOne|updateMany|findOneAndUpdate/, function pre (next) {
     this.options.runValidators = true; // trigger validation on update
     this.options.context = 'query'; // trigger validation on upsert
 

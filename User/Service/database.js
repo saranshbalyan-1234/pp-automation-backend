@@ -3,7 +3,7 @@ import { deleteBucket } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
 
 // import db from '#utils/dataBaseConnection.js';
-const db = {}
+const db = {};
 const deleteCustomer = async (email) => {
   const tenantName = email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
   try {

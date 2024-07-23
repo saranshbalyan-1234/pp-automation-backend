@@ -75,15 +75,18 @@ const setupResponseInterceptor = (app) => {
     const originalSend = res.send;
 
     res.send = async function send (...args) {
-      const errorObj = JSON.parse(args[0]);
+      let errorObj = args[0];
+      try {
+        errorObj = JSON.parse(args[0]);
+      } catch (e) {
+        console.error('Not a JSON response');
+      }
       if (typeof errorObj === 'object' && errorObj.error) {
         errorObj.method = req.method;
         errorObj.path = req.url;
         errorObj.status = res.statusCode;
         args[0] = JSON.stringify(errorObj);
-      } else {
-      if(req.session) await req.session.commitTransaction();
-      }
+      } else if (req.session) await req.session.commitTransaction();
       if (process.env.ENCRYPTION === 'true' && !(req.url.includes('decrypt') || req.url.includes('encrypt'))) args[0] = JSON.stringify(encryptWithAES(args[0]));
       // Console.log(result)
       originalSend.apply(res, args);

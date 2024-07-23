@@ -8,7 +8,7 @@ import { addProjectValidation, memberProjectValidation, updateProjectValidation 
 const UserProject = db.userProjects;
 const Project = db.projects;
 const User = db.users;
-const db = {}
+const db = {};
 const getMyProject = async (req, res) => {
   /*
    *  #swagger.tags = ["Project"]

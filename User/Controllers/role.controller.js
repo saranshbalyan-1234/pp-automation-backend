@@ -15,7 +15,6 @@ const getCreateOrUpdateRole = async (req, res) => {
   }
 };
 
-
 const getAllRole = async (req, res) => {
   /*
    *  #swagger.tags = ["Role"]

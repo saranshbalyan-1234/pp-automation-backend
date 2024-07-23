@@ -1,15 +1,13 @@
-import bcrypt from 'bcryptjs';
-
-import errorContstants from '#constants/error.constant.js';
 import successConstants from '#constants/success.contant.js';
+import { getTenantDB } from '#root/mongoConnection.js';
 import { s3, uploadFile } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
 // import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
+
 import { deleteCustomer } from '../Service/database.js';
-import { getTenantDB } from '#root/mongoConnection.js';
-const db = {}
+const db = {};
 const User = db.users;
 const Customer = db.customers;
 const UserRole = db.userRoles;
@@ -21,15 +19,15 @@ const getAddOrUpdateUser = async (req, res) => {
    *  #swagger.security = [{"apiKeyAuth": []}]
    */
   try {
-    let body = { ...req.body }
+    const body = { ...req.body };
     delete body.verifiedAt;
-    delete body.status
-    delete body.type
+    delete body.status;
+    delete body.type;
 
     const { name, email, password } = body;
 
     if (password) {
-     let db = await getTenantDB();
+      const db = await getTenantDB();
       await db.models.customers.findOneAndUpdate(
         { email },
         { password },
@@ -262,4 +260,4 @@ const logout = (req, res) => {
  * };
  */
 
-export { getAddOrUpdateUser, deleteCustomerUser, deleteUser, getTeam, logout, resendVerificationEmail, uploadProfileImage };
+export { deleteCustomerUser, deleteUser, getAddOrUpdateUser, getTeam, logout, resendVerificationEmail, uploadProfileImage };

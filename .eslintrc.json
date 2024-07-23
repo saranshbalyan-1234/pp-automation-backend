@@ -62,6 +62,8 @@
         "default-param-last":"off",
         "no-prototype-builtins":"off",
         "require-atomic-updates":"off",
+        "no-inline-comments":"off",
+        "line-comment-position":"off",
         "sort-imports": ["error", {
             "ignoreCase": true,
             "ignoreDeclarationSort": true,
