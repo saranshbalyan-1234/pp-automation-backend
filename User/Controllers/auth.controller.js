@@ -42,7 +42,7 @@ const login = async (req, res) => {
   try {
     const { email, password, rememberMe = false } = req.body;
 
-    const loggedInUser = await loginWithCredentals({ email, password, rememberMe,models: req.models,tenant:req.headers['x-tenant-id'] });
+    const loggedInUser = await loginWithCredentals({ email, models: req.models, password, rememberMe, tenant: req.headers['x-tenant-id'] });
     return res.status(200).json(loggedInUser);
   } catch (error) {
     getError(error, res);
@@ -59,8 +59,8 @@ const verifyCustomer = async (req, res) => {
     console.log('Verifying Customer', email);
 
     try {
-      const unverifiedUser = await req.models.unverified.findOneAndDelete({ email }, { session: req.session }).lean();
-      const customer = await req.models.unverified.findOne({ email }).lean();
+      const unverifiedUser = await req.models.unverified.findOneAndDelete({ email }, { session: req.session });
+      const customer = await req.models.unverified.findOne({ email });
       const tenant = customer.tenant[0];
 
       if (!unverifiedUser || !tenant || !tenant) throw new Error(errorConstants.RECORD_NOT_FOUND);

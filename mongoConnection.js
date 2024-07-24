@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import autopopulate from 'mongoose-autopopulate';
 
 import { getDirectories } from '#utils/file.js';
 
@@ -15,7 +14,6 @@ const connectionsObj = {};
 mongoose.set('debug', true);
 
 const registerAllPlugins = () => {
-  mongoose.plugin(autopopulate);
   const files = getDirectories('.', 'plugin');
 
   files.forEach(async element => {
@@ -26,6 +24,14 @@ const registerAllPlugins = () => {
 };
 
 registerAllPlugins();
+
+//setting lean for mongoose
+let __setOptions = mongoose.Query.prototype.setOptions;
+mongoose.Query.prototype.setOptions = function () {
+  __setOptions.apply(this, arguments);
+  if (!this.mongooseOptions().lean) this.mongooseOptions().lean = true;
+  return this;
+};
 
 // If the Node process ends, close the Mongoose connection
 process.on('SIGINT', () => {

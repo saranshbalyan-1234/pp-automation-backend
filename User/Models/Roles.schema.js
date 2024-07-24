@@ -30,7 +30,6 @@ const permissionsSchema = BaseSchema({
 
 const Roles = BaseSchema({
   name: {
-    lowercase: true,
     required: 'Role is required',
     trim: true,
     type: String

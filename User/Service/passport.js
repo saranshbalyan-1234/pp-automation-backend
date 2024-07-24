@@ -2,27 +2,25 @@ import passport from 'passport';
 // Const { Strategy: FacebookStrategy } = require('passport-facebook');
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+import { BasicStrategy } from 'passport-http';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
 import { loginWithCredentals } from './user.service.js';
-import { BasicStrategy} from 'passport-http' ;
 
 /**
  * Sign in with Username and Password.
  */
 passport.use(new BasicStrategy(
-  async function (username, password, done) {
+  async (username, password, done) => {
     try {
-      const user = await loginWithCredentals({ email: username, password, rememberMe: true,tenant:process.env.DATABASE_PREFIX + process.env.DATABASE_NAME })
+      const user = await loginWithCredentals({ email: username, password, rememberMe: true, tenant: process.env.DATABASE_PREFIX + process.env.DATABASE_NAME });
       if (!user) { return done(null, false); }
       return done(null, user);
-    }
-    catch (e) {
+    } catch (e) {
       return done(null, false);
     }
   }
 ));
-
 
 /**
  * Sign in with Google.
@@ -39,7 +37,7 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
       try {
         // Const email = profile.emails.find((el) => el.verified)?.value;
         const email = profile.emails[0]?.value;
-        const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true ,tenant:req.headers['x-tenant-id'] });
+        const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true, tenant: req.headers['x-tenant-id'] });
         return done(null, loggedInUser);
       } catch (err) {
         return done(err);
@@ -64,7 +62,7 @@ if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
     async (req, _accessToken, _refreshToken, profile, done) => {
       try {
         const email = profile.emails[0]?.value;
-        const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true,tenant:req.headers['x-tenant-id']  });
+        const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true, tenant: req.headers['x-tenant-id'] });
         return done(null, loggedInUser);
       } catch (err) {
         return done(err);
@@ -90,7 +88,7 @@ if (process.env.LINKEDIN_ID && process.env.LINKEDIN_SECRET) {
       async (req, _accessToken, _refreshToken, profile, done) => {
         try {
           const email = profile.emails[0]?.value;
-          const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true,tenant:req.headers['x-tenant-id']  });
+          const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true, tenant: req.headers['x-tenant-id'] });
           return done(null, loggedInUser);
         } catch (err) {
           console.log(err);

@@ -10,7 +10,7 @@ const endpointsFiles = [
   './User/Routes/passport.unprotected.routes.js',
 
   './User/Routes/user.protected.routes.js',
-  './User/Routes/role.protected.routes.js',
+  './User/Routes/role.protected.routes.js'
 
 ];
 

@@ -8,7 +8,7 @@ import getError from '#utils/error.js';
 const { verify } = pkg;
 export const validateToken = () => async (req, res, next) => {
   try {
-    const token = req.headers.authorization
+    const token = req.headers.authorization;
     if (!token) return res.status(401).json({ error: errorContstants.ACCESS_TOKEN_NOT_FOUND });
     const data = verify(token, process.env.JWT_ACCESS_SECRET);
     if (data) {

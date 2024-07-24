@@ -33,7 +33,6 @@
         "jsonwebtoken": "^9.0.2",
         "lodash": "^4.17.21",
         "mongoose": "^8.3.2",
-        "mongoose-autopopulate": "^1.1.0",
         "morgan-body": "^2.6.8",
         "mysql": "^2.18.1",
         "mysql2": "^3.9.4",
