@@ -12,6 +12,7 @@ import { loginWithCredentals } from './user.service.js';
 passport.use(new BasicStrategy(
   async (username, password, done) => {
     try {
+      // eslint-disable-next-line sonarjs/no-duplicate-string
       const user = await loginWithCredentals({ email: username, password, rememberMe: true, tenant: process.env.DATABASE_PREFIX + process.env.DATABASE_NAME });
       if (!user) { return done(null, false); }
       return done(null, user);
@@ -35,6 +36,7 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
     async (req, _accessToken, _refreshToken, _params, profile, done) => {
       try {
         const email = profile.emails[0]?.value;
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true, tenant: req.headers['x-tenant-id'] });
         return done(null, loggedInUser);
       } catch (err) {
@@ -60,6 +62,7 @@ if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
     async (req, _accessToken, _refreshToken, profile, done) => {
       try {
         const email = profile.emails[0]?.value;
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true, tenant: req.headers['x-tenant-id'] });
         return done(null, loggedInUser);
       } catch (err) {
@@ -86,6 +89,7 @@ if (process.env.LINKEDIN_ID && process.env.LINKEDIN_SECRET) {
       async (req, _accessToken, _refreshToken, profile, done) => {
         try {
           const email = profile.emails[0]?.value;
+          // eslint-disable-next-line sonarjs/no-duplicate-string
           const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true, tenant: req.headers['x-tenant-id'] });
           return done(null, loggedInUser);
         } catch (err) {
