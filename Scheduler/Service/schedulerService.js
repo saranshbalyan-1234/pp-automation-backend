@@ -1,9 +1,13 @@
 // Import Scheduler from 'cron-job-manager';
 
 import { getAllTenant } from '#user/Service/database.js';
-import db, { createDBConnection } from '#utils/dataBaseConnection.js';
 
+// import db, { createDBConnection } from '#utils/dataBaseConnection.js';
 import { executeCurl, executeQuery } from './jobRunner.js';
+const db = {};
+const createDBConnection = (connection) => {
+  console.log('db', connection);
+};
 const JobManager = db.jobManagers;
 const Job = db.jobs;
 

@@ -1,10 +1,10 @@
 // import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
+const db = {};
 const User = db.users;
 const UserProject = db.userProjects;
 const Project = db.projects;
 const ExecutionHistory = db.executionHistory;
-const db = {};
 export const dashboard = async (req, res) => {
   /*
    *  #swagger.tags = ["Dashboard"]

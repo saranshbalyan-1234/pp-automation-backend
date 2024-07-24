@@ -5,7 +5,7 @@ import {} from '#user/Service/passport.js';
 const Router = express.Router();
 
 if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
-  Router.get('/google', (req, res, next) => {
+  Router.get('/google', (_req, _res, next) => {
     /*
      *#swagger.tags = ["Passport"]
      *#swagger.path = "/passport/google"
@@ -13,7 +13,7 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
     next();
   }, passport.authenticate('google', { scope: ['email'], session: false }));
 
-  Router.get('/google/callback', (req, res, next) => {
+  Router.get('/google/callback', (_req, _res, next) => {
     /*
      *#swagger.tags = ["Passport"]
      *#swagger.path = "/passport/google/callback"
@@ -26,14 +26,14 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
 }
 
 if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
-  Router.get('/github', (req, res, next) => {
+  Router.get('/github', (_req, _res, next) => {
     /*
      *#swagger.tags = ["Passport"]
      *#swagger.path = "/passport/github"
      */
     next();
   }, passport.authenticate('github'));
-  Router.get('/github/callback', (req, res, next) => {
+  Router.get('/github/callback', (_req, _res, next) => {
     /*
      *#swagger.tags = ["Passport"]
      *#swagger.path = "/passport/github/callback"
@@ -46,14 +46,14 @@ if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
 }
 
 if (process.env.LINKEDIN_ID && process.env.LINKEDIN_SECRET) {
-  Router.get('/linkedin', (req, res, next) => {
+  Router.get('/linkedin', (_req, _res, next) => {
     /*
      *#swagger.tags = ["Passport"]
      *#swagger.path = "/passport/linkedin"
      */
     next();
   }, passport.authenticate('linkedin'));
-  Router.get('/linkedin/callback', (req, res, next) => {
+  Router.get('/linkedin/callback', (_req, _res, next) => {
     /*
      *#swagger.tags = ["Passport"]
      *#swagger.path = "/passport/linkedin/callback"

@@ -35,7 +35,6 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
     },
     async (req, _accessToken, _refreshToken, _params, profile, done) => {
       try {
-        // Const email = profile.emails.find((el) => el.verified)?.value;
         const email = profile.emails[0]?.value;
         const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true, tenant: req.headers['x-tenant-id'] });
         return done(null, loggedInUser);

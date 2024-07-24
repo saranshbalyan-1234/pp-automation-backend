@@ -2,12 +2,13 @@ import _ from 'lodash';
 
 import errorContstants from '#constants/error.constant.js';
 import successContstants from '#constants/success.contant.js';
-import db from '#utils/dataBaseConnection.js';
+// import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { idValidation } from '#validations/index.js';
 
 // Import { createJobManagerValidation } from "../Validations/scheduler.js";
 import { addToConnectionPool, deleteFromConnectionPool, getJobManagerFromMap, startManagerJobs, stopManager } from '../Service/schedulerService.js';
+const db = {};
 const JobManager = db.jobManagers;
 const Job = db.jobs;
 

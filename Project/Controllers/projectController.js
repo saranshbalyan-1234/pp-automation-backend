@@ -4,11 +4,10 @@ import getError from '#utils/error.js';
 import { idValidation } from '#validations/index.js';
 
 import { addProjectValidation, memberProjectValidation, updateProjectValidation } from '../Validations/project.js';
-
+const db = {};
 const UserProject = db.userProjects;
 const Project = db.projects;
 const User = db.users;
-const db = {};
 const getMyProject = async (req, res) => {
   /*
    *  #swagger.tags = ["Project"]

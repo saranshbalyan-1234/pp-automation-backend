@@ -27,7 +27,7 @@ registerAllPlugins();
 
 //setting lean for mongoose
 const __setOptions = mongoose.Query.prototype.setOptions;
-mongoose.Query.prototype.setOptions = function () {
+mongoose.Query.prototype.setOptions = function setOptions () {
   __setOptions.apply(this, arguments);
   if (!this.mongooseOptions().lean) this.mongooseOptions().lean = true;
   return this;

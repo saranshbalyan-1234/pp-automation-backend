@@ -18,7 +18,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     }
 
     const user = await db.models.user.findOne({ email }).populate('roles');
-    if (!user && !customer.superAdmin || !user) throw new Error(errorContstants.RECORD_NOT_FOUND);
+    if ((!user && !customer.superAdmin) || !user) throw new Error(errorContstants.RECORD_NOT_FOUND);
 
     const { id, verifiedAt } = user;
     if (!verifiedAt && !customer.superAdmin) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);

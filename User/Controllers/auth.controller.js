@@ -5,7 +5,7 @@ import successConstants from '#constants/success.contant.js';
 import { getTenantDB } from '#root/mongoConnection.js';
 // import { createBucket } from '#storage/Service/awsService.js';
 import getError from '#utils/error.js';
-import { createToken, getTokenError } from '#utils/jwt.js';
+// import { createToken, getTokenError } from '#utils/jwt.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
 
 import { loginWithCredentals } from '../Service/user.service.js';
@@ -89,97 +89,107 @@ const verifyCustomer = async (req, res) => {
   }
 };
 
-const verifyUser = async (req, res) => {
-  /*  #swagger.tags = ["Auth"] */
-  try {
-    const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
-    if (data) {
-      const { email, tenant } = data;
+// const verifyUser = async (req, res) => {
+//   /*  #swagger.tags = ["Auth"] */
+//   try {
+//     const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
+//     if (data) {
+//       const { email, tenant } = data;
 
-      const database = tenant;
+//       const database = tenant;
 
-      const user = await User.schema(database).findOne({
-        where: { email }
-      });
+/*
+ *       const user = await User.schema(database).findOne({
+ *         where: { email }
+ *       });
+ */
 
-      if (user) {
-        if (user.verifiedAt) throw new Error(errorConstants.EMAIL_ALREADY_VERIFIED);
-        await User.schema(database).update(
-          { active: true, verifiedAt: new Date() },
-          {
-            where: {
-              email: data.email
-            }
-          }
-        );
-        return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
-      }
-      throw new Error(errorConstants.RECORD_NOT_FOUND);
-    }
-  } catch (error) {
-    getError(error, res, 'Email Verification');
-  }
-};
+/*
+ *       if (user) {
+ *         if (user.verifiedAt) throw new Error(errorConstants.EMAIL_ALREADY_VERIFIED);
+ *         await User.schema(database).update(
+ *           { active: true, verifiedAt: new Date() },
+ *           {
+ *             where: {
+ *               email: data.email
+ *             }
+ *           }
+ *         );
+ *         return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
+ *       }
+ *       throw new Error(errorConstants.RECORD_NOT_FOUND);
+ *     }
+ *   } catch (error) {
+ *     getError(error, res, 'Email Verification');
+ *   }
+ * };
+ */
 
-const resetPassword = async (req, res) => {
-  /*  #swagger.tags = ["Auth"] */
-  try {
-    const data = verify(req.params.token, process.env.JWT_RESET_SECRET);
+// const resetPassword = async (req, res) => {
+//   /*  #swagger.tags = ["Auth"] */
+//   try {
+//     const data = verify(req.params.token, process.env.JWT_RESET_SECRET);
 
-    if (data) {
-      const { email, tenant } = data;
+/*
+ *     if (data) {
+ *       const { email, tenant } = data;
+ */
 
-      const database = tenant;
+//       const database = tenant;
 
-      const updatedUser = await User.schema(database).update(
-        { password: req.body.password },
-        {
-          where: {
-            email
-          }
-        }
-      );
-      if (updatedUser[0]) return res.status(200).json({ message: successConstants.PASSWORD_RESET_SUCCESSFULL });
-      throw new Error(errorConstants.RECORD_NOT_FOUND);
-    }
-  } catch (error) {
-    getError(error, res, 'Password Reset');
-  }
-};
-const sendResetPasswordMail = async (req, res) => {
-  /*  #swagger.tags = ["Auth"] */
-  try {
-    const { email } = req.body;
-    const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
-      where: { email }
-    });
-    if (!customer) throw new Error(errorConstants.RECORD_NOT_FOUND);
-    const database = process.env.DATABASE_PREFIX + customer.tenantName;
+//       const updatedUser = await User.schema(database).update(
+//         { password: req.body.password },
+//         {
+//           where: {
+//             email
+//           }
+//         }
+//       );
+//       if (updatedUser[0]) return res.status(200).json({ message: successConstants.PASSWORD_RESET_SUCCESSFULL });
+//       throw new Error(errorConstants.RECORD_NOT_FOUND);
+//     }
+//   } catch (error) {
+//     getError(error, res, 'Password Reset');
+//   }
+// };
+// const sendResetPasswordMail = async (req, res) => {
+//   /*  #swagger.tags = ["Auth"] */
+//   try {
+//     const { email } = req.body;
+//     const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
+//       where: { email }
+//     });
+//     if (!customer) throw new Error(errorConstants.RECORD_NOT_FOUND);
+//     const database = process.env.DATABASE_PREFIX + customer.tenantName;
 
-    const user = await User.schema(database).findOne({
-      where: { email }
-    });
-    sendMail({ email, name: user.name, tenant: database }, 'reset-password');
-    return res.status(200).json({ message: 'Password rest mail sent.' });
-  } catch (error) {
-    getError(error, res);
-  }
-};
+/*
+ *     const user = await User.schema(database).findOne({
+ *       where: { email }
+ *     });
+ *     sendMail({ email, name: user.name, tenant: database }, 'reset-password');
+ *     return res.status(200).json({ message: 'Password rest mail sent.' });
+ *   } catch (error) {
+ *     getError(error, res);
+ *   }
+ * };
+ */
 
-const refreshToken = (req, res) => {
-  /*  #swagger.tags = ["Auth"] */
+// const refreshToken = (req, res) => {
+//   /*  #swagger.tags = ["Auth"] */
 
-  try {
-    const data = verify(req.params.token, process.env.JWT_REFRESH_SECRET);
-    if (data) {
-      const tokenData = { email: data.email, id: data.id };
-      const accessToken = createToken(tokenData, process.env.JWT_ACCESS_SECRET, process.env.JWT_ACCESS_EXPIRATION);
-      const refreshedToken = createToken(tokenData, process.env.JWT_REFRESH_SECRET, process.env.JWT_REFRESH_EXPIRATION);
-      return res.status(200).json({ accessToken, refreshToken: refreshedToken });
-    }
-  } catch (e) {
-    return res.status(401).json({ error: getTokenError(e, 'Refresh') });
-  }
-};
+/*
+ *   try {
+ *     const data = verify(req.params.token, process.env.JWT_REFRESH_SECRET);
+ *     if (data) {
+ *       const tokenData = { email: data.email, id: data.id };
+ *       const accessToken = createToken(tokenData, process.env.JWT_ACCESS_SECRET, process.env.JWT_ACCESS_EXPIRATION);
+ *       const refreshedToken = createToken(tokenData, process.env.JWT_REFRESH_SECRET, process.env.JWT_REFRESH_EXPIRATION);
+ *       return res.status(200).json({ accessToken, refreshToken: refreshedToken });
+ *     }
+ *   } catch (e) {
+ *     return res.status(401).json({ error: getTokenError(e, 'Refresh') });
+ *   }
+ * };
+ */
 
-export { login, refreshToken, register, resetPassword, sendResetPasswordMail, verifyCustomer, verifyUser };
+export { login, register, verifyCustomer };

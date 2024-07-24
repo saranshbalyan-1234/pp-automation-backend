@@ -6,9 +6,9 @@ import { idValidation } from '#validations/index.js';
 
 // Import { createJobValidataion } from "../Validations/scheduler.js";
 import { addJob, getJobManagerFromMap, updateJobStatus } from '../Service/schedulerService.js';
+const db = {};
 const Job = db.jobs;
 const JobManager = db.jobManagers;
-const db = {};
 export const createJob = async (req, res) => {
   /*
    *  #swagger.tags = ["Scheduler"]
