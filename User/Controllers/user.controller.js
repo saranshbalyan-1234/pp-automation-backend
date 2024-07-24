@@ -2,7 +2,6 @@ import successConstants from '#constants/success.contant.js';
 import { getTenantDB } from '#root/mongoConnection.js';
 import { s3, uploadFile } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
-// import db from '#utils/dataBaseConnection.js';
 import getError from '#utils/error.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
 
@@ -102,28 +101,6 @@ const getTeam = async (req, res) => {
   }
 };
 
-const resendVerificationEmail = async (req, res) => {
-  /*
-   *  #swagger.tags = ["User"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
-  try {
-    const { email } = req.body;
-    const { database } = req;
-
-    const user = await User.schema(database).findOne({
-      where: { email }
-    });
-    await sendMail({ email, name: user.name, tenant: database }, 'addUser');
-
-    return res.status(200).json({
-      message: 'Verification Email Resent!'
-    });
-  } catch (error) {
-    getError(error, res);
-  }
-};
-
 const deleteUser = async (req, res) => {
   /*
    *  #swagger.tags = ["User"]
@@ -215,49 +192,4 @@ const logout = (req, res) => {
   }
 };
 
-// Const toggleUserActiveInactive = async (req, res) => {
-//     /*  #swagger.tags = ["User"]
-//      #swagger.security = [{"apiKeyAuth": []}]
-//   */
-//     Try {
-//         Const userId = req.params.userId;
-//         Const active = req.body.active;
-
-/*
- *         Const updatedUser = await User.schema(req.database).update(req.body, {
- *             where: {
- *                 id: userId,
- *             },
- *         });
- *         if (updatedUser[0]) return res.status(200).json({ message: `Marked User as ${active ? "Active" : "Inactive"}` });
- *         else throw new Error(errorContstants.RECORD_NOT_FOUND);
- *     } catch (error) {
- *         getError(error, res);
- *     }
- * };
- */
-
-// Const myStatus = async (req, res) => {
-//     /*  #swagger.tags = ["User"]
-//      #swagger.security = [{"apiKeyAuth": []}]
-//   */
-//     Try {
-//         Const user = await User.schema(req.database).findOne({
-//             Where: { email: req.user.email },
-//         });
-//         If (!user.active) return res.status(403).json({ error: errorContstants.ACCOUNT_INACTIVE });
-//         Const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
-//             Where: { email: req.user.email },
-//         });
-
-//         If (customer.blocked) return res.status(403).json({ error: errorContstants.ACCOUNT_BLOCKED });
-
-/*
- *         Return res.status(200).json("Active");
- *     } catch (error) {
- *         getError(error, res);
- *     }
- * };
- */
-
-export { deleteCustomerUser, deleteUser, getAddOrUpdateUser, getTeam, logout, resendVerificationEmail, uploadProfileImage };
+export { deleteCustomerUser, deleteUser, getAddOrUpdateUser, getTeam, logout, uploadProfileImage };
