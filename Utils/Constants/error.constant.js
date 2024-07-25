@@ -19,6 +19,7 @@ const errorContstants = {
   UNABLE_TO_DELETE_MASTER_DATABASE: 'Unable To Delete Master Database!',
   UNAUTHORIZED: 'Unauthorized!',
   UNAUTHORIZED_ORIGIN: 'Unauthorized Origin',
-  UNAUTHORIZED_TENANT: 'Unauthorized Tenant!'
+  UNAUTHORIZED_TENANT: 'Unauthorized Tenant!',
+  TOO_MANY_REQUEST:"Too many requests, please try again later."
 };
 export default errorContstants;
