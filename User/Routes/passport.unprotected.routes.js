@@ -6,7 +6,6 @@ const Router = express.Router();
 
 if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
   Router.get('/google', passport.authenticate('google', { scope: ['email'], session: false }));
-
   Router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/auth/google', session: false }), (req, res) => {
     const { accessToken, refreshToken } = req.user;
     return res.redirect(`${process.env.WEBSITE_HOME}/login?accessToken=${accessToken}&refreshToken=${refreshToken}`);

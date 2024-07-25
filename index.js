@@ -4,9 +4,10 @@ import fileupload from 'express-fileupload';
 import helmet from 'helmet';
 
 import defaultMiddleware from '#middlewares/default.middleware.js';
-import { setupResponseInterceptor, setupValidationErrorInterceptor } from '#middlewares/server.middleware.js';
+import { setupCors, setupErrorInterceptor, setupRateLimiter, setupResponseInterceptor, setupTimeout, setupValidationErrorInterceptor } from '#middlewares/server.middleware.js';
 import { getTenantDB } from '#root/mongoConnection.js';
 import seedSuperAdmin from '#user/Seed/superadmin.seed.js';
+import morgalApiLogger from '#utils/Logger/api.js';
 import overrideConsole from '#utils/Logger/console.js';
 
 import registerRoutes from './registerRoutes.js';
@@ -31,22 +32,15 @@ app.use(parser.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(fileupload());
 
-// App.use(defaultMiddleware());
+process.env.MULTI_TENANT === 'false' ? console.log('MULTITENANT is turned OFF') : console.log('MULTITENANT is turned ON');
+process.env.ENCRYPTION === 'true' ? console.log('ENCRYPTION is turned ON') : console.log('ENCRYPTION is turned OFF');
+process.env.NODE_ENV === 'development' ? console.log('DEVELOPMENT MODE is turned ON') : console.log('DEVELOPMENT MODE is turned OFF');
 
-/*
- * Process.env.MULTI_TENANT === 'false' ? console.log('MULTITENANT is turned OFF') : console.log('MULTITENANT is turned ON');
- * process.env.ENCRYPTION === 'true' ? console.log('ENCRYPTION is turned ON') : console.log('ENCRYPTION is turned OFF');
- * process.env.NODE_ENV === 'development' ? console.log('DEVELOPMENT MODE is turned ON') : console.log('DEVELOPMENT MODE is turned OFF');
- */
-
-/*
- * setupCors(app);
- * setupErrorInterceptor(app);
- * setupTimeout(app);
- * setupRateLimiter(app);
- * morgalApiLogger(app);
- */
-
+setupCors(app);
+setupTimeout(app);
+setupRateLimiter(app);
+morgalApiLogger(app);
+setupErrorInterceptor(app);
 setupResponseInterceptor(app);
 
 await seedSuperAdmin(conn);

@@ -37,7 +37,7 @@ const setupRateLimiter = (app) => {
     limit: process.env.RATE_LIMIT,
 
     // Disable the `X-RateLimit-*` headers.
-    message: { error: 'Too many requests, please try again later.', limit: process.env.RATE_LIMIT, limitWindow: `${process.env.RATE_LIMIT_WINDOW}s` },
+    message: { error: 'Too many requests, please try again later.', limit: process.env.RATE_LIMIT, limitWindow: `${process.env.RATE_LIMIT_WINDOW}ms`, status: 429 },
 
     // Limit each IP to 100 requests per `window` (here, per 10 minutes).
     standardHeaders: 'draft-7',
@@ -76,6 +76,7 @@ const setupResponseInterceptor = (app) => {
 
     res.send = async function send (...args) {
       let errorObj = args[0];
+      console.debug(errorObj);
       try {
         errorObj = JSON.parse(args[0]);
       } catch (e) {
@@ -86,6 +87,10 @@ const setupResponseInterceptor = (app) => {
         errorObj.path = req.url;
         errorObj.status = res.statusCode;
         args[0] = JSON.stringify(errorObj);
+        if (req.session) {
+          await req.session.abortTransaction();
+          req.session.endSession();
+        }
       } else if (req.session) await req.session.commitTransaction();
       if (process.env.ENCRYPTION === 'true' && !(req.url.includes('decrypt') || req.url.includes('encrypt'))) args[0] = JSON.stringify(encryptWithAES(args[0]));
       // Console.log(result)
@@ -99,22 +104,21 @@ const setupResponseInterceptor = (app) => {
 const setupErrorInterceptor = (app) => {
   console.log('ERROR Interceptor is Turned ON');
   app.use(async (err, req, res, next) => {
-    console.debug('error');
     const errorObj = getErrorObj(req, res);
     const error = String(err);
     if (error === 'Error: Not allowed by CORS') {
       return res.status(403).json({
-        ...errorObj
+        ...errorObj, error: 'Not allowed by CORS', status: 403
       });
     } else if (error) {
-      console.debug('error');
-
+      console.debug(error);
       await req.session.abortTransaction();
       req.session.endSession();
 
       return res.status(403).json({
         error,
-        errorObj
+        errorObj,
+        status: 403
       });
     }
     next(err);
