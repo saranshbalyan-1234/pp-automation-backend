@@ -10,10 +10,6 @@ import { sendMail } from '#utils/Mail/nodeMailer.js';
 // import { deleteCustomer } from '../Service/database.js';
 
 const getAddOrUpdateUser = async (req, res) => {
-  /*
-   *  #swagger.tags = ["User"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const body = { ...req.body };
     delete body.verifiedAt;
@@ -44,15 +40,14 @@ const getAddOrUpdateUser = async (req, res) => {
 };
 
 // const getTeam = async (req, res) => {
-//   /*
-//    *  #swagger.tags = ["User"]
-//    *  #swagger.security = [{"apiKeyAuth": []}]
-//    */
-//   try {
-//     const team = await User.schema(req.database).findAll({
-//       attributes: ['id', 'name', 'email', 'profileImage', 'verifiedAt', 'deletedAt', 'active', 'defaultProjectId']
-//     });
-//     const filteredTeam = team.filter((el) => el.id !== req.user.id);
+
+/*
+ *   try {
+ *     const team = await User.schema(req.database).findAll({
+ *       attributes: ['id', 'name', 'email', 'profileImage', 'verifiedAt', 'deletedAt', 'active', 'defaultProjectId']
+ *     });
+ *     const filteredTeam = team.filter((el) => el.id !== req.user.id);
+ */
 
 /*
  *     const teamWithImages = await filteredTeam.map(async (user) => {
@@ -103,12 +98,11 @@ const getAddOrUpdateUser = async (req, res) => {
  */
 
 // const deleteUser = async (req, res) => {
-//   /*
-//    *  #swagger.tags = ["User"]
-//    *  #swagger.security = [{"apiKeyAuth": []}]
-//    */
-//   try {
-//     const { userId } = req.params;
+
+/*
+ *   try {
+ *     const { userId } = req.params;
+ */
 
 /*
  *     const user = await User.schema(req.database).findByPk(userId);
@@ -140,12 +134,11 @@ const getAddOrUpdateUser = async (req, res) => {
  */
 
 // const deleteCustomerUser = async (req, res) => {
-//   /*
-//    *  #swagger.tags = ["User"]
-//    *  #swagger.security = [{"apiKeyAuth": []}]
-//    */
-//   try {
-//     if (!req.user.customerAdmin) return res.status(401).json({ message: 'Only customer admin can perform this operation!' });
+
+/*
+ *   try {
+ *     if (!req.user.customerAdmin) return res.status(401).json({ message: 'Only customer admin can perform this operation!' });
+ */
 
 /*
  *     await deleteCustomer(req.user.email);
@@ -157,44 +150,42 @@ const getAddOrUpdateUser = async (req, res) => {
  */
 
 // const uploadProfileImage = async (req, res) => {
-//   /*
-//    *  #swagger.tags = ["User"]
-//    *  #swagger.security = [{"apiKeyAuth": []}]
-//    */
-//   try {
-//     const file = req.files.image;
-//     if (!file) throw new Error('Inavlid Image');
-//     const bucketName = req.database.split('_')[1].toLowerCase();
-//     const fileName = req.user.email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
-//     const result = await uploadFile(file, bucketName, fileName);
-//     if (result) {
-//       await User.schema(req.database).update(
-//         { profileImage: true },
-//         {
-//           where: {
-//             id: req.user.id
-//           }
-//         }
-//       );
-//       return res.status(200).json({ message: successConstants.UPDATED });
-//     }
-//     throw new Error('Unable to upload profile image!');
-//   } catch (error) {
-//     getError(error, res);
-//   }
-// };
+
+/*
+ *   try {
+ *     const file = req.files.image;
+ *     if (!file) throw new Error('Inavlid Image');
+ *     const bucketName = req.database.split('_')[1].toLowerCase();
+ *     const fileName = req.user.email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
+ *     const result = await uploadFile(file, bucketName, fileName);
+ *     if (result) {
+ *       await User.schema(req.database).update(
+ *         { profileImage: true },
+ *         {
+ *           where: {
+ *             id: req.user.id
+ *           }
+ *         }
+ *       );
+ *       return res.status(200).json({ message: successConstants.UPDATED });
+ *     }
+ *     throw new Error('Unable to upload profile image!');
+ *   } catch (error) {
+ *     getError(error, res);
+ *   }
+ * };
+ */
 
 // const logout = (req, res) => {
-//   /*
-//    *  #swagger.tags = ["User"]
-//    *  #swagger.security = [{"apiKeyAuth": []}]
-//    */
-//   try {
-//     if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${req.user.email}`);
-//     return res.status(200).json({ message: 'Logout Successfull' });
-//   } catch (error) {
-//     getError(error, res);
-//   }
-// };
+
+/*
+ *   try {
+ *     if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${req.user.email}`);
+ *     return res.status(200).json({ message: 'Logout Successfull' });
+ *   } catch (error) {
+ *     getError(error, res);
+ *   }
+ * };
+ */
 
 export { getAddOrUpdateUser };

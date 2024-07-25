@@ -6,10 +6,6 @@ const UserProject = db.userProjects;
 const Project = db.projects;
 const ExecutionHistory = db.executionHistory;
 export const dashboard = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Dashboard"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const user = await User.schema(req.database).findAll();
 
@@ -39,10 +35,6 @@ export const dashboard = async (req, res) => {
 };
 
 export const createdReport = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Dashboard"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const projects = await Project.schema(req.database).count({
       where: { createdByUser: req.body.userId }

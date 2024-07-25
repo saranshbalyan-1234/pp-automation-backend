@@ -13,10 +13,6 @@ const JobManager = db.jobManagers;
 const Job = db.jobs;
 
 export const createJobManager = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     /*
      * Const { error } = createJobManagerValidation.validate(req.body);
@@ -38,10 +34,6 @@ export const createJobManager = async (req, res) => {
 };
 
 export const updateJobManagerById = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { jobManagerId } = req.params;
     const { error } = idValidation.validate({ id: jobManagerId });
@@ -105,10 +97,6 @@ export const updateJobManagerById = async (req, res) => {
 };
 
 export const getAllJobManager = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const projectId = req.headers['x-project-id'];
     const jobManagers = await JobManager.schema(req.database).findAll({ where: { projectId } });
@@ -119,10 +107,6 @@ export const getAllJobManager = async (req, res) => {
 };
 
 export const getJobManagerById = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { jobManagerId } = req.params;
     const jobManager = await JobManager.schema(req.database).findByPk(jobManagerId);
@@ -133,10 +117,6 @@ export const getJobManagerById = async (req, res) => {
 };
 
 export const removeJobManager = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { jobManagerId } = req.params;
     const { error } = idValidation.validate({ id: jobManagerId });

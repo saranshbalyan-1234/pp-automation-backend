@@ -3,10 +3,6 @@ import getError from '#utils/error.js';
 import { decryptWithAES, encryptWithAES } from '../Service/aes.service.js';
 
 const encryptData = (req, res) => {
-  /*
-   *  #swagger.tags = ["Encryption"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { data } = req.body;
     const encrypted = encryptWithAES(data);
@@ -17,10 +13,6 @@ const encryptData = (req, res) => {
 };
 
 const decryptData = (req, res) => {
-  /*
-   *  #swagger.tags = ["Encryption"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { encrypted } = req.body;
     const decrypted = decryptWithAES(encrypted);

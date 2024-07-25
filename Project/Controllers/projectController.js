@@ -9,10 +9,6 @@ const UserProject = db.userProjects;
 const Project = db.projects;
 const User = db.users;
 const getMyProject = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Project"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const userId = req.user.id;
     const { error } = idValidation.validate({ id: userId });
@@ -52,10 +48,6 @@ const getMyProject = async (req, res) => {
 };
 
 const getProjectById = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Project"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { projectId } = req.params;
     const project = await Project.schema(req.database).findByPk(projectId, {
@@ -85,10 +77,6 @@ const getProjectById = async (req, res) => {
 };
 
 const addProject = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Project"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { name, description, startDate, endDate } = req.body;
 
@@ -116,10 +104,6 @@ const addProject = async (req, res) => {
 };
 
 const deleteProject = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Project"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { projectId } = req.params;
     const hProjectId = req.headers['x-project-id'];
@@ -145,10 +129,6 @@ const deleteProject = async (req, res) => {
 };
 
 const addMember = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Project"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { projectId, userId } = req.body;
     const { error } = memberProjectValidation.validate({ projectId, userId });
@@ -166,10 +146,6 @@ const addMember = async (req, res) => {
 };
 
 const deleteMember = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Project"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { projectId, userId } = req.body;
 
@@ -199,10 +175,6 @@ const deleteMember = async (req, res) => {
 };
 
 const editProject = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Project"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const projectId = req.headers['x-project-id'];
 

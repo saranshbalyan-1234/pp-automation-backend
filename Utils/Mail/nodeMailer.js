@@ -21,10 +21,6 @@ if (process.env.MAILER_SERVICE) {
 const transporter = nodemailer.createTransport(smtp);
 
 const sendMailApi = (req, res) => {
-  /*
-   *  #swagger.tags = ["Mail"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   transporter.sendMail(req.body, (error, info) => {
     if (error) {
       return res.status(400).json({ error });

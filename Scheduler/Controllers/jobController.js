@@ -10,10 +10,6 @@ const db = {};
 const Job = db.jobs;
 const JobManager = db.jobManagers;
 export const createJob = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     /*
      * Const { error } = createJobValidataion.validate(req.body);
@@ -30,10 +26,6 @@ export const createJob = async (req, res) => {
 };
 
 export const updateJob = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { jobId } = req.params;
     const { error } = idValidation.validate({ id: jobId });
@@ -52,10 +44,6 @@ export const updateJob = async (req, res) => {
 };
 
 export const getAllJobByJobManagerId = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { jobManagerId } = req.params;
     const jobs = await Job.schema(req.database).findAll({ where: { jobManagerId } });
@@ -66,10 +54,6 @@ export const getAllJobByJobManagerId = async (req, res) => {
 };
 
 export const getJobById = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { jobId } = req.params;
     const job = await Job.schema(req.database).findByPk(jobId);
@@ -80,10 +64,6 @@ export const getJobById = async (req, res) => {
 };
 
 export const removeJob = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Scheduler"]
-   *   #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { jobId } = req.params;
 

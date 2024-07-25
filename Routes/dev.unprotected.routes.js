@@ -10,7 +10,6 @@ const swaggerFile = require('../swagger.json');
 const Router = express.Router();
 
 Router.get('/health', (_req, res) =>
-  /*  #swagger.tags = ["Dev"] */
   res.json('Server is Working')
 );
 

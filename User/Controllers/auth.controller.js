@@ -12,8 +12,6 @@ import { loginWithCredentals } from '../Service/user.service.js';
 const { verify } = pkg;
 
 const register = async (req, res) => {
-  /*  #swagger.tags = ["Auth"] */
-
   try {
     const { name, email, password } = req.body;
     const tenant = process.env.DATABASE_PREFIX + [process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')];
@@ -38,7 +36,6 @@ const register = async (req, res) => {
   }
 };
 const login = async (req, res) => {
-  /*  #swagger.tags = ["Auth"] */
   try {
     const { email, password, rememberMe = false } = req.body;
 
@@ -50,8 +47,6 @@ const login = async (req, res) => {
 };
 
 const verifyCustomer = async (req, res) => {
-  /*  #swagger.tags = ["Auth"] */
-
   try {
     const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
     const { email } = data;
@@ -90,11 +85,13 @@ const verifyCustomer = async (req, res) => {
 };
 
 // const verifyUser = async (req, res) => {
-//   /*  #swagger.tags = ["Auth"] */
-//   try {
-//     const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
-//     if (data) {
-//       const { email, tenant } = data;
+
+/*
+ *   try {
+ *     const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
+ *     if (data) {
+ *       const { email, tenant } = data;
+ */
 
 //       const database = tenant;
 
@@ -126,9 +123,11 @@ const verifyCustomer = async (req, res) => {
  */
 
 // const resetPassword = async (req, res) => {
-//   /*  #swagger.tags = ["Auth"] */
-//   try {
-//     const data = verify(req.params.token, process.env.JWT_RESET_SECRET);
+
+/*
+ *   try {
+ *     const data = verify(req.params.token, process.env.JWT_RESET_SECRET);
+ */
 
 /*
  *     if (data) {
@@ -137,30 +136,34 @@ const verifyCustomer = async (req, res) => {
 
 //       const database = tenant;
 
-//       const updatedUser = await User.schema(database).update(
-//         { password: req.body.password },
-//         {
-//           where: {
-//             email
-//           }
-//         }
-//       );
-//       if (updatedUser[0]) return res.status(200).json({ message: successConstants.PASSWORD_RESET_SUCCESSFULL });
-//       throw new Error(errorConstants.RECORD_NOT_FOUND);
-//     }
-//   } catch (error) {
-//     getError(error, res, 'Password Reset');
-//   }
-// };
-// const sendResetPasswordMail = async (req, res) => {
-//   /*  #swagger.tags = ["Auth"] */
-//   try {
-//     const { email } = req.body;
-//     const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
-//       where: { email }
-//     });
-//     if (!customer) throw new Error(errorConstants.RECORD_NOT_FOUND);
-//     const database = process.env.DATABASE_PREFIX + customer.tenantName;
+/*
+ *       const updatedUser = await User.schema(database).update(
+ *         { password: req.body.password },
+ *         {
+ *           where: {
+ *             email
+ *           }
+ *         }
+ *       );
+ *       if (updatedUser[0]) return res.status(200).json({ message: successConstants.PASSWORD_RESET_SUCCESSFULL });
+ *       throw new Error(errorConstants.RECORD_NOT_FOUND);
+ *     }
+ *   } catch (error) {
+ *     getError(error, res, 'Password Reset');
+ *   }
+ * };
+ * const sendResetPasswordMail = async (req, res) => {
+ */
+
+/*
+ *   try {
+ *     const { email } = req.body;
+ *     const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
+ *       where: { email }
+ *     });
+ *     if (!customer) throw new Error(errorConstants.RECORD_NOT_FOUND);
+ *     const database = process.env.DATABASE_PREFIX + customer.tenantName;
+ */
 
 /*
  *     const user = await User.schema(database).findOne({
@@ -175,7 +178,6 @@ const verifyCustomer = async (req, res) => {
  */
 
 // const refreshToken = (req, res) => {
-//   /*  #swagger.tags = ["Auth"] */
 
 /*
  *   try {

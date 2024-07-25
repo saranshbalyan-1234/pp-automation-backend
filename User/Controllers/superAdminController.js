@@ -6,10 +6,6 @@ import getError from '#utils/error.js';
 import { deleteCustomer, getCachedKeys } from '../Service/database.js';
 
 const deleteCustomerByAdmin = async (req, res) => {
-  /*
-   *  #swagger.tags = ["Super Admin"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { customerEmail } = req.body;
     await deleteCustomer(customerEmail);
@@ -20,10 +16,6 @@ const deleteCustomerByAdmin = async (req, res) => {
 };
 
 const getAllSession = (_req, res) => {
-  /*
-   *  #swagger.tags = ["Super Admin"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const sessions = getCachedKeys();
     const sessionObj = sessions
@@ -44,10 +36,6 @@ const getAllSession = (_req, res) => {
 };
 
 const terminateSession = (req, res) => {
-  /*
-   *  #swagger.tags = ["Super Admin"]
-   *  #swagger.security = [{"apiKeyAuth": []}]
-   */
   try {
     const { email } = req.body;
     if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${email}`);
