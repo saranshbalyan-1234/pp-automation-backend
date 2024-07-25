@@ -23,8 +23,8 @@ export const validateToken = () => async (req, res, next) => {
 
       //Check whether header tenant is assigned to user or not
       if (!temp.tenant.includes(req.tenant)) return res.status(401).json({ error: errorContstants.UNAUTHORIZED_TENANT });
-
-      const db = await getTenantDB(temp.tenant);
+      console.debug(temp.tenant);
+      const db = await getTenantDB(req.tenant);
       req.models = db.models;
 
       const session = await db.startSession();

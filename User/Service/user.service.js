@@ -20,10 +20,11 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const user = await db.models.user.findOne({ email }).populate('roles');
     if ((!user && !customer.superAdmin) || !user) throw new Error(errorContstants.RECORD_NOT_FOUND);
 
-    const { id, verifiedAt } = user;
+    const { _id, verifiedAt } = user;
     if (!verifiedAt && !customer.superAdmin) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
 
-    const tokenData = { email, id, tenant: user.tenant };
+    const tokenData = { _id, email, tenant: customer.tenant };
+
     const accessToken = createToken(
       { ...tokenData, roles: user.roles, superAdmin: customer.superAdmin },
       process.env.JWT_ACCESS_SECRET,
