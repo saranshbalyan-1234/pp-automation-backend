@@ -79,7 +79,6 @@ const setupResponseInterceptor = (app) => {
 
     res.send = async function send (...args) {
       let errorObj = args[0];
-      console.debug(errorObj);
       try {
         errorObj = JSON.parse(args[0]);
       } catch (e) {
