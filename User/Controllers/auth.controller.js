@@ -68,7 +68,7 @@ const verifyCustomer = async (req, res) => {
         name,
         type: 'issuer',
         verifiedAt: Date.now()
-      }],{session: req.session });
+      }]);
 
       return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
     } catch (error) {

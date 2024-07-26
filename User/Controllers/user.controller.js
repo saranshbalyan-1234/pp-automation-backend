@@ -21,13 +21,13 @@ const getAddOrUpdateUser = async (req, res) => {
     if (password) {
       const db = await getTenantDB();
       await db.models.customers.findOneAndUpdate(
-        { email },
+        { _id: req.body._id },
         { password },
         { upsert: true });
     }
 
     const user = await req.models.user.findOneAndUpdate(
-      { email },
+      { _id: req.body._id },
       { ...req.body },
       { new: true, upsert: true });
 

@@ -37,8 +37,8 @@ process.env.ENCRYPTION === 'true' ? console.log('ENCRYPTION is turned ON') : con
 process.env.NODE_ENV === 'development' ? console.log('DEVELOPMENT MODE is turned ON') : console.log('DEVELOPMENT MODE is turned OFF');
 
 setupCors(app);
-setupTimeout(app);
-setupRateLimiter(app);
+// setupTimeout(app);
+// setupRateLimiter(app);
 morgalApiLogger(app);
 setupErrorInterceptor(app);
 setupResponseInterceptor(app);

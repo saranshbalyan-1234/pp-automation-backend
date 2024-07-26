@@ -5,6 +5,7 @@ import { createToken } from '#utils/jwt.js';
 
 const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired = true, tenant }) => {
   try {
+    let currentTenant = tenant
     let db = await getTenantDB();
     const customer = await db.models.customer.findOne({ email });
     if (!customer) throw new Error(errorContstants.RECORD_NOT_FOUND);
@@ -12,9 +13,10 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const isAuthenticated = !isPassRequired || customer.password === password;
     if (!isAuthenticated) throw new Error(errorContstants.INCORRECT_PASSWORD);
 
-    if (customer.tenant.length > 1) {
+    if (customer.tenant.length > 1 || process.env.MULTI_TENANT == 'true') {
+      currentTenant = customer.tenant.length > 1 ? req.headers['x-tenant-id'] : customer.tenant[0];
       if (!tenant) return { message: 'send tenant in x-tenant-id header', tenant: [...customer.tenant] };
-      db = await getTenantDB(tenant);
+      db = await getTenantDB(currentTenant);
     }
 
     const user = await db.models.user.findOne({ email }).populate('roles');
@@ -23,7 +25,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const { _id, verifiedAt } = user;
     if (!verifiedAt && !customer.superAdmin) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
 
-    const tokenData = { _id, email, tenant: customer.tenant };
+    const tokenData = { _id, email, tenant: customer.tenant ,currentTenant};
 
     const accessToken = createToken(
       { ...tokenData, roles: user.roles, superAdmin: customer.superAdmin },
@@ -38,6 +40,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
 
     return combinedUserData;
   } catch (e) {
+    console.log(e)
     throw new Error(e);
   }
 };
