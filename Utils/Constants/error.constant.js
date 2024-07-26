@@ -16,10 +16,10 @@ const errorContstants = {
   SOMETHING_WENT_WRONG: 'Something Went Wrong!',
   TIMEOUT: 'Timeout!',
   TOKEN_NOT_FOUND: 'Token Not Found',
+  TOO_MANY_REQUEST: 'Too many requests, please try again later.',
   UNABLE_TO_DELETE_MASTER_DATABASE: 'Unable To Delete Master Database!',
   UNAUTHORIZED: 'Unauthorized!',
   UNAUTHORIZED_ORIGIN: 'Unauthorized Origin',
-  UNAUTHORIZED_TENANT: 'Unauthorized Tenant!',
-  TOO_MANY_REQUEST:"Too many requests, please try again later."
+  UNAUTHORIZED_TENANT: 'Unauthorized Tenant!'
 };
 export default errorContstants;

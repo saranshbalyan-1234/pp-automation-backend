@@ -37,9 +37,9 @@ const setupRateLimiter = (app) => {
     limit: process.env.RATE_LIMIT,
 
     // Disable the `X-RateLimit-*` headers.
-    message: async (req, res) => { 
-      const errorObj =  getErrorObj(req,res)
-      return {error:errorContstants.TOO_MANY_REQUEST,limit: process.env.RATE_LIMIT, limitWindow: `${process.env.RATE_LIMIT_WINDOW}ms`,...errorObj}
+    message: (req, res) => {
+      const errorObj = getErrorObj(req, res);
+      return { error: errorContstants.TOO_MANY_REQUEST, limit: process.env.RATE_LIMIT, limitWindow: `${process.env.RATE_LIMIT_WINDOW}ms`, ...errorObj };
     },
 
     // Limit each IP to 100 requests per `window` (here, per 10 minutes).

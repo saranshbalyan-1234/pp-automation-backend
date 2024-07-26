@@ -47,12 +47,12 @@ const verifyCustomer = async (req, res) => {
     console.log('Verifying Customer', data.email);
 
     try {
-      const unverifiedUser = await req.models.unverified.findOneAndDelete({ email:data.email }, { session: req.session });
+      const unverifiedUser = await req.models.unverified.findOneAndDelete({ email: data.email }, { session: req.session });
       const { email, password, name, tenant } = unverifiedUser;
-      
+
       const customer = await req.models.customer.create(
-        [{email,password,tenant}],
-        {session: req.session }
+        [{ email, password, tenant }],
+        { session: req.session }
       );
 
       if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
@@ -63,7 +63,7 @@ const verifyCustomer = async (req, res) => {
         db = await getTenantDB(tenant);
       }
       await db.models.user.create([{
-        _id:customer[0]._id,
+        _id: customer[0]._id,
         email,
         name,
         type: 'issuer',

@@ -28,7 +28,7 @@ const sendMailApi = (req, res) => {
     return res.status(200).json(info);
   });
 };
-const sendMail = async (data, type) => {
+const sendMail = (data, type) => {
   try {
     let mailOption = {
       html: '',
