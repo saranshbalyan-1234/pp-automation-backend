@@ -27,6 +27,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const { _id, verifiedAt } = user;
     if (!verifiedAt && !customer.superAdmin) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
 
+    // Below code is to generate token only, no logic
     const tokenData = { _id, currentTenant, email, tenant: customer.tenant };
 
     const accessToken = createToken(
