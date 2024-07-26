@@ -70,7 +70,7 @@ const sendMail = async (data, type) => {
       default:
         break;
     }
-    await transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM });
+    // await transporter.sendMail({ ...mailOption, from: process.env.MAILER_FROM });
     console.success('Mail send', mailOption);
     return true;
   } catch (err) {

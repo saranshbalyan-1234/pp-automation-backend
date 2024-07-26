@@ -15,7 +15,7 @@ const getCreateOrUpdateRole = async (req, res) => {
 
 const deleteRole = async (req, res) => {
   try {
-    const role = await req.models.roles.findOneAndDelete({ _id: req.body._id });
+    const role = await req.models.roles.findOneAndDelete({ _id: req.params.id });
     return res.status(200).json(role);
   } catch (error) {
     getError(error, res);

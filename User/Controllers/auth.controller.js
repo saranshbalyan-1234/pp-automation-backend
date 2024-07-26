@@ -16,14 +16,8 @@ const register = async (req, res) => {
     const { name, email, password } = req.body;
     const tenant = process.env.DATABASE_PREFIX + [process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')];
 
-    await req.models.customer.create(
-      [{ email, password, tenant }],
-      { session: req.session }
-    );
-
     await req.models.unverified.create(
-      [{ email, name, password, tenant }],
-      { session: req.session }
+      [{ email, name, password, tenant }]
     );
 
     await sendMail({ email, name }, 'customerRegister');
@@ -49,31 +43,32 @@ const login = async (req, res) => {
 const verifyCustomer = async (req, res) => {
   try {
     const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
-    const { email } = data;
 
-    console.log('Verifying Customer', email);
+    console.log('Verifying Customer', data.email);
 
     try {
-      const unverifiedUser = await req.models.unverified.findOneAndDelete({ email }, { session: req.session });
-      const customer = await req.models.unverified.findOne({ email });
-      const tenant = customer.tenant[0];
+      const unverifiedUser = await req.models.unverified.findOneAndDelete({ email:data.email }, { session: req.session });
+      const { email, password, name, tenant } = unverifiedUser;
+      
+      const customer = await req.models.customer.create(
+        [{email,password,tenant}],
+        {session: req.session }
+      );
 
-      if (!unverifiedUser || !tenant || !tenant) throw new Error(errorConstants.RECORD_NOT_FOUND);
-
-      const { name } = unverifiedUser;
+      if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
 
       let db = req;
       if (process.env.MULTI_TENANT !== 'false') {
         // createBucket(tenant.replace(process.env.DATABASE_PREFIX, ''))
         db = await getTenantDB(tenant);
-      };
-
+      }
       await db.models.user.create([{
+        _id:customer[0]._id,
         email,
         name,
         type: 'issuer',
         verifiedAt: Date.now()
-      }]);
+      }],{session: req.session });
 
       return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
     } catch (error) {
