@@ -14,6 +14,7 @@ const errorContstants = {
   NOT_AN_ACTIVE_SESSION: 'Not An Active Session!',
   RECORD_NOT_FOUND: 'Record Not Found!',
   SOMETHING_WENT_WRONG: 'Something Went Wrong!',
+  TENANT_HEADER_REQUIRED: 'Tenant Header Required!',
   TIMEOUT: 'Timeout!',
   TOKEN_NOT_FOUND: 'Token Not Found',
   TOO_MANY_REQUEST: 'Too many requests, please try again later.',

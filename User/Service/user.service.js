@@ -5,20 +5,22 @@ import { createToken } from '#utils/jwt.js';
 
 const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired = true, tenant }) => {
   try {
-    let currentTenant = tenant;
     let db = await getTenantDB();
     const customer = await db.models.customer.findOne({ email });
+    let currentTenant = customer.tenant[0];
     if (!customer) throw new Error(errorContstants.RECORD_NOT_FOUND);
 
     const isAuthenticated = !isPassRequired || customer.password === password;
     if (!isAuthenticated) throw new Error(errorContstants.INCORRECT_PASSWORD);
 
-    if (customer.tenant.length > 1 || process.env.MULTI_TENANT === 'true') {
-      currentTenant = customer.tenant.length > 1 ? tenant : customer.tenant[0];
-      if (!tenant) return { message: 'send tenant in x-tenant-id header', tenant: [...customer.tenant] };
-      db = await getTenantDB(currentTenant);
+    if (customer.tenant.length > 1) {
+      if (tenant) {
+        //Check if user has access to this tenant
+        if (customer.tenant.includes(tenant)) currentTenant = tenant;
+        else throw new Error(errorContstants.UNAUTHORIZED_TENANT);
+      } else throw new Error(errorContstants.TENANT_HEADER_REQUIRED);
     }
-
+    db = await getTenantDB(currentTenant);
     const user = await db.models.user.findOne({ email }).populate('roles');
     if ((!user && !customer.superAdmin) || !user) throw new Error(errorContstants.RECORD_NOT_FOUND);
 
