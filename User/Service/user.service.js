@@ -8,7 +8,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     let db = await getTenantDB();
     const customer = await db.models.customer.findOne({ email });
     if (!customer) throw new Error(errorContstants.RECORD_NOT_FOUND);
-    
+
     let currentTenant = customer.tenant[0];
 
     const isAuthenticated = !isPassRequired || customer.password === password;
@@ -39,7 +39,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const refreshToken = createToken(tokenData, process.env.JWT_REFRESH_SECRET, rememberMe ? process.env.JWT_REFRESH_REMEMBER_EXPIRATION : process.env.JWT_REFRESH_EXPIRATION);
     if (process.env.JWT_ACCESS_CACHE) cache.set(`accesstoken_${email}`, accessToken, process.env.JWT_ACCESS_CACHE);
 
-    const combinedUserData = { ...customer, ...user, accessToken, refreshToken };
+    const combinedUserData = { ...customer, ...user,currentTenant, accessToken, refreshToken };
     delete combinedUserData.password;
 
     return combinedUserData;
