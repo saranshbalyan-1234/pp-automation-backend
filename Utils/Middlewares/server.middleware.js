@@ -114,8 +114,10 @@ const setupErrorInterceptor = (app) => {
       });
     } else if (error) {
       console.debug(error);
-      await req.session.abortTransaction();
-      req.session.endSession();
+      if (req.session) {
+        await req.session.abortTransaction();
+        req.session.endSession();
+      }
 
       return res.status(403).json({
         error,
