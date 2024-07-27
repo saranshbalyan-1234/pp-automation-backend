@@ -44,7 +44,8 @@ export const createDbConnection = async (tenant = process.env.DATABASE_PREFIX + 
   try {
     console.log(`Establishing ${tenant} db connection`)
     const DB_URL = process.env.DATABASE_URL;
-    const conn = await mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, clientOption).asPromise();
+    const conn = mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, clientOption);
+    await conn.$initialConnection // wait for connection to get established
     await registerAllSchema(conn);
     connectionEvents(conn);
     connectionsObj[tenant] = conn;
@@ -66,7 +67,7 @@ const registerAllSchema = async (db) => {
     const tempAr1 = tempAr[tempAr.length - 3].split('/');
     const name = tempAr1[tempAr1.length - 1];
 
-    db.model(name.toLowerCase(), defaultFile);
+    await db.model(name.toLowerCase(), defaultFile);
   };
 };
 
