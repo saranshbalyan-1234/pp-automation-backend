@@ -19,7 +19,7 @@ export const validateToken = () => async (req, res, next) => {
       delete temp.iat;
       delete temp.exp;
       req.user = temp;
-      req.tenant = temp.currentTenant
+      req.tenant = temp.currentTenant;
 
       const db = await getTenantDB(req.tenant);
       req.models = db.models;

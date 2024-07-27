@@ -42,14 +42,14 @@ process.on('SIGINT', () => {
 
 export const createDbConnection = async (tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) => {
   try {
-    console.log(`Establishing ${tenant} db connection`)
+    console.log(`Establishing ${tenant} db connection`);
     const DB_URL = process.env.DATABASE_URL;
     const conn = mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, clientOption);
-    await conn.$initialConnection // wait for connection to get established
+    await conn.$initialConnection; // wait for connection to get established
     await registerAllSchema(conn);
     connectionEvents(conn);
     connectionsObj[tenant] = conn;
-    console.log('Connection Established')
+    console.log('Connection Established');
     return conn;
   } catch (error) {
     console.log('Error while connecting to DB', error);

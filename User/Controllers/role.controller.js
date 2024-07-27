@@ -1,5 +1,6 @@
+import mongoose from 'mongoose';
+
 import getError from '#utils/error.js';
-import mongoose from 'mongoose'
 const getCreateOrUpdateRole = async (req, res) => {
   try {
     const role = await req.models.roles.findOneAndUpdate(

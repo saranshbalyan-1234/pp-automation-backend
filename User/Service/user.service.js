@@ -39,7 +39,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const refreshToken = createToken(tokenData, process.env.JWT_REFRESH_SECRET, rememberMe ? process.env.JWT_REFRESH_REMEMBER_EXPIRATION : process.env.JWT_REFRESH_EXPIRATION);
     if (process.env.JWT_ACCESS_CACHE) cache.set(`accesstoken_${email}`, accessToken, process.env.JWT_ACCESS_CACHE);
 
-    const combinedUserData = { ...customer, ...user,currentTenant, accessToken, refreshToken };
+    const combinedUserData = { ...customer, ...user, accessToken, currentTenant, refreshToken };
     delete combinedUserData.password;
 
     return combinedUserData;

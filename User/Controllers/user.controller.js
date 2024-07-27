@@ -1,4 +1,6 @@
 // import successConstants from '#constants/success.contant.js';
+import mongoose from 'mongoose';
+
 import { getTenantDB } from '#root/mongo.connection.js';
 /*
  * import { s3, uploadFile } from '#storage/Service/awsService.js';
@@ -6,7 +8,6 @@ import { getTenantDB } from '#root/mongo.connection.js';
  */
 import getError from '#utils/error.js';
 import { sendMail } from '#utils/Mail/nodeMailer.js';
-import mongoose from 'mongoose'
 // import { deleteCustomer } from '../Service/database.js';
 
 const getAddOrUpdateUser = async (req, res) => {
@@ -17,11 +18,11 @@ const getAddOrUpdateUser = async (req, res) => {
     delete body.type;
 
     const { name, email, password } = body;
-    req.body._id = req.body._id || new mongoose.Types.ObjectId() 
+    req.body._id ||= new mongoose.Types.ObjectId();
     if (password) {
       const db = await getTenantDB();
       await db.models.customer.findOneAndUpdate(
-        { _id: req.body._id},
+        { _id: req.body._id },
         { password },
         { upsert: true });
     }

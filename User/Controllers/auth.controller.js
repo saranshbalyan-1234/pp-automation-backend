@@ -50,16 +50,17 @@ const verifyCustomer = async (req, res) => {
       const { email, password, name, tenant } = unverifiedUser;
 
       const customer = await req.models.customer.findOneAndUpdate({ email },
-        { email, password, $push: { tenant  } },
-        { session: req.session,new: true, upsert: true  }
+        { $push: { tenant }, email, password },
+        { new: true, session: req.session, upsert: true }
       );
       if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
 
-      let db = req;
-      // if (process.env.MULTI_TENANT !== 'false') {
-      // createBucket(tenant.replace(process.env.DATABASE_PREFIX, ''))
-      // }
-      db = await getTenantDB(tenant);
+      /*
+       * if (process.env.MULTI_TENANT !== 'false') {
+       * createBucket(tenant.replace(process.env.DATABASE_PREFIX, ''))
+       * }
+       */
+      const db = await getTenantDB(tenant);
       await db.models.user.create([{
         _id: customer._id,
         email,
