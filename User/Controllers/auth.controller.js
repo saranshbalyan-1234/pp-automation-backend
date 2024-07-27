@@ -77,44 +77,6 @@ const verifyCustomer = async (req, res) => {
   }
 };
 
-// const verifyUser = async (req, res) => {
-
-/*
- *   try {
- *     const data = verify(req.params.token, process.env.JWT_VERIFICATION_SECRET);
- *     if (data) {
- *       const { email, tenant } = data;
- */
-
-//       const database = tenant;
-
-/*
- *       const user = await User.schema(database).findOne({
- *         where: { email }
- *       });
- */
-
-/*
- *       if (user) {
- *         if (user.verifiedAt) throw new Error(errorConstants.EMAIL_ALREADY_VERIFIED);
- *         await User.schema(database).update(
- *           { active: true, verifiedAt: new Date() },
- *           {
- *             where: {
- *               email: data.email
- *             }
- *           }
- *         );
- *         return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
- *       }
- *       throw new Error(errorConstants.RECORD_NOT_FOUND);
- *     }
- *   } catch (error) {
- *     getError(error, res, 'Email Verification');
- *   }
- * };
- */
-
 // const resetPassword = async (req, res) => {
 
 /*
