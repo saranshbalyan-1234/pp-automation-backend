@@ -1,5 +1,5 @@
 // import successConstants from '#constants/success.contant.js';
-import { getTenantDB } from '#root/mongoConnection.js';
+import { getTenantDB } from '#root/mongo.connection.js';
 /*
  * import { s3, uploadFile } from '#storage/Service/awsService.js';
  * import cache from '#utils/cache.js';
