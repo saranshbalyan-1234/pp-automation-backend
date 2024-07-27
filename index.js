@@ -7,8 +7,8 @@ import defaultMiddleware from '#middlewares/default.middleware.js';
 import { setupCors, setupErrorInterceptor, setupResponseInterceptor, setupValidationErrorInterceptor } from '#middlewares/server.middleware.js';
 import { getTenantDB } from '#root/mongoConnection.js';
 import seedSuperAdmin from '#user/Seed/superadmin.seed.js';
-import morgalApiLogger from '#utils/Logger/api.js';
-import overrideConsole from '#utils/Logger/console.js';
+import morgalApiLogger from '#utils/Logger/api.logger.js';
+import overrideConsole from '#utils/Logger/console.logger.js';
 
 import registerRoutes from './registerRoutes.js';
 // Import { scheduleInit } from "#scheduler/Service/schedulerService.js";
