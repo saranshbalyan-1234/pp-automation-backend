@@ -20,7 +20,7 @@ const getAddOrUpdateUser = async (req, res) => {
 
     if (password) {
       const db = await getTenantDB();
-      await db.models.customers.findOneAndUpdate(
+      await db.models.customer.findOneAndUpdate(
         { _id: req.body._id },
         { password },
         { upsert: true });

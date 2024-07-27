@@ -7,8 +7,8 @@ const clientOption = {
    * SocketTimeoutMS: 30000,
    * ServerSelectionTimeoutMS:30000,
    */
-  maxPoolSize: 5,
-  minPoolSize: 1
+  maxPoolSize: 100,
+  minPoolSize: 5
 };
 const connectionsObj = {};
 mongoose.set('debug', true);
@@ -42,11 +42,13 @@ process.on('SIGINT', () => {
 
 export const createDbConnection = async (tenant = process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) => {
   try {
+    console.info(`Establishing ${tenant} db connection`)
     const DB_URL = process.env.DATABASE_URL;
-    const conn = mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, clientOption);
+    const conn = await mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, clientOption).asPromise();
     await registerAllSchema(conn);
     connectionEvents(conn);
     connectionsObj[tenant] = conn;
+    console.info('Connection Established')
     return conn;
   } catch (error) {
     console.log('Error while connecting to DB', error);
