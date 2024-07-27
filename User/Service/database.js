@@ -56,8 +56,6 @@ const getCachedKeys = () => {
 };
 
 const dropDatabase = async (database) => {
-  if (process.env.MULTI_TENANT === 'false') return true;
-
   if (database === process.env.DATABASE_PREFIX + process.env.DATABASE_NAME) throw new Error(errorContstants.UNABLE_TO_DELETE_MASTER_DATABASE);
 
   console.log(`deleting database ${database}`);

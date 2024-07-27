@@ -7,8 +7,9 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
   try {
     let db = await getTenantDB();
     const customer = await db.models.customer.findOne({ email });
-    let currentTenant = customer.tenant[0];
     if (!customer) throw new Error(errorContstants.RECORD_NOT_FOUND);
+    
+    let currentTenant = customer.tenant[0];
 
     const isAuthenticated = !isPassRequired || customer.password === password;
     if (!isAuthenticated) throw new Error(errorContstants.INCORRECT_PASSWORD);

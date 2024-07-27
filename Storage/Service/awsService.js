@@ -67,7 +67,6 @@ export const createBucket = (bucketName) => {
 
 export const deleteBucket = (bucketName) => {
   try {
-    if (process.env.MULTI_TENANT === 'false') return;
     if (!bucketName) throw new Error(errorContstants.INVALID_BUCKET);
 
     const bucketParams = {

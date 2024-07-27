@@ -22,7 +22,8 @@ const Unverified = BaseSchema({
   },
   tenant: {
     required: 'tenant is required',
-    type: Array
+    trim: true,
+    type: String
   }
 });
 

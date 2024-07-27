@@ -14,8 +14,7 @@ const { verify } = pkg;
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const tenant = process.env.DATABASE_PREFIX + [process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')];
-
+    const tenant = process.env.DATABASE_PREFIX + (process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, ''));
     await req.models.unverified.create(
       [{ email, name, password, tenant }]
     );
@@ -58,10 +57,10 @@ const verifyCustomer = async (req, res) => {
       if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
 
       let db = req;
-      if (process.env.MULTI_TENANT !== 'false') {
-        // createBucket(tenant.replace(process.env.DATABASE_PREFIX, ''))
-        db = await getTenantDB(tenant);
-      }
+      // if (process.env.MULTI_TENANT !== 'false') {
+      // createBucket(tenant.replace(process.env.DATABASE_PREFIX, ''))
+      // }
+      db = await getTenantDB(tenant);
       await db.models.user.create([{
         _id: customer[0]._id,
         email,
