@@ -86,7 +86,7 @@ const resendVerificationMail = async (req, res) => {
     const { name } = unverifiedUser;
 
     await sendMail({ email, name }, 'customerRegister');
-    return res.status(200).json({ message: 'Password rest mail sent.' });
+    return res.status(200).json({ message: 'Mail Sent!' });
   } catch (error) {
     getError(error, res);
   }
