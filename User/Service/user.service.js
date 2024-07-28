@@ -7,11 +7,11 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
   try {
     let db = await getTenantDB();
     const customer = await db.models.customer.findOne({ email });
-    if (!customer) { 
-      const unverifiedUser = await req.models.unverified.findOne({ email });
-      if (unverifiedUser)  throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
+    if (!customer) {
+      const unverifiedUser = await db.models.unverified.findOne({ email });
+      if (unverifiedUser) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
       else throw new Error(errorContstants.RECORD_NOT_FOUND);
-    } 
+    }
 
     let currentTenant = customer.tenant[0];
 

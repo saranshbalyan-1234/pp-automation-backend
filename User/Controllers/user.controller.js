@@ -15,7 +15,7 @@ const getOrUpdateUser = async (req, res) => {
     delete body.status;
     delete body.type;
 
-    const { assword } = body;
+    const { password } = body;
     req.body._id ||= new mongoose.Types.ObjectId();
     if (password) {
       const db = await getTenantDB();

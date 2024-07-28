@@ -14,7 +14,7 @@ const { verify } = pkg;
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const tenant = req.headers['x-tenant-id'] || process.env.DATABASE_PREFIX + (process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, ''))
+    const tenant = req.headers['x-tenant-id'] || process.env.DATABASE_PREFIX + (process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, ''));
     await req.models.unverified.create(
       [{ email, name, password, tenant }]
     );
@@ -78,6 +78,20 @@ const verifyCustomer = async (req, res) => {
   }
 };
 
+const resendVerificationMail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const unverifiedUser = await req.models.unverified.findOne({ email });
+    if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
+    const { name } = unverifiedUser;
+
+    await sendMail({ email, name }, 'customerRegister');
+    return res.status(200).json({ message: 'Password rest mail sent.' });
+  } catch (error) {
+    getError(error, res);
+  }
+};
+
 // const resetPassword = async (req, res) => {
 
 /*
@@ -108,34 +122,10 @@ const verifyCustomer = async (req, res) => {
  *     getError(error, res, 'Password Reset');
  *   }
  * };
- * const sendResetPasswordMail = async (req, res) => {
- */
-
-/*
- *   try {
- *     const { email } = req.body;
- *     const customer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).findOne({
- *       where: { email }
- *     });
- *     if (!customer) throw new Error(errorConstants.RECORD_NOT_FOUND);
- *     const database = process.env.DATABASE_PREFIX + customer.tenantName;
- */
-
-/*
- *     const user = await User.schema(database).findOne({
- *       where: { email }
- *     });
- *     sendMail({ email, name: user.name, tenant: database }, 'reset-password');
- *     return res.status(200).json({ message: 'Password rest mail sent.' });
- *   } catch (error) {
- *     getError(error, res);
- *   }
- * };
- */
-
-// const refreshToken = (req, res) => {
-
-/*
+ *
+ *       // const refreshToken = (req, res) => {
+ *
+ *       /*
  *   try {
  *     const data = verify(req.params.token, process.env.JWT_REFRESH_SECRET);
  *     if (data) {
@@ -150,4 +140,4 @@ const verifyCustomer = async (req, res) => {
  * };
  */
 
-export { login, register, verifyCustomer };
+export { login, register, resendVerificationMail, verifyCustomer };

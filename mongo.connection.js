@@ -13,7 +13,8 @@ const clientOption = {
 const connectionsObj = {};
 mongoose.set('debug', true);
 
-const registerAllPlugins = async() => {
+const registerAllPlugins = async () => {
+  console.log('Registering Plugins');
   const files = getDirectories('.', 'plugin');
 
   for (const file of files) {
@@ -21,6 +22,7 @@ const registerAllPlugins = async() => {
     const defaultFile = schema.default;
     mongoose.plugin(defaultFile);
   };
+  console.log('Registered All Plugins');
 };
 
 registerAllPlugins();
@@ -58,7 +60,7 @@ export const createDbConnection = async (tenant = process.env.DATABASE_PREFIX + 
 
 const registerAllSchema = async (db) => {
   const files = getDirectories('.', 'schema');
-    for (const file of files){
+  for (const file of files) {
     const schema = await import(file);
     const defaultFile = schema.default;
 
