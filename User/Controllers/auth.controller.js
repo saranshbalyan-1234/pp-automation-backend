@@ -13,7 +13,8 @@ const { verify } = pkg;
 
 const register = async (req, res) => {
   try {
-    const { name, email, password, tenant=process.env.DATABASE_PREFIX + (process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')) } = req.body;
+    const { name, email, password } = req.body;
+    const tenant = req.headers['x-tenant-id'] || process.env.DATABASE_PREFIX + (process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, ''))
     await req.models.unverified.create(
       [{ email, name, password, tenant }]
     );
@@ -47,7 +48,7 @@ const verifyCustomer = async (req, res) => {
     try {
       const unverifiedUser = await req.models.unverified.findOneAndDelete({ email: data.email }, { session: req.session });
       if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
-      
+
       const { email, password, name, tenant } = unverifiedUser;
 
       const customer = await req.models.customer.findOneAndUpdate({ email },
