@@ -14,7 +14,6 @@ const connectionsObj = {};
 mongoose.set('debug', true);
 
 const registerAllPlugins = async () => {
-  console.log('Registering Plugins');
   const files = getDirectories('.', 'plugin');
 
   for (const file of files) {

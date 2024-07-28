@@ -2,7 +2,7 @@ import { getTenantDB } from '#root/mongo.connection.js';
 
 const defaultMiddleware = () => async (req, _res, next) => {
   try {
-    const allowRoutes = ['auth'];
+    const allowRoutes = ['auth', 'superadmin'];
     if (!allowRoutes.includes(req.url.split('/')[1])) return next();
 
     const db = await getTenantDB();

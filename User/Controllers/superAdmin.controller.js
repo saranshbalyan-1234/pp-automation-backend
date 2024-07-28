@@ -5,6 +5,14 @@ import getError from '#utils/error.js';
 
 import { deleteCustomer, getCachedKeys } from '../Service/database.js';
 
+const getAllTenant = async (req, res) => {
+  try {
+    const tenants = await req.models.customer.distinct('tenant');
+    return res.status(200).json(tenants);
+  } catch (error) {
+    getError(error, res);
+  }
+};
 const deleteCustomerByAdmin = async (req, res) => {
   try {
     const { customerEmail } = req.body;
@@ -45,4 +53,4 @@ const terminateSession = (req, res) => {
   }
 };
 
-export { deleteCustomerByAdmin, getAllSession, terminateSession };
+export { deleteCustomerByAdmin, getAllSession, getAllTenant, terminateSession };
