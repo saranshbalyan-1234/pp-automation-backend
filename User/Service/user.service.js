@@ -7,10 +7,10 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
   try {
     let db = await getTenantDB();
     const customer = await db.models.customer.findOne({ email });
-    
+
     if (customer) {
-      if(customer.blocked) throw new Error(errorContstants.ACCOUNT_BLOCKED)
-    } else { 
+      if (customer.blocked) throw new Error(errorContstants.ACCOUNT_BLOCKED);
+    } else {
       const unverifiedUser = await db.models.unverified.findOne({ email });
       if (unverifiedUser) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
       else throw new Error(errorContstants.RECORD_NOT_FOUND);
