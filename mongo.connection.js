@@ -13,14 +13,14 @@ const clientOption = {
 const connectionsObj = {};
 mongoose.set('debug', true);
 
-const registerAllPlugins = () => {
+const registerAllPlugins = async() => {
   const files = getDirectories('.', 'plugin');
 
-  files.forEach(async element => {
-    const schema = await import(element);
+  for (const file of files) {
+    const schema = await import(file);
     const defaultFile = schema.default;
     mongoose.plugin(defaultFile);
-  });
+  };
 };
 
 registerAllPlugins();
@@ -58,12 +58,11 @@ export const createDbConnection = async (tenant = process.env.DATABASE_PREFIX + 
 
 const registerAllSchema = async (db) => {
   const files = getDirectories('.', 'schema');
-  for (let i = 0; i < files.length; i++) {
-    const element = files[i];
-    const schema = await import(element);
+    for (const file of files){
+    const schema = await import(file);
     const defaultFile = schema.default;
 
-    const tempAr = element.split('.');
+    const tempAr = file.split('.');
     const tempAr1 = tempAr[tempAr.length - 3].split('/');
     const name = tempAr1[tempAr1.length - 1];
 
