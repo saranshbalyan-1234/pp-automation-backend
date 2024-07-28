@@ -3,9 +3,7 @@ import BaseSchema from '#utils/Mongo/BaseSchema.js';
 const customerSchema = BaseSchema({
   blocked: {
     default: false,
-    lowercase: true,
     required: 'Blocked Status is required',
-    trim: true,
     type: Boolean
   },
   email: {
@@ -25,9 +23,7 @@ const customerSchema = BaseSchema({
   superAdmin: {
     default: false,
     immutable: true,
-    lowercase: true,
     required: 'SuperAdmin is required',
-    trim: true,
     type: Boolean
   },
   tenant: {
