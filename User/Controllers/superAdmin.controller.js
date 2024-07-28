@@ -13,6 +13,7 @@ const getAllTenant = async (req, res) => {
     getError(error, res);
   }
 };
+
 const deleteCustomerByAdmin = async (req, res) => {
   try {
     const { customerEmail } = req.body;
