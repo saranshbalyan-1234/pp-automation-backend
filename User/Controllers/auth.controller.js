@@ -17,7 +17,7 @@ const register = async (req, res) => {
     await req.models.unverified.create(
       [{ email, name, password, tenant }]
     );
-    
+
     await sendMail({ email, name }, 'customerRegister');
 
     return res.status(200).json({
@@ -46,13 +46,14 @@ const verifyCustomer = async (req, res) => {
 
     try {
       const unverifiedUser = await req.models.unverified.findOneAndDelete({ email: data.email }, { session: req.session });
+      if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
+      
       const { email, password, name, tenant } = unverifiedUser;
 
       const customer = await req.models.customer.findOneAndUpdate({ email },
         { $push: { tenant }, email, password },
         { new: true, session: req.session, upsert: true }
       );
-      if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
 
       /*
        * if (process.env.MULTI_TENANT !== 'false') {
@@ -64,8 +65,7 @@ const verifyCustomer = async (req, res) => {
         _id: customer._id,
         email,
         name,
-        type: 'issuer',
-        verifiedAt: Date.now()
+        type: 'issuer'
       }]);
 
       return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });

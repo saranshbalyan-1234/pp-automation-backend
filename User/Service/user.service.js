@@ -7,7 +7,11 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
   try {
     let db = await getTenantDB();
     const customer = await db.models.customer.findOne({ email });
-    if (!customer) throw new Error(errorContstants.RECORD_NOT_FOUND);
+    if (!customer) { 
+      const unverifiedUser = await req.models.unverified.findOne({ email });
+      if (unverifiedUser)  throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
+      else throw new Error(errorContstants.RECORD_NOT_FOUND);
+    } 
 
     let currentTenant = customer.tenant[0];
 
@@ -25,8 +29,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
     const user = await db.models.user.findOne({ email }).populate('roles');
     if ((!user && !customer.superAdmin) || !user) throw new Error(errorContstants.RECORD_NOT_FOUND);
 
-    const { _id, verifiedAt } = user;
-    if (!verifiedAt && !customer.superAdmin) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
+    const { _id } = user;
 
     // Below code is to generate token only, no logic
     const tokenData = { _id, currentTenant, email, tenant: customer.tenant };

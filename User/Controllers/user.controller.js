@@ -7,17 +7,15 @@ import { getTenantDB } from '#root/mongo.connection.js';
  * import cache from '#utils/cache.js';
  */
 import getError from '#utils/error.js';
-import { sendMail } from '#utils/Mail/nodeMailer.js';
 // import { deleteCustomer } from '../Service/database.js';
 
-const getAddOrUpdateUser = async (req, res) => {
+const getOrUpdateUser = async (req, res) => {
   try {
     const body = { ...req.body };
-    delete body.verifiedAt;
     delete body.status;
     delete body.type;
 
-    const { name, email, password } = body;
+    const { assword } = body;
     req.body._id ||= new mongoose.Types.ObjectId();
     if (password) {
       const db = await getTenantDB();
@@ -31,8 +29,6 @@ const getAddOrUpdateUser = async (req, res) => {
       { _id: req.body._id },
       { ...req.body },
       { new: true });
-
-    if (email && !user.verifiedAt) await sendMail({ email, name, tenant: req.tenant }, 'addUser');
 
     return res.status(200).json(user);
   } catch (error) {
@@ -108,7 +104,6 @@ const getAddOrUpdateUser = async (req, res) => {
 /*
  *     const user = await User.schema(req.database).findByPk(userId);
  *     if (req.user.tenant === user.email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase()) throw new Error('Cannot Delete Customer Admin');
- *     if (user.verifiedAt) throw new Error('Cannot delete Active User, You can only mark them inactive!');
  *     await userProject.schema(req.database).destroy({ where: { userId } });
  *     await UserRole.schema(req.database).destroy({ where: { userId } });
  *     const deletedUser = await User.schema(req.database).destroy({
@@ -189,4 +184,4 @@ const getAddOrUpdateUser = async (req, res) => {
  * };
  */
 
-export { getAddOrUpdateUser };
+export { getOrUpdateUser };

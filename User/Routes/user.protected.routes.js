@@ -1,12 +1,12 @@
 import express from 'express';
 
 import {
-  getAddOrUpdateUser
+  getOrUpdateUser
 } from '../Controllers/user.controller.js';
 
 const Router = express.Router();
 
-Router.post('/', getAddOrUpdateUser);
+Router.post('/', getOrUpdateUser);
 
 /*
  * Router.delete('/customer', validateCustomerAdmin(), deleteCustomerUser);
