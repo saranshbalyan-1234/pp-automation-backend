@@ -50,7 +50,6 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
 
     return combinedUserData;
   } catch (e) {
-    console.log(e);
     throw new Error(e);
   }
 };

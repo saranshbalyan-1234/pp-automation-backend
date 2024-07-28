@@ -7,9 +7,9 @@ import { encryptWithAES } from '#encryption/Service/aes.service.js';
 const setupTimeout = (app) => {
   if (!process.env.TIMEOUT) return console.log('Timeout is turned OFF');
   console.log(`Timeout is turned ON with ${process.env.TIMEOUT}`);
-  app.use((req, res, next) => {
+  app.use((_req, res, next) => {
     res.setTimeout(parseInt(process.env.TIMEOUT) || 60_000, () => {
-      console.error('Request has timed out.', req);
+      console.error('Request has timed out.');
       res.status(408).json({ error: errorContstants.TIMEOUT });
       res.json =
         res.send =
@@ -77,25 +77,30 @@ const setupResponseInterceptor = (app) => {
   app.use((req, res, next) => {
     const originalSend = res.send;
 
-    res.send = async function send (...args) {
+    res.send = function send (...args) {
       let errorObj = args[0];
       try {
         errorObj = JSON.parse(args[0]);
       } catch (e) {
         console.error('Not a JSON response');
       }
-      if (typeof errorObj === 'object' && errorObj.error) {
+      if (errorObj && typeof errorObj === 'object' && errorObj.error) {
         errorObj.method = req.method;
         errorObj.path = req.url;
         errorObj.status = res.statusCode;
         args[0] = JSON.stringify(errorObj);
         if (req.session) {
-          await req.session.abortTransaction();
-          req.session.endSession();
+          req.session.abortTransaction().then(() => { 
+            req.session.endSession();
+          })
         }
-      } else if (req.session) await req.session.commitTransaction();
+      } else if (req.session) {
+        req.session.commitTransaction().then(() => { 
+          req.session.endSession();
+        })
+     
+      }
       if (process.env.ENCRYPTION === 'true' && !(req.url.includes('decrypt') || req.url.includes('encrypt'))) args[0] = JSON.stringify(encryptWithAES(args[0]));
-      // Console.log(result)
       originalSend.apply(res, args);
     };
 
@@ -105,7 +110,7 @@ const setupResponseInterceptor = (app) => {
 
 const setupErrorInterceptor = (app) => {
   console.log('ERROR Interceptor is Turned ON');
-  app.use(async (err, req, res, next) => {
+  app.use((err, req, res, next) => {
     const errorObj = getErrorObj(req, res);
     const error = String(err);
     if (error === 'Error: Not allowed by CORS') {
@@ -113,16 +118,16 @@ const setupErrorInterceptor = (app) => {
         ...errorObj, error: 'Not allowed by CORS', status: 403
       });
     } else if (error) {
-      console.debug(error);
       if (req.session) {
-        await req.session.abortTransaction();
-        req.session.endSession();
+        req.session.abortTransaction().then(() => { 
+          req.session.endSession();
+        })
       }
 
-      return res.status(403).json({
+      return res.status(400).json({
         error,
         errorObj,
-        status: 403
+        status: 400
       });
     }
     next(err);
