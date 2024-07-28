@@ -66,7 +66,7 @@ const verifyCustomer = async (req, res) => {
         _id: customer._id,
         email,
         name,
-        type: 'issuer'
+        type: process.env.DATABASE_PREFIX + email.replace(/[^a-zA-Z0-9 ]/g, '') === tenant ? 'issuer' : 'user'
       }]);
 
       return res.status(200).json({ message: successConstants.EMAIL_VERIFICATION_SUCCESSFULL });
