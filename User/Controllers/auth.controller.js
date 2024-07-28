@@ -13,12 +13,11 @@ const { verify } = pkg;
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    const tenant = process.env.DATABASE_PREFIX + (process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, ''));
+    const { name, email, password, tenant=process.env.DATABASE_PREFIX + (process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, '')) } = req.body;
     await req.models.unverified.create(
       [{ email, name, password, tenant }]
     );
-
+    
     await sendMail({ email, name }, 'customerRegister');
 
     return res.status(200).json({

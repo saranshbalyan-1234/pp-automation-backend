@@ -23,16 +23,16 @@ const getAddOrUpdateUser = async (req, res) => {
       const db = await getTenantDB();
       await db.models.customer.findOneAndUpdate(
         { _id: req.body._id },
-        { password },
-        { upsert: true });
+        { password }
+      );
     }
 
     const user = await req.models.user.findOneAndUpdate(
       { _id: req.body._id },
       { ...req.body },
-      { new: true, upsert: true });
+      { new: true });
 
-    if (email && !user.verifiedAt) sendMail({ email, name, tenant: req.tenant }, 'addUser');
+    if (email && !user.verifiedAt) await sendMail({ email, name, tenant: req.tenant }, 'addUser');
 
     return res.status(200).json(user);
   } catch (error) {
