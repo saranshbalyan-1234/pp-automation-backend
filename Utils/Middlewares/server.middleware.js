@@ -90,15 +90,14 @@ const setupResponseInterceptor = (app) => {
         errorObj.status = res.statusCode;
         args[0] = JSON.stringify(errorObj);
         if (req.session) {
-          req.session.abortTransaction().then(() => { 
-            req.session.endSession();
-          })
+          req.session.abortTransaction().then(() => req.session.endSession()).catch((er) => {
+            console.error(er);
+          });
         }
       } else if (req.session) {
-        req.session.commitTransaction().then(() => { 
-          req.session.endSession();
-        })
-     
+        req.session.commitTransaction().then(() => req.session.endSession()).catch((er) => {
+          console.error(er);
+        });
       }
       if (process.env.ENCRYPTION === 'true' && !(req.url.includes('decrypt') || req.url.includes('encrypt'))) args[0] = JSON.stringify(encryptWithAES(args[0]));
       originalSend.apply(res, args);
@@ -119,9 +118,10 @@ const setupErrorInterceptor = (app) => {
       });
     } else if (error) {
       if (req.session) {
-        req.session.abortTransaction().then(() => { 
-          req.session.endSession();
-        })
+        // eslint-disable-next-line promise/no-promise-in-callback
+        req.session.abortTransaction().then(() => req.session.endSession()).catch((er) => {
+          console.error(er);
+        });
       }
 
       return res.status(400).json({

@@ -1,4 +1,8 @@
-const seedSuperAdmin = async (conn) => {
+import { getTenantDB } from '#root/mongo.connection.js';
+
+const seedSuperAdmin = async () => {
+  const conn = await getTenantDB();
+
   const superAdmin = {
     email: 'superadmin@mail.com',
     name: 'Super Admin',

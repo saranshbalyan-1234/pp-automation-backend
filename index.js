@@ -19,7 +19,7 @@ app.use(defaultMiddleware());
 
 overrideConsole();
 
-const conn = await getTenantDB();
+await getTenantDB();
 
 if (process.env.PRINT_ENV === 'true') {
   console.debug('======================ENV======================');
@@ -43,7 +43,7 @@ morgalApiLogger(app);
 setupErrorInterceptor(app);
 setupResponseInterceptor(app);
 
-await seedSuperAdmin(conn);
+await seedSuperAdmin();
 await registerRoutes(app);
 
 setupValidationErrorInterceptor(app);
