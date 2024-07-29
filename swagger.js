@@ -1,18 +1,15 @@
 import swaggerAutogen from 'swagger-autogen';
-
+import { getDirectories } from '#utils/file.js';
 swaggerAutogen();
+
+const protectedRoutes = getDirectories('.', 'protected.routes')
+const unprotectedRoutes = getDirectories('.', 'unprotected.routes')
+
+console.debug(protectedRoutes,unprotectedRoutes)
 
 const outputFile = './swagger.json';
 
-const endpointsFiles = [
-  './User/Routes/auth.unprotected.routes.js',
-  './Routes/dev.unprotected.routes.js',
-  './User/Routes/passport.unprotected.routes.js',
-
-  './User/Routes/user.protected.routes.js',
-  './User/Routes/role.protected.routes.js'
-
-];
+const endpointsFiles = [...protectedRoutes,...unprotectedRoutes];
 
 const doc = {
   basePath: '/',

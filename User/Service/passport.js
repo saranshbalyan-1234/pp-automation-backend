@@ -17,6 +17,7 @@ passport.use(new BasicStrategy(
       if (!user) { return done(null, false); }
       return done(null, user);
     } catch (e) {
+      console.error(e)
       return done(null, false);
     }
   }

@@ -15,28 +15,19 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
       if (unverifiedUser) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
       else throw new Error(errorContstants.RECORD_NOT_FOUND);
     }
-
-    let currentTenant = customer.tenant[0];
+    let currentTenant = tenant || customer.tenant[0];
+    if (!currentTenant || !customer.tenant.includes(currentTenant)) throw new Error(errorContstants.UNAUTHORIZED_TENANT);
 
     const isAuthenticated = !isPassRequired || customer.password === password;
     if (!isAuthenticated) throw new Error(errorContstants.INCORRECT_PASSWORD);
 
-    if (customer.tenant.length > 1) {
-      if (tenant) {
-        //Check if user has access to this tenant
-        if (customer.tenant.includes(tenant)) currentTenant = tenant;
-        else throw new Error(errorContstants.UNAUTHORIZED_TENANT);
-      } else throw new Error(errorContstants.TENANT_HEADER_REQUIRED);
-    }
     db = await getTenantDB(currentTenant);
     const user = await db.models.user.findOne({ email }).populate('roles');
-    if ((!user && !customer.superAdmin) || !user) throw new Error(errorContstants.RECORD_NOT_FOUND);
-
+    if (!user) throw new Error(errorContstants.RECORD_NOT_FOUND);
     const { _id } = user;
 
     // Below code is to generate token only, no logic
     const tokenData = { _id, currentTenant, email, tenant: customer.tenant };
-
     const accessToken = createToken(
       { ...tokenData, roles: user.roles, superAdmin: customer.superAdmin },
       process.env.JWT_ACCESS_SECRET,
@@ -47,7 +38,6 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
 
     const combinedUserData = { ...customer, ...user, accessToken, currentTenant, refreshToken };
     delete combinedUserData.password;
-
     return combinedUserData;
   } catch (e) {
     throw new Error(e);
