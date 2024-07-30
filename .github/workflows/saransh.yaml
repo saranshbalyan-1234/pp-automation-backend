@@ -1,9 +1,9 @@
-name: learning
+name: saransh
 
 on:
-    # push:
-    #     branches:
-    #         - master
+  pull_request:
+    branches:
+      - main
     workflow_dispatch:
 
 concurrency:
@@ -11,13 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-    first:
-        runs-on: ubuntu-latest
-        steps:
-            - name: console
-              run: echo "Hellow world"
-
-    javascript:
+    saransh:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
