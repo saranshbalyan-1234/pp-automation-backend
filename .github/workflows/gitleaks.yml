@@ -11,8 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  scan:
-    name: gitleaks
+  gitleaks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  eslint:
+  reviewdog:
     name: runner / eslint
     runs-on: ubuntu-latest
     permissions:

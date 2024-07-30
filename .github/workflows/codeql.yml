@@ -1,4 +1,4 @@
-name: CodeQL
+name: codeql
 
 on:
   pull_request:
@@ -16,8 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  analyze:
-    name: Analyze
+  codeql:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

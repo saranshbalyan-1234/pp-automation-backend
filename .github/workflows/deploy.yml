@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  docker:
+  deploy:
     runs-on: ubuntu-latest
     # defaults:
     #   run:
