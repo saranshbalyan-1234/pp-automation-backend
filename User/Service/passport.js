@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github2';
-import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
 import { BasicStrategy } from 'passport-http';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
@@ -34,7 +35,7 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
       clientSecret: process.env.GOOGLE_SECRET,
       passReqToCallback: true
     },
-    async (req, _accessToken, _refreshToken, _params, profile, done) => {
+    async (req, _accessToken, _refreshToken, profile, done) => {
       try {
         const email = profile.emails[0]?.value;
         // eslint-disable-next-line sonarjs/no-duplicate-string
@@ -46,6 +47,32 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
     }
   );
   passport.use('google', googleStrategyConfig);
+}
+
+/**
+ * Sign in with Microsoft.
+ */
+if (process.env.MICROSOFT_ID && process.env.MICROSOFT_SECRET) {
+  const microsoftStrategyConfig = new MicrosoftStrategy(
+    {
+      callbackURL: '/auth/microsoft/callback',
+      clientID: process.env.MICROSOFT_ID,
+      clientSecret: process.env.MICROSOFT_SECRET,
+      passReqToCallback: true,
+      scope: ['user.read'],
+    },
+    async (req, _accessToken, _refreshToken, profile, done) => {
+      try {
+        const email = profile.emails[0]?.value;
+        // eslint-disable-next-line sonarjs/no-duplicate-string
+        const loggedInUser = await loginWithCredentals({ email, isPassRequired: false, rememberMe: true, tenant: req.headers['x-tenant-id'] });
+        return done(null, loggedInUser);
+      } catch (err) {
+        return done(err);
+      }
+    }
+  );
+  passport.use('microsoft', microsoftStrategyConfig);
 }
 
 /**
