@@ -1,7 +1,7 @@
 {
-    "name": "automationbackend",
-    "version": "1.1.0",
-    "description": "",
+    "name": "startex",
+    "version": "2.1",
+    "description": "now with mongo",
     "main": "index.js",
     "type": "module",
     "scripts": {
