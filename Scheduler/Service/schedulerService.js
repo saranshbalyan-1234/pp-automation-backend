@@ -1,6 +1,6 @@
 // Import Scheduler from 'cron-job-manager';
 
-import { getAllTenant } from '#user/Service/database.js';
+import { getAllTenant } from '#user/Service/database.service.js';
 
 // import db, { createDBConnection } from '#utils/dataBaseConnection.js';
 import { executeCurl, executeQuery } from './jobRunner.js';

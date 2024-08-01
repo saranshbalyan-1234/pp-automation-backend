@@ -7,7 +7,7 @@ import { getTenantDB } from '#root/mongo.connection.js';
  */
 import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
-// import { deleteCustomer } from '../Service/database.js';
+// import { deleteCustomer } from '../Service/database.service.js';
 
 const getOrUpdateUser = async (req, res) => {
   try {

@@ -2,7 +2,7 @@ import errorContstants from '#constants/error.constant.js';
 import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
 
-import { deleteCustomer, getCachedKeys } from '../Service/database.js';
+import { deleteCustomer, getCachedKeys } from '../Service/database.service.js';
 
 const getAllTenant = async (req, res) => {
   try {

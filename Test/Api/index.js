@@ -1,5 +1,5 @@
 import { deleteCustomerByAdmin, login, register, verifyCustomer } from './auth.js';
-// Import { deleteCustomer } from "#user/Service/database.js";
+// Import { deleteCustomer } from "#user/Service/database.service.js";
 
 const config = {
   email: 'saranshbalyan123@gmail.com',
