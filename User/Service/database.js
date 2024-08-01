@@ -1,33 +1,21 @@
 import errorContstants from '#constants/error.constant.js';
-import { deleteBucket } from '#storage/Service/awsService.js';
+import { getTenantDB } from '#root/mongo.connection.js';
+// import { deleteBucket } from '#storage/Service/awsService.js';
 import cache from '#utils/cache.js';
 
-// import db from '#utils/dataBaseConnection.js';
 const db = {};
 const deleteCustomer = async (email) => {
   const tenantName = email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
   try {
     console.debug('Deleting Customer', email);
-    const Customer = db.customers;
-    const Unverified = db.unverifieds;
-    const User = db.users;
     const database = process.env.DATABASE_PREFIX + tenantName;
 
-    const deletedCustomer = await Customer.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).destroy({
-      where: { email }
-    });
-    await User.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).destroy({
-      where: { email }
-    });
-
-    Unverified.schema(process.env.DATABASE_PREFIX + process.env.DATABASE_NAME).destroy({
-      where: { email }
-    });
-
     await dropDatabase(database);
-    deleteBucket(database);
-    if (deletedCustomer > 0) return true;
-    throw new Error(errorContstants.RECORD_NOT_FOUND);
+    /*
+     * deleteBucket(database);
+     * if (deletedCustomer > 0) return true;
+     * throw new Error(errorContstants.RECORD_NOT_FOUND);
+     */
   } catch (e) {
     throw new Error(e);
   }
@@ -60,8 +48,8 @@ const dropDatabase = async (database) => {
 
   console.log(`deleting database ${database}`);
   try {
-    await db.sequelize.query(`drop database ${database}`);
-    return true;
+    const conn = await getTenantDB(database);
+    return await conn.db.dropDatabase();
   } catch (err) {
     console.error(err);
     console.error(`Unable to delete ${database}: Not Found`);

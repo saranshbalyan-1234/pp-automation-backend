@@ -1,7 +1,8 @@
 import express from 'express';
 
+import { validateSuperAdmin } from '#middlewares/permissions.middleware.js';
+
 import { deleteCustomerByAdmin, getAllSession, getAllTenant, terminateSession } from '../Controllers/superAdmin.controller.js';
-import {validateSuperAdmin} from '#middlewares/permissions.middleware.js'
 const Router = express.Router();
 
 Router.use(validateSuperAdmin());

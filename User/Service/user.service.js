@@ -16,7 +16,6 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
       else throw new Error(errorContstants.RECORD_NOT_FOUND);
     }
     const currentTenant = tenant || customer.tenant[0];
-    console.debug(currentTenant)
     if (!currentTenant || !customer.tenant.includes(currentTenant)) throw new Error(errorContstants.UNAUTHORIZED_TENANT);
 
     const isAuthenticated = !isPassRequired || customer.password === password;
