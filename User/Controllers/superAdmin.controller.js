@@ -13,16 +13,6 @@ const getAllTenant = async (req, res) => {
   }
 };
 
-const deleteCustomerByAdmin = async (req, res) => {
-  try {
-    const { email } = req.body;
-    await deleteCustomer(email);
-    return res.status(200).json({ message: 'Deleted all data!' });
-  } catch (error) {
-    getError(error, res);
-  }
-};
-
 const getAllSession = (_req, res) => {
   try {
     const sessions = getCachedKeys();
@@ -39,6 +29,16 @@ const terminateSession = (req, res) => {
     if (!cache.get(`accesstoken_${email}`)) throw new Error(errorContstants.NOT_AN_ACTIVE_SESSION);
     cache.del(`accesstoken_${email}`);
     return res.status(200).json({ message: 'Session Terminated!' });
+  } catch (error) {
+    getError(error, res);
+  }
+};
+
+const deleteCustomerByAdmin = async (req, res) => {
+  try {
+    const { email } = req.body;
+    await deleteCustomer(email);
+    return res.status(200).json({ message: 'Deleted all data!' });
   } catch (error) {
     getError(error, res);
   }
