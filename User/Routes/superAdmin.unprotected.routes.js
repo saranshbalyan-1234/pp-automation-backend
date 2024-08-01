@@ -8,7 +8,7 @@ const Router = express.Router();
 
 Router.get('/tenant', getAllTenant);
 Router.post('/delete', deleteCustomerByAdmin);
-Router.post('/sessions', getAllSession);
+Router.get('/session', getAllSession);
 Router.post('/terminate-sessions', terminateSession);
 
 export default Router;

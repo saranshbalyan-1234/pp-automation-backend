@@ -1,5 +1,5 @@
 import NodeCache from 'node-cache';
-const cache = new NodeCache({ checkperiod: 120 });
+const cache = new NodeCache({ checkperiod: 60 });
 
 const get = (key) => cache.get(key);
 
