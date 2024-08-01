@@ -4,6 +4,7 @@ import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
 
 import { deleteCustomer, getCachedKeys } from '../Service/database.js';
+import errorContstants from '#constants/error.constant.js';
 
 const getAllTenant = async (req, res) => {
   try {
@@ -36,7 +37,9 @@ const getAllSession = (_req, res) => {
 const terminateSession = (req, res) => {
   try {
     const { email } = req.body;
-    if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${email}`);
+    if (!process.env.JWT_ACCESS_CACHE) throw new Error(errorContstants.SESSION_OFF)
+      if(!cache.get(`accesstoken_${email}`)) throw new Error(errorContstants.NOT_AN_ACTIVE_SESSION)
+      cache.del(`accesstoken_${email}`);
     return res.status(200).json({ message: 'Session Terminated!' });
   } catch (error) {
     getError(error, res);

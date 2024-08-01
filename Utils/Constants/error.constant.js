@@ -12,6 +12,7 @@ const errorContstants = {
   INVALID_FOLDER: 'Invalid Folder',
   INVALID_PERMISSION: 'Invalid Permission!',
   NOT_AN_ACTIVE_SESSION: 'Not An Active Session!',
+  SESSION_OFF: 'Session Is OFF!',
   RECORD_NOT_FOUND: 'Record Not Found!',
   SOMETHING_WENT_WRONG: 'Something Went Wrong!',
   TENANT_HEADER_REQUIRED: 'Tenant Header Required!',
