@@ -4,8 +4,7 @@ import { getTenantDB, removeTenantDB } from '#root/mongo.connection.js';
 import cache from '#utils/cache.js';
 
 const db = {};
-const deleteCustomer = async (email) => {
-  const tenant = process.env.DATABASE_PREFIX + email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
+const deleteCustomer = async (tenant) => {
   try {
     console.debug('Deleting Tenant', tenant);
 

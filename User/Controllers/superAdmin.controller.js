@@ -1,8 +1,9 @@
 import errorContstants from '#constants/error.constant.js';
+import { getTenantDB } from '#root/mongo.connection.js';
 import cache from '#utils/cache.js';
 import getError from '#utils/error.js';
 
-import { deleteCustomer, getCachedKeys } from '../Service/database.service.js';
+import { getCachedKeys } from '../Service/database.service.js';
 
 const getAllTenant = async (req, res) => {
   try {
@@ -37,8 +38,11 @@ const terminateSession = (req, res) => {
 const deleteCustomerByAdmin = async (req, res) => {
   try {
     const { email } = req.body;
-    await deleteCustomer(email);
-    return res.status(200).json({ message: 'Deleted all data!' });
+    const tenant = process.env.DATABASE_PREFIX + email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
+    await deleteCustomer(tenant);
+    const db = await getTenantDB();
+    const result = await db.models.customer.updateMany({ tenant: { $elemMatch: { $eq: tenant } } }, { $pull: { tenant } });
+    return res.status(200).json({ message: 'Deleted all data!', result });
   } catch (error) {
     getError(error, res);
   }
