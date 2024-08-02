@@ -51,7 +51,8 @@ const dropDatabase = async (database) => {
     const res = await conn.db.dropDatabase((err, result) => {
       console.debug(err, result);
     });
-    console.debug('Deleted', res);
+    if (res) console.debug('Deleted', database);
+    else console.debug('Unable to delete', database);
     return true;
   } catch (err) {
     console.error(err);

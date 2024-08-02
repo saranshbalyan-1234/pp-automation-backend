@@ -51,7 +51,7 @@ export const createDbConnection = async (tenant = process.env.DATABASE_PREFIX + 
     const DB_URL = process.env.DATABASE_URL;
     const conn = mongoose.createConnection(DB_URL.at(-1) === '/' ? DB_URL + tenant : `${DB_URL}/${tenant}`, { ...clientOption, autoIndex });
     await conn.$initialConnection; // wait for connection to get established
-    await registerAllSchema(conn);
+    if(autoIndex) await registerAllSchema(conn);
     connectionEvents(conn);
     connectionsObj[tenant] = conn;
     console.debug('Active connections', Object.keys(connectionsObj));
