@@ -252,7 +252,7 @@
         }
       }
     },
-    "/re-verify": {
+    "/verify/send-mail": {
       "post": {
         "description": "",
         "parameters": [

@@ -8,7 +8,7 @@ const Router = express.Router();
 Router.post('/register', validate(registerValidation), register);
 Router.post('/login', validate(loginValidation), login);
 Router.get('/verify/:token', validate(tokenParamsValidation), verifyCustomer);
-Router.post('/re-verify', validate(emailBodyValidation), resendVerificationMail);
+Router.post('/verify/send-mail', validate(emailBodyValidation), resendVerificationMail);
 Router.post('/reset-password/send-mail', validate(emailBodyValidation), resendVerificationMail);
 Router.post('/reset-password/:token', validate(tokenParamsValidation), resetPassword);
 /*
