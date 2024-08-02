@@ -1,7 +1,7 @@
-const resetPasswordHtml = (name, link) => `<!DOCTYPE html>
+const resetPasswordHtml = (email, link) => `<!DOCTYPE html>
         <html>
             <body>
-                <p>Hi ${name}, As per your request, we have sent you a link to rest your password. </p>
+                <p>Hi ${email}, As per your request, we have sent you a link to rest your password. </p>
                 <br/>
                 <p>Click on the link below or copy paste in your browser.</p>
                 <br/>

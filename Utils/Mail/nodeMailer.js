@@ -40,7 +40,7 @@ const sendMail = (data, type) => {
     let link = '';
     switch (type) {
       case 'customerRegister':
-        token = createToken({ email: data.email }, process.env.JWT_VERIFICATION_SECRET);
+        token = createToken({ _id: data._id }, process.env.JWT_VERIFICATION_SECRET);
         link = `${process.env.WEBSITE_HOME}/auth/verify-customer/${token}`;
         mailOption = {
           html: registerHTML(data.name, link),
@@ -49,10 +49,10 @@ const sendMail = (data, type) => {
         };
         break;
       case 'reset-password':
-        token = createToken({ email: data.email, tenant: data.tenant }, process.env.JWT_RESET_SECRET, process.env.JWT_RESET_EXPIRATION);
+        token = createToken({ _id: data._id }, process.env.JWT_RESET_SECRET, process.env.JWT_RESET_EXPIRATION);
         link = `${process.env.WEBSITE_HOME}/reset-password/${token}`;
         mailOption = {
-          html: resetPasswordHtml(data.name, link),
+          html: resetPasswordHtml(data.email, link),
           subject: 'Password Reset',
           to: data.email
         };

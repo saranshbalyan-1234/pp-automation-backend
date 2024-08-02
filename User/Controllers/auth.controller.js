@@ -15,11 +15,11 @@ const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const tenant = req.headers['x-tenant-id'] || process.env.DATABASE_PREFIX + (process.env.MULTI_TENANT === 'false' ? process.env.DATABASE_NAME : email.replace(/[^a-zA-Z0-9 ]/g, ''));
-    await req.models.unverified.create(
+    const unverifiedUser = await req.models.unverified.create(
       [{ email, name, password, tenant }]
     );
 
-    await sendMail({ email, name }, 'customerRegister');
+    await sendMail({ _id: unverifiedUser.id, email, name }, 'customerRegister');
 
     return res.status(200).json({
       message: 'Registered successfuly, Please check email to verify account.'
@@ -46,7 +46,7 @@ const verifyCustomer = async (req, res) => {
     console.log('Verifying Customer', data.email);
 
     try {
-      const unverifiedUser = await req.models.unverified.findOneAndDelete({ email: data.email }, { session: req.session });
+      const unverifiedUser = await req.models.unverified.findOneAndDelete({ _id: data._id }, { session: req.session });
       if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
 
       const { email, password, name, tenant } = unverifiedUser;
@@ -83,46 +83,52 @@ const resendVerificationMail = async (req, res) => {
     const { email } = req.body;
     const unverifiedUser = await req.models.unverified.findOne({ email });
     if (!unverifiedUser) throw new Error(errorConstants.RECORD_NOT_FOUND);
-    const { name } = unverifiedUser;
+    const { name, _id } = unverifiedUser;
 
-    await sendMail({ email, name }, 'customerRegister');
+    await sendMail({ _id, email, name }, 'customerRegister');
     return res.status(200).json({ message: 'Mail Sent!' });
   } catch (error) {
     getError(error, res);
   }
 };
 
-// const resetPassword = async (req, res) => {
+const sendResetPasswordMail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const customer = await req.models.customer.findOne({ email });
+    if (!customer) throw new Error(errorConstants.RECORD_NOT_FOUND);
+
+    await sendMail({ _id: customer._id, email }, 'reset-password');
+
+    return res.status(200).json({ message: 'Password rest mail sent.' });
+  } catch (error) {
+    getError(error, res);
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const data = verify(req.params.token, process.env.JWT_RESET_SECRET);
+    try {
+      if (!req.body.password) throw new Error(errorConstants.INSUFFICIENT_DETAILS);
+      const { _id } = data;
+
+      const customer = await req.models.customer.findOneAndUpdate(
+        { _id },
+        { password: req.body.password },
+        { new: true });
+
+      if (!customer) throw new Error(errorConstants.RECORD_NOT_FOUND);
+      return res.status(200).json({ message: successConstants.PASSWORD_RESET_SUCCESSFULL });
+    } catch (error) {
+      getError(error, res);
+    }
+  } catch (error) {
+    getError(error, res, 'Password Reset');
+  }
+};
 
 /*
- *   try {
- *     const data = verify(req.params.token, process.env.JWT_RESET_SECRET);
- */
-
-/*
- *     if (data) {
- *       const { email, tenant } = data;
- */
-
-//       const database = tenant;
-
-/*
- *       const updatedUser = await User.schema(database).update(
- *         { password: req.body.password },
- *         {
- *           where: {
- *             email
- *           }
- *         }
- *       );
- *       if (updatedUser[0]) return res.status(200).json({ message: successConstants.PASSWORD_RESET_SUCCESSFULL });
- *       throw new Error(errorConstants.RECORD_NOT_FOUND);
- *     }
- *   } catch (error) {
- *     getError(error, res, 'Password Reset');
- *   }
- * };
- *
  *       // const refreshToken = (req, res) => {
  *
  *       /*
@@ -140,4 +146,4 @@ const resendVerificationMail = async (req, res) => {
  * };
  */
 
-export { login, register, resendVerificationMail, verifyCustomer };
+export { login, register, resendVerificationMail, resetPassword, sendResetPasswordMail, verifyCustomer };

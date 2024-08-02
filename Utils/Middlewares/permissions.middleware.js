@@ -31,16 +31,18 @@ const validateIssuer = () => (req, res, next) => {
   }
 };
 
-const validateUserProject = () => async (req, res, next) => {
+const validateUserProject = () => (req, res, next) => {
   try {
     const projectId = req.params.projectId || req.headers['x-project-id'];
     const { error } = idValidation.validate({ id: projectId });
     if (error) throw new Error(error.details[0].message);
 
-    // const userProject = await UserProject.schema(req.database).findOne({
-    //   where: { projectId, userId: req.user.id }
-    // });
-    // if (!userProject) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
+    /*
+     * const userProject = await UserProject.schema(req.database).findOne({
+     *   where: { projectId, userId: req.user.id }
+     * });
+     * if (!userProject) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
+     */
 
     return next();
   } catch (e) {
