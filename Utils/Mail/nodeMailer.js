@@ -48,16 +48,6 @@ const sendMail = (data, type) => {
           to: data.email
         };
         break;
-      case 'addUser':
-        token = createToken({ email: data.email, tenant: data.tenant }, process.env.JWT_VERIFICATION_SECRET);
-        link = `${process.env.WEBSITE_HOME}/auth/verify-user/${token}`;
-        mailOption = {
-          html: registerHTML(data.name, link),
-          subject: 'Registration Successfull',
-          to: data.email
-        };
-        console.log(link);
-        break;
       case 'reset-password':
         token = createToken({ email: data.email, tenant: data.tenant }, process.env.JWT_RESET_SECRET, process.env.JWT_RESET_EXPIRATION);
         link = `${process.env.WEBSITE_HOME}/reset-password/${token}`;

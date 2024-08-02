@@ -4,10 +4,10 @@ import mongoose from 'mongoose';
 import { getTenantDB } from '#root/mongo.connection.js';
 /*
  * import { s3, uploadFile } from '#storage/Service/awsService.js';
- * import cache from '#utils/cache.js';
  */
+import cache from '#utils/Cache/index.js';
 import getError from '#utils/error.js';
-// import { deleteCustomer } from '../Service/database.js';
+// import { deleteCustomer } from '../Service/database.service.js';
 
 const getOrUpdateUser = async (req, res) => {
   try {
@@ -36,63 +36,23 @@ const getOrUpdateUser = async (req, res) => {
   }
 };
 
-// const getTeam = async (req, res) => {
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await req.models.user.find();
+    return res.status(200).json(users);
+  } catch (error) {
+    getError(error, res);
+  }
+};
 
-/*
- *   try {
- *     const team = await User.schema(req.database).findAll({
- *       attributes: ['id', 'name', 'email', 'profileImage', 'verifiedAt', 'deletedAt', 'active', 'defaultProjectId']
- *     });
- *     const filteredTeam = team.filter((el) => el.id !== req.user.id);
- */
-
-/*
- *     const teamWithImages = await filteredTeam.map(async (user) => {
- *       let base64ProfileImage = '';
- *       if (user.dataValues.profileImage) {
- *         try {
- *           const getParams = {
- *             Bucket: req.database.split('_')[1].toLowerCase(),
- *             Key: user.email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase()
- *           };
- */
-
-//           const data = await s3.getObject(getParams);
-
-/*
- *           if (data?.Body) {
- *             base64ProfileImage = await data.Body.transformToString('base64');
- *           } else {
- *             base64ProfileImage = data;
- *           }
- *           return {
- *             ...user.dataValues,
- *             profileImage: user.dataValues.profileImage ? base64ProfileImage : ''
- *           };
- *         } catch (err) {
- *           console.error('Profile Image Error', err);
- *           return {
- *             ...user.dataValues,
- *             profileImage: ''
- *           };
- *         }
- *       } else {
- *         return {
- *           ...user.dataValues,
- *           profileImage: base64ProfileImage
- *         };
- *       }
- *     });
- *     Promise.all(teamWithImages)
- *       .then((data) => res.status(200).json(data))
- *       .catch((err) => {
- *         throw new Error(err);
- *       });
- *   } catch (error) {
- *     getError(error, res);
- *   }
- * };
- */
+const logout = (req, res) => {
+  try {
+    if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${req.user.email}`);
+    return res.status(200).json({ message: 'Logout Successfull' });
+  } catch (error) {
+    getError(error, res);
+  }
+};
 
 // const deleteUser = async (req, res) => {
 
@@ -172,16 +132,4 @@ const getOrUpdateUser = async (req, res) => {
  * };
  */
 
-// const logout = (req, res) => {
-
-/*
- *   try {
- *     if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${req.user.email}`);
- *     return res.status(200).json({ message: 'Logout Successfull' });
- *   } catch (error) {
- *     getError(error, res);
- *   }
- * };
- */
-
-export { getOrUpdateUser };
+export { getAllUsers, getOrUpdateUser, logout };

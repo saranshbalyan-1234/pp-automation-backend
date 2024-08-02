@@ -1,6 +1,6 @@
 import errorContstants from '#constants/error.constant.js';
 import { getTenantDB } from '#root/mongo.connection.js';
-import cache from '#utils/cache.js';
+import cache from '#utils/Cache/index.js';
 import { createToken } from '#utils/jwt.js';
 
 const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired = true, tenant }) => {
@@ -15,7 +15,7 @@ const loginWithCredentals = async ({ email, password, rememberMe, isPassRequired
       if (unverifiedUser) throw new Error(errorContstants.EMAIL_NOT_VERIFIED);
       else throw new Error(errorContstants.RECORD_NOT_FOUND);
     }
-    let currentTenant = tenant || customer.tenant[0];
+    const currentTenant = tenant || customer.tenant[0];
     if (!currentTenant || !customer.tenant.includes(currentTenant)) throw new Error(errorContstants.UNAUTHORIZED_TENANT);
 
     const isAuthenticated = !isPassRequired || customer.password === password;

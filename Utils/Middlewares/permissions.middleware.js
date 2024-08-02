@@ -24,9 +24,9 @@ const validateSuperAdmin = () => (req, res, next) => {
     return getError(e, res);
   }
 };
-const validateCustomerAdmin = () => (req, res, next) => {
+const validateIssuer = () => (req, res, next) => {
   try {
-    if (!req.user.customerAdmin) return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
+    if (!req.user.type=='issuer') return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
     return next();
   } catch (e) {
     return getError(e, res);
@@ -50,4 +50,4 @@ const validateUserProject = () => async (req, res, next) => {
   }
 };
 
-export { validateCustomerAdmin, validatePermission, validateSuperAdmin, validateUserProject };
+export { validateIssuer, validatePermission, validateSuperAdmin, validateUserProject };

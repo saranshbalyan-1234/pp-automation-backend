@@ -13,6 +13,7 @@ const errorContstants = {
   INVALID_PERMISSION: 'Invalid Permission!',
   NOT_AN_ACTIVE_SESSION: 'Not An Active Session!',
   RECORD_NOT_FOUND: 'Record Not Found!',
+  SESSION_OFF: 'Session Is OFF!',
   SOMETHING_WENT_WRONG: 'Something Went Wrong!',
   TENANT_HEADER_REQUIRED: 'Tenant Header Required!',
   TIMEOUT: 'Timeout!',

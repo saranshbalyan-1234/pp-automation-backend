@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 
-import {} from '#user/Service/passport.js';
+import {} from '#user/Service/passport.service.js';
 const Router = express.Router();
 
 if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {

@@ -1,15 +1,19 @@
 import express from 'express';
 
 import {
-  getOrUpdateUser
+  getAllUsers,
+  getOrUpdateUser,
+  logout
 } from '../Controllers/user.controller.js';
 
 const Router = express.Router();
 
 Router.post('/', getOrUpdateUser);
+Router.get('/', getAllUsers);
+Router.get('/logout', logout);
 
 /*
- * Router.delete('/customer', validateCustomerAdmin(), deleteCustomerUser);
+ * Router.delete('/customer', validateIssuer(), deleteCustomerUser);
  * Router.get('/team', validatePermission('Team', 'view'), getTeam);
  * Router.get('/', getUserDetailsByEmail);
  * Router.post('/', validate(emailBodyValidation), getUserDetailsByEmail);

@@ -1,9 +1,9 @@
 import passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
 import { BasicStrategy } from 'passport-http';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
+import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
 
 import { loginWithCredentals } from './user.service.js';
 
@@ -18,7 +18,7 @@ passport.use(new BasicStrategy(
       if (!user) { return done(null, false); }
       return done(null, user);
     } catch (e) {
-      console.error(e)
+      console.error(e);
       return done(null, false);
     }
   }
@@ -59,7 +59,7 @@ if (process.env.MICROSOFT_ID && process.env.MICROSOFT_SECRET) {
       clientID: process.env.MICROSOFT_ID,
       clientSecret: process.env.MICROSOFT_SECRET,
       passReqToCallback: true,
-      scope: ['user.read'],
+      scope: ['user.read']
     },
     async (req, _accessToken, _refreshToken, profile, done) => {
       try {

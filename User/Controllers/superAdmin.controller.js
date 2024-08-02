@@ -1,9 +1,9 @@
-import _ from 'lodash';
-
-import cache from '#utils/cache.js';
+import errorContstants from '#constants/error.constant.js';
+import { getTenantDB } from '#root/mongo.connection.js';
+import cache from '#utils/Cache/index.js';
 import getError from '#utils/error.js';
 
-import { deleteCustomer, getCachedKeys } from '../Service/database.js';
+import { getCachedKeys } from '#utils/Cache/cache.service.js';
 
 const getAllTenant = async (req, res) => {
   try {
@@ -14,31 +14,10 @@ const getAllTenant = async (req, res) => {
   }
 };
 
-const deleteCustomerByAdmin = async (req, res) => {
-  try {
-    const { customerEmail } = req.body;
-    await deleteCustomer(customerEmail);
-    return res.status(200).json({ message: 'Deleted all data!' });
-  } catch (error) {
-    getError(error, res);
-  }
-};
-
 const getAllSession = (_req, res) => {
   try {
     const sessions = getCachedKeys();
-    const sessionObj = sessions
-      .filter((el) => el.split('_')[0] === 'accesstoken')
-      .map((el) => {
-        const temp = {};
-        const tempArr = el.split('_');
-        temp.tenant = tempArr[1];
-        temp.email = tempArr[2];
-        return temp;
-      });
-    const result = _.groupBy(sessionObj, 'tenant');
-
-    return res.status(200).json(result);
+    return res.status(200).json(sessions);
   } catch (error) {
     getError(error, res);
   }
@@ -47,8 +26,23 @@ const getAllSession = (_req, res) => {
 const terminateSession = (req, res) => {
   try {
     const { email } = req.body;
-    if (process.env.JWT_ACCESS_CACHE) cache.del(`accesstoken_${email}`);
+    if (!process.env.JWT_ACCESS_CACHE) throw new Error(errorContstants.SESSION_OFF);
+    if (!cache.get(`accesstoken_${email}`)) throw new Error(errorContstants.NOT_AN_ACTIVE_SESSION);
+    cache.del(`accesstoken_${email}`);
     return res.status(200).json({ message: 'Session Terminated!' });
+  } catch (error) {
+    getError(error, res);
+  }
+};
+
+const deleteCustomerByAdmin = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const tenant = process.env.DATABASE_PREFIX + email.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
+    await deleteCustomer(tenant);
+    const db = await getTenantDB();
+    const result = await db.models.customer.updateMany({ tenant: { $elemMatch: { $eq: tenant } } }, { $pull: { tenant } });
+    return res.status(200).json({ message: 'Deleted all data!', result });
   } catch (error) {
     getError(error, res);
   }
