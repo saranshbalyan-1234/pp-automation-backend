@@ -1,9 +1,7 @@
 import errorContstants from '#constants/error.constant.js';
 import { getTenantDB, removeTenantDB } from '#root/mongo.connection.js';
 // import { deleteBucket } from '#storage/Service/awsService.js';
-import cache from '#utils/cache.js';
 
-const db = {};
 const deleteCustomer = async (tenant) => {
   try {
     console.debug('Deleting Tenant', tenant);
@@ -17,28 +15,6 @@ const deleteCustomer = async (tenant) => {
      */
   } catch (e) {
     console.error(e);
-    throw new Error(e);
-  }
-};
-
-const getAllTenant = async () => {
-  try {
-    // Customer
-    const Customer = db.customers;
-
-    return await Customer.findAll({
-      attributes: ['tenantName', 'blocked'],
-      group: ['tenantName']
-    });
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-const getCachedKeys = () => {
-  try {
-    return cache.keys();
-  } catch (e) {
     throw new Error(e);
   }
 };
@@ -59,4 +35,4 @@ const dropDatabase = async (database) => {
     return false;
   }
 };
-export { deleteCustomer, dropDatabase, getAllTenant, getCachedKeys };
+export { deleteCustomer, dropDatabase, getCachedKeys };

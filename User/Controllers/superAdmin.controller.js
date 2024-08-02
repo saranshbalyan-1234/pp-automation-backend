@@ -1,9 +1,9 @@
 import errorContstants from '#constants/error.constant.js';
 import { getTenantDB } from '#root/mongo.connection.js';
-import cache from '#utils/cache.js';
+import cache from '#utils/Cache/index.js';
 import getError from '#utils/error.js';
 
-import { getCachedKeys } from '../Service/database.service.js';
+import { getCachedKeys } from '#utils/Cache/cache.service.js';
 
 const getAllTenant = async (req, res) => {
   try {

@@ -5,7 +5,7 @@ import { getTenantDB } from '#root/mongo.connection.js';
 /*
  * import { s3, uploadFile } from '#storage/Service/awsService.js';
  */
-import cache from '#utils/cache.js';
+import cache from '#utils/Cache/index.js';
 import getError from '#utils/error.js';
 // import { deleteCustomer } from '../Service/database.service.js';
 
