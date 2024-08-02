@@ -26,7 +26,7 @@ const validateSuperAdmin = () => (req, res, next) => {
 };
 const validateIssuer = () => (req, res, next) => {
   try {
-    if (!req.user.type=='issuer') return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
+    if (!req.user.type === 'issuer') return res.status(401).json({ error: errorContstants.UNAUTHORIZED });
     return next();
   } catch (e) {
     return getError(e, res);

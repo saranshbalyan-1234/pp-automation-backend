@@ -35,4 +35,4 @@ const dropDatabase = async (database) => {
     return false;
   }
 };
-export { deleteCustomer, dropDatabase, getCachedKeys };
+export { deleteCustomer, dropDatabase };
