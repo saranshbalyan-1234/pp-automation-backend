@@ -4,7 +4,7 @@ import { createRequire } from 'module';
 import passport from 'passport';
 import swaggerUi from 'swagger-ui-express';
 const require = createRequire(import.meta.url);
-const swaggerFile = require('../swagger.json');
+const swaggerFile = require('../Utils/Swagger/swagger.json');
 // Swagger
 
 const Router = express.Router();

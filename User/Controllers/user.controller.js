@@ -1,7 +1,7 @@
 // import successConstants from '#constants/success.contant.js';
 import mongoose from 'mongoose';
 
-import { getTenantDB } from '#root/mongo.connection.js';
+import { getTenantDB } from '#utils/Database/mongo.connection.js';
 /*
  * import { s3, uploadFile } from '#storage/Service/awsService.js';
  */

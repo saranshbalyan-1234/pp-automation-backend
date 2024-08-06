@@ -1,4 +1,4 @@
-import { getTenantDB } from '#root/mongo.connection.js';
+import { getTenantDB } from '#utils/Database/mongo.connection.js';
 
 const seedSuperAdmin = async () => {
   const conn = await getTenantDB();

@@ -5,7 +5,7 @@ import helmet from 'helmet';
 
 import defaultMiddleware from '#middlewares/default.middleware.js';
 import { setupCors, setupErrorInterceptor, setupRateLimiter, setupResponseInterceptor, setupTimeout, setupValidationErrorInterceptor } from '#middlewares/server.middleware.js';
-import { getTenantDB } from '#root/mongo.connection.js';
+import { getTenantDB } from '#utils/Database/mongo.connection.js';
 import seedSuperAdmin from '#user/Seed/superadmin.seed.js';
 import morgalApiLogger from '#utils/Logger/api.logger.js';
 import overrideConsole from '#utils/Logger/console.logger.js';
